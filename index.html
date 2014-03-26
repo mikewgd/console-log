@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Console Log Test - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<script type="text/javascript" src="js/globals.js"></script>
+
+
+<!--[if lte IE 7]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<script type="text/javascript" src="assets/js/console.js"></script>
+<script>
+	var args ={
+        fruit: 'apple',
+        car: 'Ford',
+        dessert: 'cupcake'
+    };
+
+	var jsonObject = {
+	    "status":1000,
+	    "object":"stream_posts",
+	    "results":[
+	        {
+	            "stream_id":1,
+	            "stream_post_id":"448957571991605248",
+	            "site":"twitter",
+	            "attribution_author":"Peri Trembley",
+	            "avatar":"https://pbs.twimg.com/profile_images/448207929871962112/yT3pIr3w_normal.jpeg",
+	            "follow_url":"https://twitter.com/intent/user/?screen_name=peri_trembley",
+	            "reply_url":"https://twitter.com/intent/tweet/?in_reply_to=448957571991605248",
+	            "retweet_url":"https://twitter.com/intent/retweet/?tweet_id=448957571991605248",
+	            "favorite_url":"https://twitter.com/intent/favorite/?tweet_id=448957571991605248",
+	            "permalink":"https://twitter.com/peri_trembley/statuses/448957571991605248",
+	            "content_name":"RT @<a href='https://twitter.com/ACUVUE' target='_blank'>ACUVUE</a>: Demi's back! The first of our four",
+	            "timestamp":1395874801,
+	            "attribution_url":"https://twitter.com/peri_trembley",
+	            "attribution_avatar":"https://pbs.twimg.com/profile_images/448207929871962112/yT3pIr3w_normal.jpeg",
+	            "thumb":"https://pbs.twimg.com/media/Bjr1wOXCQAAQ6Cl.jpg:thumb",
+	            "link":"https://twitter.com/ACUVUE/status/448941321705635840/photo/1",
+	            "media_url":"https://pbs.twimg.com/media/Bjr1wOXCQAAQ6Cl.jpg"
+	        },
+	    ],
+	    "paging":{
+	        "next":"https://acuvue1day2014.thismoment.com/v4.1/api/stream_posts?pretty=1&site_key=c6dd012b3e60b6d4f02e852d48af8988&signature=47bfb14e3c9648d238d8a777f2427be1&start=25&total=25",
+	        "start":0,
+	        "total_requested":25,
+	        "total_results":50
+	    },
+	    "requested":1395876666
+	};
+
+    debug.logg(jsonObject);
+    debug.logg('There is only ',1,' cat in the house.');
+    debug.logg('There is only '+2+' cat in the house.');
+    debug.logg(1);
+    debug.logg(null);
+</script>
+
+</body>
+</html>
