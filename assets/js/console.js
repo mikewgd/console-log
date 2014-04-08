@@ -40,22 +40,6 @@
 	}
 
 	/**
-	* @function objSize
-	* Returns the size of an object.
-	*
-	* @param {Object} obj - object to be measured.
-	*/
-	function objSize(obj){
-		var count = 0;
-		
-		for(var prop in obj){
-			count++;
-		}
-		
-		return count;
-	}
-
-	/**
 	* @function styleElement
 	* Adds styles to an element.
 	* Usage: ML.El.styl(element, 'display': 'none', 'overflow': 'hidden'});
@@ -102,21 +86,33 @@
 	};
 
 	// Start of the custom console.log
-	// If the console is undefined or using a mobile device.
+	// If the console is undefined or you are using a device.
+	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || isMobile()) {
-		var output, 
+		var output, consoleShown = true, 
 			div = create('div', {id: 'consoleLog'}),
-			ul = create('ul'), h6 = create('h6');
+			ul = create('ul', {id: 'consoleLog-UL'}), h6 = create('h6');
 			
-		h6.innerHTML = 'CONSOLE LOG';
+		h6.innerHTML = 'CONSOLE LOG <span style="float:right;color:#ccc;">[click to toggle]</span>';
 		
-		// Styles the individual elements: h6, ul and holder of logs.
-		styleElement(div,{position:"fixed",bottom:"0",left: 0,width:"97%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial"});
+		// Styles the individual elements
+		styleElement(div,{margin:0,padding:0,position:"fixed",bottom:"0",left: 0,width:"97%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'border-top':'1px solid #999'});
 		styleElement(ul,{margin:0,padding:0,overflow:"auto",height:Math.round(window.innerHeight/4.5)+"px", "fontFamily":"Times New Roman","fontSize":"12px"});
-		styleElement(h6,{margin:0,padding:"5px","fontSize":"13px","border-bottom":"1px solid #ccc"})
+		styleElement(h6,{margin:0,padding:"5px","fontSize":"13px","border-bottom":"1px solid #ccc", cursor:'pointer'});
 		
 		div.appendChild(h6);
 		div.appendChild(ul);
+		
+		// Toggle console
+		h6.onclick = function(e){
+			if (consoleShown) {
+				$('consoleLog-UL').style.display = 'none';
+				consoleShown = false;
+			} else {
+				$('consoleLog-UL').style.display = 'block';
+				consoleShown = true;
+			}
+		};
 		
 		// Overwrites the console
 		window.console = {
@@ -147,4 +143,5 @@
 			}
 		}
 	}
+	// end of IF console is undefined or isMobile()
 }());
