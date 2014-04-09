@@ -10,7 +10,7 @@ A simple script that makes debugging easier on browsers that do not support cons
 
 Since the script overwrites the log function for console, rewriting of any code is not necessary! 
 
-Go see the [demo page](http://console.mikewgd.com/demo.html)
+Go see the [demo page](http://console.mikewgd.com/demo.html) and/or the [site](http://console.mikewgd.com)
 
 ### Limitations
 If you console.log window/this or any type of complex object it will fail. It has to do with too much recursion. Another feature which has not been added are string substitutions. 
