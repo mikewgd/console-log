@@ -125,10 +125,7 @@
 		window.console = {
 			log: function(){
 				output = ''; // used to clear the output each time				
-
-
-				// oldConsole.log(arguments.parentNode)
-				
+								
 				for(var i=0; i<arguments.length; i++) {
 					var param = arguments[i],
 						li = create('li');
