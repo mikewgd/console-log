@@ -87,7 +87,7 @@
 			oldConsole = console;
 			
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
-						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">[click to hide]</a>'+
+						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">[hide]</a>'+
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 						   
 		// Styles the individual elements
@@ -108,7 +108,7 @@
 			if (element.id == 'consoleLog-toggle') {
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
-				element.innerHTML = '[click to '+((!consoleShown) ? 'show' : 'hide')+']';
+				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
 			}
 		};
 
@@ -119,6 +119,7 @@
 			}
 
 			ul.style.height = this.value+'px';
+			ul.scrollTop = ul.scrollHeight; // always keep at bottom
 		};
 		
 		// Overwrites the console
@@ -159,6 +160,9 @@
 				li.innerHTML = output;
 				ul.appendChild(li);
 				document.body.appendChild(div);
+
+				// Scroll to latest log
+				ul.scrollTop = ul.scrollHeight;
 			}
 		}
 	}
