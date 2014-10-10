@@ -129,26 +129,21 @@
 
 				for(var i=0; i<arguments.length; i++) {
 					var param = arguments[i],
-						li = CLcreate('li');
+						li = CLcreate('li'),
+                        pString = param.toString();
 
 					// Each log is placed inside an li element.
 					CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
 
 					// If the parameter is an object special functionality needs to happen.
-					if (typeof param == 'object') {
-						if (param.tagName || param[0] !== undefined || param.window || (param.parentNode == null && param.childNodes)) {
-							var el = (param[0] !== undefined) ? param[0] : param;
-							if (param.window) el.nodeName = 'window';
+					if ((typeof param).toLowerCase() == 'object') {
 
-							output += el.nodeName+'<br />'+
-									  '<em>* For more information, please log a specific aspect of the '+el.nodeName+' element. For example its id, attributes, length, childNodes and/or etc...</em>';
-						} else {
-							if (param.toString() == '[object Object]') {
-								output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
-							} else {
-								output += param;
-							}
-						}
+						if (param.toString() == '[object Object]') {
+                            output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
+                        } else {
+                            // alert(param[0]);
+                            output += '['+param;
+                        }
 
 						// Since null keyword is an object
 						if (param == null) {output = 'null';}
