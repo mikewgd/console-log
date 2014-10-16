@@ -141,8 +141,7 @@
 						if (param.toString() == '[object Object]') {
                             output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
                         } else {
-                            // alert(param[0]);
-                            output += '['+param;
+                            output += param;
                         }
 
 						// Since null keyword is an object
