@@ -114,11 +114,15 @@
 
 		// Change height
 		input.onkeyup = function(e) {
-			if (isNaN(this.value) || this.value == '') {
-				this.value = this.defaultValue;
+			var val = Number(this.value);
+
+			// Added 30 to account for title bar
+			if (val <= (window.innerHeight-30) && val >= this.defaultValue) {
+				ul.style.height = this.value+'px';
+			} else {
+				ul.style.height = this.defaultValue+'px';
 			}
 
-			ul.style.height = this.value+'px';
 			ul.scrollTop = ul.scrollHeight; // always keep at bottom
 		};
 
