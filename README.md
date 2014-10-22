@@ -9,7 +9,7 @@ A simple script that makes debugging easier on browsers that do not support cons
 2. That's it!
 
 ## Parameters
-Currently, height is the only available parameter. Simple append ?<HeightInPixels> to the src attribute in the script tag for Console Log.
+Currently, height is the only available parameter. Simple append ?<HeightInPixels> to the src attribute in the script tag.
 
 Ex: /js/console.min.js?400
 
