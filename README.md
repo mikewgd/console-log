@@ -8,6 +8,11 @@ A simple script that makes debugging easier on browsers that do not support cons
 1. Include the JS file on the page before any js files that have console.log in them
 2. That's it!
 
+## Parameters
+Currently, height is the only available parameter. Simple append ?<HeightInPixels> to the src attribute in the script tag for Console Log.
+
+Ex: /js/console.min.js?400
+
 Since the script overwrites the log function for console, rewriting of any code is not necessary! 
 
 Go see the [demo page](http://console.mikewgd.com/demo.html) and/or the [site](http://console.mikewgd.com)
