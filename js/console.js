@@ -79,11 +79,22 @@
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
+		//Grab parameters (right now only height)
+		var scriptTags = document.getElementsByTagName('script'),
+			height = Math.round(window.innerHeight/4);
+
+		for(var i=0; i<scriptTags.length; i++){
+			//grab all script tags, if its console or console.min then check for param
+			if(/.*console(\.min)?\.js/gi.test(scriptTags[i].src) && scriptTags[i].src.indexOf('?') > 0){
+				height = scriptTags[i].src.substring(scriptTags[i].src.indexOf('?')+1,scriptTags[i].src.length) || Math.round(window.innerHeight/4);
+			}
+		}
+
 		var output, consoleShown = true,
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
-			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: Math.round(window.innerHeight/4), maxlength: 3}),
+			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
 			oldConsole = console;
 
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
@@ -92,7 +103,7 @@
 
 		// Styles the individual elements
 		CLstyleElement(div,{margin:0, padding:0,position:"fixed",bottom:"0",left: 0,width:"100%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'border-top':'1px solid #999'});
-		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:Math.round(window.innerHeight/4)+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
+		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
 		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "border-bottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'})
 
