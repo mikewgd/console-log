@@ -13,6 +13,8 @@ The script uses device detection (user agent sniffing) and if the console object
 ### To Do's
 - Other functions of belonging to console object.
 - Executing code 
+- Set default height by query param (work in progress)
+- Hide/show by default query param
 
 ### Features
 - Does not use any libraries, raw js!
