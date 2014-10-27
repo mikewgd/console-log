@@ -11,8 +11,8 @@ The script uses device detection (user agent sniffing) and if the console object
 2. That's it!
 
 ### To Do's
-1. Other functions of belonging to console object.
-2. Executing code 
+- Other functions of belonging to console object.
+- Executing code 
 
 ### Features
 - Does not use any libraries, raw js!
