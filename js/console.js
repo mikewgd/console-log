@@ -79,26 +79,42 @@
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
-		//Grab parameters (right now only height)
+		// Grab parameters 
 		var scriptTags = document.getElementsByTagName('script'),
-			height = Math.round(window.innerHeight/4);
+			consoleShown = true,
+			windowHeight = window.innerHeight,
+			height = Math.round(windowHeight/4);
 
 		for(var i=0; i<scriptTags.length; i++){
-			//grab all script tags, if its console or console.min then check for param
-			if(/.*console(\.min)?\.js/gi.test(scriptTags[i].src) && scriptTags[i].src.indexOf('?') > 0){
-				height = scriptTags[i].src.substring(scriptTags[i].src.indexOf('?')+1,scriptTags[i].src.length) || Math.round(window.innerHeight/4);
+			var scTagSrc = scriptTags[i].src;
+
+			// Grab all script tags, if its console or console.min then check for param
+			if(/.*console(\.min)?\.js/gi.test(scTagSrc) && scTagSrc.indexOf('?') > 0){
+				var queries = scTagSrc.substring(scTagSrc.indexOf('?')+1, scTagSrc.length).split('&');
+
+				// Implement queries
+				for (var j=0; j<queries.length; j++) {
+					var query = queries[j];
+
+					if (Number(query)) {
+						height = (query > windowHeight-30) ? windowHeight-30 : query
+					} else {
+						consoleShown = (query == 'hide') ? false : true;
+					}
+				}
 			}
 		}
 
-		var output, consoleShown = true,
+		var output, 
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
-			oldConsole = console;
+			oldConsole = console,
+			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
-						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">[hide]</a>'+
+						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">'+toggleText+'</a>'+
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 
 		// Styles the individual elements
@@ -110,6 +126,9 @@
 		div.appendChild(header);
 		div.appendChild(ul);
 		header.getElementsByTagName('span')[0].appendChild(input);
+
+		// Initially display or hide console.
+		ul.style.display = (!consoleShown) ? 'none' : 'block';
 
 		// Toggle console
 		document.onclick = function(e){
@@ -127,7 +146,7 @@
 		input.onkeyup = function(e) {
 			var val = Number(this.value),
 				newHeight,
-				windowHeight = window.innerHeight-30;
+				windowHeight = windowHeight-30;
 
 			// Added 30 to account for title bar
 			if (val <= windowHeight && val >= this.defaultValue) {
