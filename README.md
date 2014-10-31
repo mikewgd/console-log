@@ -9,10 +9,15 @@ A tool for programmers to see a viewable console in the browser. Meant to be use
 
 ### Features
 
-*   Does not use any JavaScript libraries. Coded in raw js.
+*   Does not use any JavaScript libraries.
 *   Hide/Show the console logs.
-*   Change the height of the console. (added in v2)
+*   Change height of console. (added in v2)
 *   Query params (added in v2.1) **NEW!**
+
+### Limitations
+*   Complex nested objects
+*   Viewing HTML Elements
+*   Have an issue? [Log it here!](https://github.com/mikewgd/console-log/issues)
 
 ## Implementation
 
@@ -23,33 +28,34 @@ Look below for an example:
             ...
             
             <!-- Add console log script above the other script. -->
-            <script type="text/javascript" src="http://...console.min.js"></script>
+            <script type="text/javascript" src="//console.min.js"></script>
 
             <!-- Some random js file with console.log -->
-            <script type="text/javascript" src="test.js"></script>
+            <script type="text/javascript" src="//test.js"></script>
 
         </body>
     </html>
 
 ### **NEW!** Parameters
+Visibility and height are the current parameters you can implement.
 
-Visibility and height are the current paramaters you can implement. Simply add '?' to the end of the src attribute on the script tag. View the example below for different implementations of usage.
+Simply add '?' to the end of the src attribute on the script tag. View the example below for different implementations of usage.
             
             ...
             
             <!-- Console will be expanded with a height of 400px -->
-            <script type="text/javascript" src="http://.../console.min.js?400"></script>
+            <script type="text/javascript" src="//console.min.js?400"></script>
     
             <!-- Console will be collapsed with a default height -->
-            <script type="text/javascript" src="http://.../console.min.js?hide"></script>
+            <script type="text/javascript" src="//console.min.js?hide"></script>
     
             <!-- Console will be collapsed with a height of 400px -->
-            <script type="text/javascript" src="http://.../console.min.js?hide&400"></script>
+            <script type="text/javascript" src="//console.min.js?hide&400"></script>
             
         </body>
     </html>
 
-## Try it for yourself! [View the demo](http://console.mikewgd.com/demo)
+## Try it out! [View the demo](http://console.mikewgd.com/demo)
 
 Remember you need to view it on a device or change your user agent.
 
