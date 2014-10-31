@@ -20,6 +20,8 @@ Just add the script on the page before the js file(s) that contain `console.log`
 
 Look below for an example:
 
+            ...
+            
             <!-- Add console log script above the other script. -->
             <script type="text/javascript" src="http://...console.min.js"></script>
 
@@ -32,7 +34,9 @@ Look below for an example:
 ### **NEW!** Parameters
 
 Visibility and height are the current paramaters you can implement. Simply add '?' to the end of the src attribute on the script tag. View the example below for different implementations of usage.
-
+            
+            ...
+            
             <!-- Console will be expanded with a height of 400px -->
             <script type="text/javascript" src="http://.../console.min.js?400"></script>
     
