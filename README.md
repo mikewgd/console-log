@@ -49,7 +49,7 @@ Visibility and height are the current paramaters you can implement. Simply add '
         </body>
     </html>
 
-## Try it for yourself! [View the demo](/demo)
+## Try it for yourself! [View the demo](http://console.mikewgd.com/demo)
 
 Remember you need to view it on a device or change your user agent.
 
