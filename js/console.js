@@ -1,5 +1,4 @@
 (function () {
-	oldConsole = console;
 	/**
 	* UTILITIES
 	* Functions to make accessing the DOM and other functionality easier.
