@@ -1,4 +1,5 @@
 (function () {
+	oldConsole = console;
 	/**
 	* UTILITIES
 	* Functions to make accessing the DOM and other functionality easier.
@@ -73,20 +74,31 @@
 	* @function printHTML
 	* Returns HTML as a string.
 	*
-	* @param {HTMLElement/Object} p - the element to be parsed.
+	* @param {HTMLElement/Object} el - the element to be parsed.
 	*/
-	function printHTML(p) {
-		var div = CLcreate('div');
+	function printHTML(el) {
+		var outputDiv = CLcreate('div'),
+			elem;
+			
+		// Clear each time called.
+		outputDiv.innerHTML = '';
 
 		try {
-			div.appendChild(p);
+			elem = el.cloneNode(true); // Needed to use clone because it was removing orginal elements
+			outputDiv.appendChild(elem);
 		} catch(e) {
-			for (var i=0; i<p.length; i++) {
-				div.appendChild(p[i]);
+			for (var i=0; i<el.length; i++) {
+				var breakLine = document.createTextNode('\n');
+				elem = el[i].cloneNode(true);
+
+				outputDiv.appendChild(elem);
+				outputDiv.appendChild(breakLine);
 			}
 		}
-	
-		return div.innerHTML.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		
+		// Replace entities
+		outputDiv.innerHTML = outputDiv.innerHTML.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		return outputDiv.innerHTML.replace(/\n/g, '<br>'); // Add breaking space
 	}
 
 	/** 
@@ -200,7 +212,7 @@
                             output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
                         } else if (pString.match(/^\[object */i)) {
                         	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
-                        		output += printHTML(param);
+	                        	output += printHTML(param);
                         	} else { // Most likely window, document etc...
 								output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
                         	}
