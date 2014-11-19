@@ -48,25 +48,109 @@
 		return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? true : false;
 	}
 
-	// Credits: https://github.com/douglascrockford/JSON-js
-	function JSONstringify(obj) {
-		var t = typeof (obj);
-		if (t != "object" || obj === null) {
-			// simple data type
-			if (t == "string") obj = '"'+obj+'"';
-			return String(obj);
-		}
-		else {
-			// recurse array or object
-			var n, v, json = [], arr = (obj && obj.constructor == Array);
-			for (n in obj) {
-				v = obj[n]; t = typeof(v);
-				if (t == "string") v = '"'+v+'"';
-				else if (t == "object" && v !== null) v = JSONstringify(v);
-				json.push((arr ? "" : '"' + n + '": ') + String(v));
-			}
-			return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
-		}
+	/**
+	* @function ObjToString
+	* Returns an Object as a string
+	* Credits go to https://github.com/douglascrockford/JSON-js
+	* Code was modified to fit certain needs.
+	*
+	* @param {Object} obj - object being passed
+	*/
+	function ObjToString(obj) {
+		var cx, 
+	        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, 
+	        gap = '', indent = '', 
+	        meta = {"\b":"\\b","  ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"};
+
+	    String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function () {
+	        return this.valueOf();
+	    };
+
+	    var quote = function(string) {
+	        escapable.lastIndex = 0;
+	        return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+	            var c = meta[a];
+	            return typeof c === 'string'
+	                ? c
+	                : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+	        }) + '"' : '"' + string + '"';
+	    };
+
+	    for (i = 0; i < 4; i += 1) {
+	        indent += ' ';
+	    }
+
+	    function str(key, holder) {
+	        var i,          // The loop counter.
+	            k,          // The member key.
+	            v,          // The member value.
+	            length, mind = gap, partial, value = holder[key];
+
+	        if (value && typeof value === 'object' &&
+	                typeof value.toJSON === 'function') {
+	            value = value.toJSON(key);
+	        }
+
+	        switch (typeof value) {
+		        case 'string':
+		            return quote(value);
+		        break;
+		        case 'number':
+		            return isFinite(value) ? String(value) : 'null';
+		        break;
+		        case 'boolean':
+		        case 'null':
+		        case 'function':
+		            return String(value);
+		       	break;
+		        case 'object':
+
+		            if (!value) {
+		                return 'null';
+		            }
+
+		            gap += indent;
+		            partial = [];
+
+		            if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+		                length = value.length;
+		                for (i = 0; i < length; i += 1) {
+		                    partial[i] = str(i, value) || 'null';
+		                }
+
+		                v = partial.length === 0
+		                    ? '[]'
+		                    : gap
+		                    ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']'
+		                    : '[' + partial.join(',') + ']';
+		                gap = mind;
+		                return v;
+		            }
+
+		            for (k in value) {
+		            	if (Object.prototype.hasOwnProperty.call(value, k)) {
+		                    v = str(k, value);
+		                    if (v) {
+		                        partial.push(quote(k) + (gap ? ': ' : ':') + v);
+		                    }
+		                }
+		            }
+
+		            v = partial.length === 0
+		                ? '{}'
+		                : gap
+		                ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}'
+		                : '{' + partial.join(',') + '}';
+		            gap = mind;
+		            return v;
+		   		break;
+	        }
+	    }
+
+
+		var j = str('', {'': obj});
+		return j.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;')
 	}
 
 	/**
@@ -203,12 +287,12 @@
 						pString = param.toString();
 
 					// Each log is placed inside an li element.
-					CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
+					CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
 
 					// If the parameter is an object special functionality needs to happen.
 					if ((typeof param).toLowerCase() == 'object') {
 						if (pString == '[object Object]') {
-                            output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
+                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
                         } else if (pString.match(/^\[object */i)) {
                         	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
 	                        	output += printHTML(param);

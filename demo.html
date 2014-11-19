@@ -17,9 +17,9 @@
 
 	<script type="text/javascript" src="js/console.js?200"></script>
 	<script>
-		var objectTest = {fruit: 'apple', car: 'Ford', dessert: 'cupcake'},
-			jsonTest = [{a:1,b:[{b1:2,b2:{"b2-1":[3,2,4]}},{b1:4}],c:5,d:{d1:6,d2:7},e:[1,2,3]}],
-			classTest = {init: function() {return this;}},
+		var objectTest = {fruit: 'apple', car: 'Ford', dessert: 'cupcake', numbers: {'1':'odd', '2': 'even'}},
+			jsonTest = [{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false,"about":"Amet magna duis eiusmod cillum voluptate fugiat. Mollit sint quis Lorem non officia cillum. Cillum irure Lorem aliqua ipsum sit ipsum laborum commodo laborum adipisicing eu. Ea eu sint excepteur irure. Laboris sunt quis officia minim.\r\n","latitude":-71.517163,"tags":["est","sunt","ex"],"friends":[{"id":0,"name":"Marshall Cabrera"},{"id":1,"name":"Marcella Estrada"}]}],
+			mixTest = {current: 0, boo: false, test:'ttests asdfasdf', 'stringFunc': function(e,t) {var j=[{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false}];}, init: function() {return this;}},
 			arrayTest = [1,2,3],
 			elementTest = document.getElementsByTagName('p'),
 			nativeFuncTest = String,
@@ -27,7 +27,7 @@
 
 		console.log(objectTest);
 		console.log(jsonTest);
-		console.log(classTest);
+		console.log(mixTest);
 		console.log(arrayTest);
 		console.log(elementTest);
 		console.log(nativeFuncTest);
