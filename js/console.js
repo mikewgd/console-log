@@ -11,15 +11,12 @@
 	* Usage: var test = ML.El.CLcreate(element, {'attribute': 'attributeValue'});
 	*
 	* @param {String} tag - tag you want to created, i.e "div", "span", etc...
-	* @param {Object} args - arguments passed.
-	*** @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
+	* @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
 	*/
-	function CLcreate(element, arg) {
+	function CLcreate(element, attrs) {
 		var elem = document.createElement(element);
 
-		if (arg) {
-			var attrs = arg;
-
+		if (attrs) {
 			for (var attr in attrs) {
 				// IE does not support support setting class name with set attribute
 				([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
@@ -35,12 +32,9 @@
 	* Usage: ML.El.styl(element, 'display': 'none', 'overflow': 'hidden'});
 	*
 	* @param {HTMLElement} element - element you want styled.
-	* @param {Object} args - arguments passed.
-	*** @param {Object} arg.props - styles you want applied to the element.
+	* @param {Object} props - styles you want applied to the element.
 	*/
-	function CLstyleElement(element, arg) {
-		var props = arg;
-
+	function CLstyleElement(element, props) {
 		for (var prop in props) {
 			element.style[prop] = props[prop];
 		}
@@ -73,18 +67,42 @@
 			}
 			return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
 		}
-	};
+	}
 
-	// Start of the custom console.log
+	/**
+	* @function printHTML
+	* Returns HTML as a string.
+	*
+	* @param {HTMLElement/Object} p - the element to be parsed.
+	*/
+	function printHTML(p) {
+		var div = CLcreate('div');
+
+		try {
+			div.appendChild(p);
+		} catch(e) {
+			for (var i=0; i<p.length; i++) {
+				div.appendChild(p[i]);
+			}
+		}
+	
+		return div.innerHTML.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+	}
+
+	/** 
+	* Start of custom console.log
+	*/
+
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
-		// Grab parameters 
+
 		var scriptTags = document.getElementsByTagName('script'),
 			consoleShown = true,
 			windowHeight = window.innerHeight,
 			height = Math.round(windowHeight/4);
 
+		// Loop through script tags on page.
 		for(var i=0; i<scriptTags.length; i++){
 			var scTagSrc = scriptTags[i].src;
 
@@ -130,6 +148,10 @@
 		// Initially display or hide console.
 		ul.style.display = (!consoleShown) ? 'none' : 'block';
 
+		/**
+		* EVENTS
+		*/
+
 		// Toggle console
 		document.onclick = function(e){
 			var element = e.target || e.srcElement;
@@ -159,24 +181,29 @@
 			ul.scrollTop = ul.scrollHeight; // always keep at bottom
 		};
 
-		// Overwrites the console
 		window.console = {
 			log: function(){
 				output = ''; // used to clear the output each time
 
+				// Loop through arguments passed in.
 				for(var i=0; i<arguments.length; i++) {
 					var param = arguments[i],
 						li = CLcreate('li'),
-                        pString = param.toString();
+						pString = param.toString();
 
 					// Each log is placed inside an li element.
 					CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
 
 					// If the parameter is an object special functionality needs to happen.
 					if ((typeof param).toLowerCase() == 'object') {
-
-						if (param.toString() == '[object Object]') {
+						if (pString == '[object Object]') {
                             output += '<span style="display:block;">Object '+JSONstringify(param)+'</span>';
+                        } else if (pString.match(/^\[object */i)) {
+                        	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
+                        		output += printHTML(param);
+                        	} else { // Most likely window, document etc...
+								output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
+                        	}
                         } else {
                             output += param;
                         }
@@ -197,5 +224,4 @@
 			}
 		}
 	}
-	// end of IF console is undefined or CLisMobile()
 }());
