@@ -282,36 +282,40 @@
 			log: function(){
 				output = ''; // used to clear the output each time
 
-				// Loop through arguments passed in.
-				for(var i=0; i<arguments.length; i++) {
-					var param = arguments[i],
-						li = CLcreate('li'),
-						pString = param.toString();
+				try {
+					// Loop through arguments passed in.
+					for(var i=0; i<arguments.length; i++) {
+						var param = arguments[i],
+							li = CLcreate('li'),
+							pString = param.toString();						
 
-					// Each log is placed inside an li element.
-					CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
+						// If the parameter is an object special functionality needs to happen.
+						if ((typeof param).toLowerCase() == 'object') {
+							if (pString == '[object Object]') {
+	                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
+	                        } else if (pString.match(/^\[object */i)) {
+	                        	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
+		                        	output += printHTML(param);
+	                        	} else { // Most likely window, document etc...
+									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
+	                        	}
+	                        } else {
+	                            output += param;
+	                        }
 
-					// If the parameter is an object special functionality needs to happen.
-					if ((typeof param).toLowerCase() == 'object') {
-						if (pString == '[object Object]') {
-                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
-                        } else if (pString.match(/^\[object */i)) {
-                        	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
-	                        	output += printHTML(param);
-                        	} else { // Most likely window, document etc...
-								output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
-                        	}
-                        } else {
-                            output += param;
-                        }
-
-						// Since null keyword is an object
-						if (param == null) {output = 'null';}
-					} else {
-						output += param;
+							// Since null keyword is an object
+							if (param == null) {output = 'null';}
+						} else {
+							output += param;
+						}
 					}
+				} catch(e) {
+					output += e;
 				}
 
+				// Style li elements
+				CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
+				
 				li.innerHTML = output;
 				ul.appendChild(li);
 				document.body.appendChild(div);
