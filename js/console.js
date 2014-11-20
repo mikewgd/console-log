@@ -113,8 +113,8 @@
 		            partial = [];
 
 		            if (Object.prototype.toString.apply(value) === '[object Array]') {
-
 		                length = value.length;
+
 		                for (i = 0; i < length; i += 1) {
 		                    partial[i] = str(i, value) || 'null';
 		                }
@@ -132,7 +132,10 @@
 		            	if (Object.prototype.hasOwnProperty.call(value, k)) {
 		                    v = str(k, value);
 		                    if (v) {
-		                        partial.push(quote(k) + (gap ? ': ' : ':') + v);
+		                        /*
+								Removing quotes from key
+		                        partial.push(quote(k) + (gap ? ': ' : ':') + v);*/
+		                        partial.push(k + (gap ? ': ' : ':') + v);
 		                    }
 		                }
 		            }
@@ -148,9 +151,8 @@
 	        }
 	    }
 
-
 		var j = str('', {'': obj});
-		return j.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;')
+		return j.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
 	}
 
 	/**
