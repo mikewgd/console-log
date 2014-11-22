@@ -80,7 +80,7 @@
 	        indent += ' ';
 	    }
 
-	    function str(key, holder) {
+	    var str = function(key, holder) {
 	        var i,          // The loop counter.
 	            k,          // The member key.
 	            v,          // The member value.
@@ -149,7 +149,7 @@
 		            return v;
 		   		break;
 	        }
-	    }
+	    };
 
 		var j = str('', {'': obj});
 		return j.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
