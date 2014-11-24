@@ -64,5 +64,8 @@ Remember you need to view it on a device or change your user agent.
 ### Future Features
 
 *   Executing code (working on it!)
-*   Clear console button
-*   Style more like console
+*   Clear console button (working on it!)
+*   Syntax highlighting (working on it!)
+*   More function support, not just log
+*   Showing line numbers
+*   Style like Chrome console (working on it!)
