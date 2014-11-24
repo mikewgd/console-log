@@ -193,7 +193,6 @@
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
-
 		var scriptTags = document.getElementsByTagName('script'),
 			consoleShown = true,
 			windowHeight = window.innerHeight,
@@ -241,6 +240,7 @@
 		div.appendChild(header);
 		div.appendChild(ul);
 		header.getElementsByTagName('span')[0].appendChild(input);
+		document.body.appendChild(div);
 
 		// Initially display or hide console.
 		ul.style.display = (!consoleShown) ? 'none' : 'block';
@@ -259,6 +259,14 @@
 				consoleShown = (consoleShown) ? false : true;
 				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
 			}
+		};
+
+		window.onerror = function(err, url, line) {
+			var li = CLcreate('li');
+			li.innerHTML = '<span style="display:block;">'+err+'\n'+url+'\n on line: '+line+'</span>';
+			CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
+			oldConsole.log(ul)
+			ul.appendChild(li);
 		};
 
 		// Change height
@@ -318,7 +326,6 @@
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
-				document.body.appendChild(div);
 
 				// Scroll to latest log
 				ul.scrollTop = ul.scrollHeight;
