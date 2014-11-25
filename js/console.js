@@ -163,7 +163,7 @@
 	*/
 	function printHTML(el) {
 		var outputDiv = CLcreate('div'),
-			elem;
+			elem, html;
 			
 		// Clear each time called.
 		outputDiv.innerHTML = '';
@@ -180,10 +180,17 @@
 				outputDiv.appendChild(breakLine);
 			}
 		}
+
+		html = outputDiv.innerHTML;
 		
 		// Replace entities
-		outputDiv.innerHTML = outputDiv.innerHTML.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-		return outputDiv.innerHTML.replace(/\n/g, '<br>'); // Add breaking space
+		html = html.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+		// Added in for IE
+		html = html.replace(/&lt;\/?([A-Z]+)/g, function(x) {return x.toLowerCase();});
+		html = html.replace(/([a-zA-Z]+)=([a-zA-Z]+-?[a-zA-Z]+)/g, '$1="$2"');
+
+		return html.replace(/\n/g, '<br>'); // Add breaking space
 	}
 
 	/** 
@@ -195,7 +202,7 @@
 	if (typeof console == 'undefined' || CLisMobile()) {
 		var scriptTags = document.getElementsByTagName('script'),
 			consoleShown = true,
-			windowHeight = window.innerHeight,
+			windowHeight = window.innerHeight || document.body.clientHeight,
 			height = Math.round(windowHeight/4);
 
 		// Loop through script tags on page.
@@ -224,7 +231,6 @@
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
-			oldConsole = console,
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
@@ -232,9 +238,9 @@
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 
 		// Styles the individual elements
-		CLstyleElement(div,{margin:0, padding:0,position:"fixed",bottom:"0",left: 0,width:"100%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'border-top':'1px solid #999'});
+		CLstyleElement(div,{'margin':0, 'padding':0,'position':"fixed",bottom:"0",left: 0,width:"100%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
 		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
-		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "border-bottom":"1px solid #ccc", 'color': '#000000'});
+		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'})
 
 		div.appendChild(header);
@@ -251,8 +257,13 @@
 
 		// Toggle console
 		document.onclick = function(e){
-			var element = e.target || e.srcElement;
-        	if (element.nodeType == 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
+			// http://www.quirksmode.org/js/events_properties.html
+			var element;
+			if (!e) var e = window.event;
+			if (e.target) element = e.target;
+			else if (e.srcElement) element = e.srcElement;
+			if (element.nodeType == 3) // defeat Safari bug
+				element = element.parentNode;
 
 			if (element.id == 'consoleLog-toggle') {
 				ul.style.display = (consoleShown) ? 'none' : 'block';
@@ -264,8 +275,7 @@
 		window.onerror = function(err, url, line) {
 			var li = CLcreate('li');
 			li.innerHTML = '<span style="display:block;">'+err+'\n'+url+'\n on line: '+line+'</span>';
-			CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
-			oldConsole.log(ul)
+			CLstyleElement(li, {'whiteSpace': 'break-word','wordBreak': 'breakAll', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 			ul.appendChild(li);
 		};
 
@@ -273,13 +283,13 @@
 		input.onkeyup = function(e) {
 			var val = Number(this.value),
 				newHeight,
-				windowHeight = windowHeight-30;
+				winHeight = windowHeight-30;
 
 			// Added 30 to account for title bar
-			if (val <= windowHeight && val >= this.defaultValue) {
+			if (val <= winHeight && val >= this.defaultValue) {
 				newHeight = this.value;
 			} else {
-				newHeight = (this.value > windowHeight) ? windowHeight : this.defaultValue;
+				newHeight = (this.value > winHeight) ? winHeight : this.defaultValue;
 			}
 
 			ul.style.height = newHeight+'px';
@@ -293,16 +303,20 @@
 				try {
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
-						var param = arguments[i],
-							li = CLcreate('li'),
-							pString = param.toString();						
+						var param = arguments[i], li = CLcreate('li'), pString = param.toString(), 
+							htmlElem = function () {
+								return ((param.length) ? param[0].nodeType : param.nodeType === 1) ? true : false;;
+							};		
+
+							// alert(param[0].nodeType)
 
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
 	                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
 	                        } else if (pString.match(/^\[object */i)) {
-	                        	if (pString.match(/^\[object HTML*/i)) { // if param is HTML element
+
+	                        	if (pString.match(/^\[object HTML*/i) || htmlElem()) { // if param is HTML element
 		                        	output += printHTML(param);
 	                        	} else { // Most likely window, document etc...
 									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
@@ -322,7 +336,7 @@
 				}
 
 				// Style li elements
-				CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','border-bottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
