@@ -308,8 +308,6 @@
 								return ((param.length) ? param[0].nodeType : param.nodeType === 1) ? true : false;;
 							};		
 
-							// alert(param[0].nodeType)
-
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
