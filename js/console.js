@@ -201,9 +201,14 @@
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
 		var scriptTags = document.getElementsByTagName('script'),
-			consoleShown = true,
+			consoleShown = true, output
 			windowHeight = window.innerHeight || document.body.clientHeight,
-			height = Math.round(windowHeight/4);
+			height = Math.round(windowHeight/4),
+			div = CLcreate('div', {id: 'consoleLog'}),
+			header = CLcreate('div', {id: 'consoleLog-header'}),
+			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
+			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
+			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
 		// Loop through script tags on page.
 		for(var i=0; i<scriptTags.length; i++){
@@ -225,13 +230,6 @@
 				}
 			}
 		}
-
-		var output, 
-			div = CLcreate('div', {id: 'consoleLog'}),
-			header = CLcreate('div', {id: 'consoleLog-header'}),
-			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
-			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
-			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
 						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">'+toggleText+'</a>'+
@@ -258,10 +256,8 @@
 		// Toggle console
 		document.onclick = function(e){
 			// http://www.quirksmode.org/js/events_properties.html
-			var element;
 			if (!e) var e = window.event;
-			if (e.target) element = e.target;
-			else if (e.srcElement) element = e.srcElement;
+			var element = e.target || e.srcElement;
 			if (element.nodeType == 3) // defeat Safari bug
 				element = element.parentNode;
 
