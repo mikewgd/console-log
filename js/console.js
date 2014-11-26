@@ -192,7 +192,6 @@
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
-			li = CLcreate('li'),
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
