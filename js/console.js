@@ -186,17 +186,17 @@
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
 		var scriptTags = document.getElementsByTagName('script'),
-			consoleShown = true, output,
+			consoleShown = true, output, space = ' ',
 			windowHeight = window.innerHeight || document.body.clientHeight,
 			height = Math.round(windowHeight/4),
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
+			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
+			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']',
 			liExecute = CLcreate('li', {id: 'consoleLog-liExecute', 'class': 'li-execute'}),
 			inputExecute = CLcreate('textarea', {id: 'consoleLog-inputExecute'}),
-			isExecute = false, space = ' ',
-			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
-			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
+			isExecute = false;
 
 		// Loop through script tags on page.
 		for(var i=0; i<scriptTags.length; i++){
