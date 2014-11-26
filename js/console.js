@@ -194,6 +194,7 @@
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
 			liExecute = CLcreate('li', {id: 'consoleLog-liExecute', 'class': 'li-execute'}),
 			inputExecute = CLcreate('textarea', {id: 'consoleLog-inputExecute'}),
+			isExecute = false, space = ' ',
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
@@ -227,6 +228,7 @@
 		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
 		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'});
+		CLstyleElement(inputExecute, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000','padding': '2px', 'width':'76%', 'float': 'left'});
 
 		div.appendChild(header);
 		div.appendChild(ul);
@@ -252,14 +254,14 @@
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
 				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
+			} else if (element.id == 'consoleLog-executeBtn') {
+				isExecute = true;
+				console.log(inputExecute.value, eval(inputExecute.value));
 			}
 		};
 
 		window.onerror = function(err, url, line) {
-			var li = CLcreate('li');
-			li.innerHTML = '<span style="display:block;white-space:break-word;word-break:break-all;">'+err+'\n'+url+'\n on line: '+line+'</span>';
-			CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-			ul.appendChild(li);
+			console.log(err+'\n'+url+'\n on line: '+line);
 		};
 
 		// Change height
@@ -288,6 +290,8 @@
 						return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
 					};
 
+					if (isExecute) space = '<br>';
+ 
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
 						var param = arguments[i], li = CLcreate('li'), pString = param.toString();
@@ -295,39 +299,42 @@
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
-	                            output += '<span style="display:block;white-space:break-word;word-break:break-all;">Object '+ObjToString(param)+'</span>';
+	                            output += '<span style="display:block;word-break:break-all;">Object '+ObjToString(param)+'</span>'+space;
 	                        } else if (pString.match(/^\[object */i)) {
-
 	                        	if (pString.match(/^\[object HTML*/i) || htmlElem(param)) { // if param is HTML element
-		                        	output += printHTML(param);
+		                        	output += printHTML(param)+space;
 	                        	} else { // Most likely window, document etc...
-									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
+									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>'+space;	
 	                        	}
 	                        } else {
-	                            output += param;
+	                            output += param+space;
 	                        }
-
-							// Since null keyword is an object
-							if (param === null) {output = 'null';}
 						} else {
-							output += param;
+							output += param+space;
 						}
+						
 					}
 				} catch(e) {
-					output += e;
+					output += e+space;
 				}
 
 				// Style li elements
 				CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-				CLstyleElement(liExecute, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(liExecute, {'position': 'relative', 'overflow':'hidden', 'padding': '5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
-				ul.appendChild(liExecute);
-				liExecute.appendChild(inputExecute);
 				
+				ul.appendChild(liExecute);
+				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;position:absolute;right:0;top:5px;" id="consoleLog-executeBtn">EXECUTE</a>';
+				liExecute.appendChild(inputExecute);
+
 				// Scroll to latest log
 				ul.scrollTop = ul.scrollHeight;
+
+				// Reset variable & textarea value
+				isExecute = false;
+				inputExecute.value = '';
 			}
 		};
 	}
