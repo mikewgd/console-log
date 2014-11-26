@@ -207,6 +207,8 @@
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
+			liExecute = CLcreate('li', {id: 'consoleLog-liExecute', 'class': 'li-execute'}),
+			inputExecute = CLcreate('textarea', {id: 'consoleLog-inputExecute'}),
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
@@ -241,6 +243,8 @@
 		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'})
 
+		
+
 		div.appendChild(header);
 		div.appendChild(ul);
 		header.getElementsByTagName('span')[0].appendChild(input);
@@ -270,8 +274,8 @@
 
 		window.onerror = function(err, url, line) {
 			var li = CLcreate('li');
-			li.innerHTML = '<span style="display:block;">'+err+'\n'+url+'\n on line: '+line+'</span>';
-			CLstyleElement(li, {'whiteSpace': 'break-word','wordBreak': 'breakAll', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+			li.innerHTML = '<span style="display:block;white-space:break-word;word-break:break-all;">'+err+'\n'+url+'\n on line: '+line+'</span>';
+			CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 			ul.appendChild(li);
 		};
 
@@ -307,7 +311,7 @@
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
-	                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
+	                            output += '<span style="display:block;white-space:break-word;word-break:break-all;">Object '+ObjToString(param)+'</span>';
 	                        } else if (pString.match(/^\[object */i)) {
 
 	                        	if (pString.match(/^\[object HTML*/i) || htmlElem()) { // if param is HTML element
@@ -330,11 +334,14 @@
 				}
 
 				// Style li elements
-				CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(liExecute, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
-
+				ul.appendChild(liExecute);
+				liExecute.appendChild(inputExecute);
+				
 				// Scroll to latest log
 				ul.scrollTop = ul.scrollHeight;
 			}
