@@ -57,8 +57,7 @@
 	* @param {Object} obj - object being passed
 	*/
 	function ObjToString(obj) {
-		var cx, 
-	        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, 
+		var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, 
 	        gap = '', indent = '', 
 	        meta = {"\b":"\\b","  ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"};
 
@@ -70,9 +69,7 @@
 	        escapable.lastIndex = 0;
 	        return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
 	            var c = meta[a];
-	            return typeof c === 'string'
-	                ? c
-	                : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+	            return typeof c === 'string' ? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
 	        }) + '"' : '"' + string + '"';
 	    };
 
@@ -94,15 +91,12 @@
 	        switch (typeof value) {
 		        case 'string':
 		            return quote(value);
-		        break;
 		        case 'number':
 		            return isFinite(value) ? String(value) : 'null';
-		        break;
 		        case 'boolean':
 		        case 'null':
 		        case 'function':
 		            return String(value);
-		       	break;
 		        case 'object':
 
 		            if (!value) {
@@ -119,11 +113,7 @@
 		                    partial[i] = str(i, value) || 'null';
 		                }
 
-		                v = partial.length === 0
-		                    ? '[]'
-		                    : gap
-		                    ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']'
-		                    : '[' + partial.join(',') + ']';
+		                v = partial.length === 0 ? '[]' : gap ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' : '[' + partial.join(',') + ']';
 		                gap = mind;
 		                return v;
 		            }
@@ -140,14 +130,9 @@
 		                }
 		            }
 
-		            v = partial.length === 0
-		                ? '{}'
-		                : gap
-		                ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}'
-		                : '{' + partial.join(',') + '}';
+		            v = partial.length === 0 ? '{}' : gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' : '{' + partial.join(',') + '}';
 		            gap = mind;
 		            return v;
-		   		break;
 	        }
 	    };
 
@@ -201,12 +186,13 @@
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
 		var scriptTags = document.getElementsByTagName('script'),
-			consoleShown = true, output
+			consoleShown = true, output,
 			windowHeight = window.innerHeight || document.body.clientHeight,
 			height = Math.round(windowHeight/4),
 			div = CLcreate('div', {id: 'consoleLog'}),
 			header = CLcreate('div', {id: 'consoleLog-header'}),
 			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
+			li = CLcreate('li'),
 			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']';
 
@@ -223,7 +209,7 @@
 					var query = queries[j];
 
 					if (Number(query)) {
-						height = (query > windowHeight-30) ? windowHeight-30 : query
+						height = (query > windowHeight-30) ? windowHeight-30 : query;
 					} else {
 						consoleShown = (query == 'hide') ? false : true;
 					}
@@ -239,7 +225,7 @@
 		CLstyleElement(div,{'margin':0, 'padding':0,'position':"fixed",bottom:"0",left: 0,width:"100%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
 		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
 		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
-		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'})
+		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'});
 
 		div.appendChild(header);
 		div.appendChild(ul);
@@ -256,7 +242,7 @@
 		// Toggle console
 		document.onclick = function(e){
 			// http://www.quirksmode.org/js/events_properties.html
-			if (!e) var e = window.event;
+			if (!e) e = window.event;
 			var element = e.target || e.srcElement;
 			if (element.nodeType == 3) // defeat Safari bug
 				element = element.parentNode;
@@ -270,13 +256,13 @@
 
 		window.onerror = function(err, url, line) {
 			var li = CLcreate('li');
-			li.innerHTML = '<span style="display:block;">'+err+'\n'+url+'\n on line: '+line+'</span>';
-			CLstyleElement(li, {'whiteSpace': 'break-word','wordBreak': 'breakAll', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+			li.innerHTML = '<span style="display:block;white-space:break-word;word-break:break-all;">'+err+'\n'+url+'\n on line: '+line+'</span>';
+			CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 			ul.appendChild(li);
 		};
 
 		// Change height
-		input.onkeyup = function(e) {
+		input.onkeyup = function() {
 			var val = Number(this.value),
 				newHeight,
 				winHeight = windowHeight-30;
@@ -297,20 +283,21 @@
 				output = ''; // used to clear the output each time
 
 				try {
+					var htmlElem = function(p) {
+						return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
+					};
+
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
-						var param = arguments[i], li = CLcreate('li'), pString = param.toString(), 
-							htmlElem = function () {
-								return ((param.length) ? param[0].nodeType : param.nodeType === 1) ? true : false;;
-							};		
+						var param = arguments[i], li = CLcreate('li'), pString = param.toString();
 
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
-	                            output += '<span style="display:block;">Object '+ObjToString(param)+'</span>';
+	                            output += '<span style="display:block;white-space:break-word;word-break:break-all;">Object '+ObjToString(param)+'</span>';
 	                        } else if (pString.match(/^\[object */i)) {
 
-	                        	if (pString.match(/^\[object HTML*/i) || htmlElem()) { // if param is HTML element
+	                        	if (pString.match(/^\[object HTML*/i) || htmlElem(param)) { // if param is HTML element
 		                        	output += printHTML(param);
 	                        	} else { // Most likely window, document etc...
 									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
@@ -320,7 +307,7 @@
 	                        }
 
 							// Since null keyword is an object
-							if (param == null) {output = 'null';}
+							if (param === null) {output = 'null';}
 						} else {
 							output += param;
 						}
@@ -330,14 +317,14 @@
 				}
 
 				// Style li elements
-				CLstyleElement(li, {'white-space': 'break-word','word-break': 'break-word', 'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
-
+				
 				// Scroll to latest log
 				ul.scrollTop = ul.scrollHeight;
 			}
-		}
+		};
 	}
 }());
