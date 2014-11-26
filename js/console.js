@@ -186,7 +186,7 @@
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
 	if (typeof console == 'undefined' || CLisMobile()) {
 		var scriptTags = document.getElementsByTagName('script'),
-			consoleShown = true, output,
+			consoleShown = true, output, space = ' ',
 			windowHeight = window.innerHeight || document.body.clientHeight,
 			height = Math.round(windowHeight/4),
 			div = CLcreate('div', {id: 'consoleLog'}),
@@ -254,10 +254,7 @@
 		};
 
 		window.onerror = function(err, url, line) {
-			var li = CLcreate('li');
-			li.innerHTML = '<span style="display:block;white-space:break-word;word-break:break-all;">'+err+'\n'+url+'\n on line: '+line+'</span>';
-			CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-			ul.appendChild(li);
+			console.log(err+'\n'+url+'\n on line: '+line);
 		};
 
 		// Change height
@@ -285,7 +282,7 @@
 					var htmlElem = function(p) {
 						return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
 					};
-
+ 
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
 						var param = arguments[i], li = CLcreate('li'), pString = param.toString();
@@ -293,26 +290,23 @@
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
-	                            output += '<span style="display:block;white-space:break-word;word-break:break-all;">Object '+ObjToString(param)+'</span>';
+	                            output += '<span style="display:block;word-break:break-all;">Object '+ObjToString(param)+'</span>'+space;
 	                        } else if (pString.match(/^\[object */i)) {
-
 	                        	if (pString.match(/^\[object HTML*/i) || htmlElem(param)) { // if param is HTML element
-		                        	output += printHTML(param);
+		                        	output += printHTML(param)+space;
 	                        	} else { // Most likely window, document etc...
-									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>';	
+									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>'+space;	
 	                        	}
 	                        } else {
-	                            output += param;
+	                            output += param+space;
 	                        }
-
-							// Since null keyword is an object
-							if (param === null) {output = 'null';}
 						} else {
-							output += param;
+							output += param+space;
 						}
+						
 					}
 				} catch(e) {
-					output += e;
+					output += e+space;
 				}
 
 				// Style li elements
