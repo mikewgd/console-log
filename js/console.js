@@ -254,7 +254,7 @@
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
 				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
-			} else if (element.id == 'consoleLog-executeBtn') {
+			} else if (element.id == 'consoleLog-executeBtn' && inputExecute.value !== '') {
 				isExecute = true;
 				console.log(inputExecute.value, eval(inputExecute.value));
 			}
