@@ -250,6 +250,8 @@
 			if (element.nodeType == 3) // defeat Safari bug
 				element = element.parentNode;
 
+			
+
 			if (element.id == 'consoleLog-toggle') {
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
@@ -257,6 +259,10 @@
 			} else if (element.id == 'consoleLog-executeBtn' && inputExecute.value !== '') {
 				isExecute = true;
 				console.log(inputExecute.value, eval(inputExecute.value));
+			}
+
+			if (element.id == 'consoleLog-toggle' || element.id == 'consoleLog-executeBtn') {
+				return false;
 			}
 		};
 
