@@ -8,7 +8,6 @@
 	* @function CLcreate
 	* Returns an element to be created in the DOM and adds attributes.
 	* NOTE: It is best to put it in a variable.
-	* Usage: var test = ML.El.CLcreate(element, {'attribute': 'attributeValue'});
 	*
 	* @param {String} tag - tag you want to created, i.e "div", "span", etc...
 	* @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
@@ -29,7 +28,6 @@
 	/**
 	* @function CLstyleElement
 	* Adds styles to an element.
-	* Usage: ML.El.styl(element, 'display': 'none', 'overflow': 'hidden'});
 	*
 	* @param {HTMLElement} element - element you want styled.
 	* @param {Object} props - styles you want applied to the element.
@@ -61,10 +59,17 @@
 	        gap = '', indent = '', 
 	        meta = {"\b":"\\b","  ":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"};
 
+	    // Returns the primitive value
 	    String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function () {
 	        return this.valueOf();
 	    };
 
+	    /**
+		* @function quote
+		* Returns string with quotes
+		*
+		* @param {String} string - string being passed to surround with quotes.
+	    */
 	    var quote = function(string) {
 	        escapable.lastIndex = 0;
 	        return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
@@ -73,10 +78,12 @@
 	        }) + '"' : '"' + string + '"';
 	    };
 
+	    // Responsible for indentation, set to 4 spaces
 	    for (i = 0; i < 4; i += 1) {
 	        indent += ' ';
 	    }
 
+	    // Magic behind parsing objects
 	    var str = function(key, holder) {
 	        var i,          // The loop counter.
 	            k,          // The member key.
@@ -250,8 +257,6 @@
 			if (element.nodeType == 3) // defeat Safari bug
 				element = element.parentNode;
 
-			
-
 			if (element.id == 'consoleLog-toggle') {
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
@@ -291,13 +296,13 @@
 			log: function(){
 				output = ''; // used to clear the output each time
 
-				try {
-					var htmlElem = function(p) {
-						return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
-					};
+				var htmlElem = function(p) {
+					return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
+				};
 
-					if (isExecute) space = '<br>';
- 
+				if (isExecute) space = '<br>';
+
+				try {
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
 						var param = arguments[i], li = CLcreate('li'), pString = param.toString();
@@ -321,7 +326,12 @@
 						
 					}
 				} catch(e) {
-					output += e+space;
+					// To account for js keywords
+					if ((typeof param).toLowerCase() == 'object') { 
+						output += param+space;
+					} else {
+						output += e+space;
+					}
 				}
 
 				// Style li elements
