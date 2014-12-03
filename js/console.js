@@ -197,12 +197,12 @@
 			windowHeight = window.innerHeight || document.body.clientHeight,
 			height = Math.round(windowHeight/4),
 			div = CLcreate('div', {id: 'consoleLog'}),
-			header = CLcreate('div', {id: 'consoleLog-header'}),
-			ul = CLcreate('ul', {id: 'consoleLog-ul'}),
-			input = CLcreate('input', {id: 'consoleLog-input', type: 'text', value: height, maxlength: 3}),
+			header = CLcreate('div'),
+			ul = CLcreate('ul'),
+			input = CLcreate('input', {id: 'consoleLogInput', type: 'text', value: height, maxlength: 3}),
 			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']',
-			liExecute = CLcreate('li', {id: 'consoleLog-liExecute', 'class': 'li-execute'}),
-			inputExecute = CLcreate('textarea', {id: 'consoleLog-inputExecute'}),
+			liExecute = CLcreate('li'),
+			inputExecute = CLcreate('textarea', {id: 'consoleLogExecute'}),
 			isExecute = false;
 
 		// Loop through script tags on page.
@@ -227,7 +227,7 @@
 		}
 
 		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
-						   '<a id="consoleLog-toggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">'+toggleText+'</a>'+
+						   '<a id="consoleLogToggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">'+toggleText+'</a>'+
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 
 		// Styles the individual elements
@@ -257,16 +257,16 @@
 			if (element.nodeType == 3) // defeat Safari bug
 				element = element.parentNode;
 
-			if (element.id == 'consoleLog-toggle') {
+			if (element.id == 'consoleLogToggle') {
 				ul.style.display = (consoleShown) ? 'none' : 'block';
 				consoleShown = (consoleShown) ? false : true;
 				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
-			} else if (element.id == 'consoleLog-executeBtn' && inputExecute.value !== '') {
+			} else if (element.id == 'consoleLogExecuteBtn' && inputExecute.value !== '') {
 				isExecute = true;
 				console.log(inputExecute.value, eval(inputExecute.value));
 			}
 
-			if (element.id == 'consoleLog-toggle' || element.id == 'consoleLog-executeBtn') {
+			if (element.id == 'consoleLogToggle' || element.id == 'consoleLogExecuteBtn') {
 				return false;
 			}
 		};
@@ -342,7 +342,7 @@
 				ul.appendChild(li);
 				
 				ul.appendChild(liExecute);
-				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;position:absolute;right:0;top:5px;" id="consoleLog-executeBtn">EXECUTE</a>';
+				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;position:absolute;right:0;top:5px;" id="consoleLogExecuteBtn">EXECUTE</a>';
 				liExecute.appendChild(inputExecute);
 
 				// Scroll to latest log
