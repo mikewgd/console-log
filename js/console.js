@@ -1,4 +1,4 @@
-(function () {
+(function () {	
 	/**
 	* UTILITIES
 	* Functions to make accessing the DOM and other functionality easier.
@@ -231,9 +231,9 @@
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 
 		// Styles the individual elements
-		CLstyleElement(div,{'margin':0, 'padding':0,'position':"fixed",bottom:"0",left: 0,width:"100%","fontSize":"12px",background:"#fff",zIndex:"999999999999999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
-		CLstyleElement(ul,{margin:0, padding:0,overflow:"auto",height:height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
-		CLstyleElement(header,{'overflow': 'auto', margin:0, padding:"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
+		CLstyleElement(div,{'margin':0, 'padding':0, 'position':"absolute", "bottom":"0", "left": 0, "width":"100%","fontSize":"12px","background":"#fff","zIndex":"999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
+		CLstyleElement(ul,{"margin":0, "padding":0,"overflow":"auto","height":height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
+		CLstyleElement(header,{'overflow': 'auto', "margin":0, "padding":"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'});
 		CLstyleElement(inputExecute, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000','padding': '2px', 'width':'76%', 'float': 'left'});
 
@@ -336,13 +336,13 @@
 
 				// Style li elements
 				CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-				CLstyleElement(liExecute, {'position': 'relative', 'overflow':'hidden', 'padding': '5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
+				CLstyleElement(liExecute, {'overflow':'hidden', 'padding': '5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
 				
 				li.innerHTML = output;
 				ul.appendChild(li);
 				
 				ul.appendChild(liExecute);
-				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;position:absolute;right:0;top:5px;" id="consoleLogExecuteBtn">EXECUTE</a>';
+				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;float:right;" id="consoleLogExecuteBtn">EXECUTE</a>';
 				liExecute.appendChild(inputExecute);
 
 				// Scroll to latest log
