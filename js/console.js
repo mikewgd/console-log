@@ -17,8 +17,12 @@
 
 		if (attrs) {
 			for (var attr in attrs) {
-				// IE does not support support setting class name with set attribute
-				([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
+				if ([attr] === 'html') {
+					elem.innerHTML = attrs[attr];
+				} else {
+					// IE does not support support setting class name with set attribute
+					([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
+				}
 			}
 		}
 
