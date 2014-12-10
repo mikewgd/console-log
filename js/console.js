@@ -231,7 +231,7 @@
 						   '<span style="float:right;margin-right:10px;">Height: </span>';
 
 		// Styles the individual elements
-		CLstyleElement(div,{'margin':0, 'padding':0, 'position':"absolute", "bottom":"0", "left": 0, "width":"100%","fontSize":"12px","background":"#fff","zIndex":"999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
+		CLstyleElement(div,{'margin':0, 'padding':0, 'position':"fixed", "bottom":"0", "left": 0, "width":"100%","fontSize":"12px","background":"#fff","zIndex":"999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
 		CLstyleElement(ul,{"margin":0, "padding":0,"overflow":"auto","height":height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
 		CLstyleElement(header,{'overflow': 'auto', "margin":0, "padding":"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
 		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'});
