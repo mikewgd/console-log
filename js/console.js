@@ -17,7 +17,7 @@
 
 		if (attrs) {
 			for (var attr in attrs) {
-				if ([attr] === 'html') {
+				if (attr === 'html') {
 					elem.innerHTML = attrs[attr];
 				} else {
 					// IE does not support support setting class name with set attribute
@@ -27,19 +27,6 @@
 		}
 
 		return elem;
-	}
-
-	/**
-	* @function CLstyleElement
-	* Adds styles to an element.
-	*
-	* @param {HTMLElement} element - element you want styled.
-	* @param {Object} props - styles you want applied to the element.
-	*/
-	function CLstyleElement(element, props) {
-		for (var prop in props) {
-			element.style[prop] = props[prop];
-		}
 	}
 
 	/**
@@ -83,7 +70,7 @@
 	    };
 
 	    // Responsible for indentation, set to 4 spaces
-	    for (i = 0; i < 4; i += 1) {
+	    for (i = 0; i < 2; i += 1) {
 	        indent += ' ';
 	    }
 
@@ -152,6 +139,40 @@
 	}
 
 	/**
+	* @function syntaxHighlighting
+	* Returns string with HTML surrounding, used for coloring.
+	*
+	* @param {String} type - type of argument being passed, i.e. number, null, etc..
+	* @param {String} str - string being passed to surround with.
+    */
+	function syntaxHighlighting(type, str) {
+		var formattedString = str;
+
+		if (type == 'object') {
+			if (str === null) {
+				formattedString = '<span style="color:#808080;">'+str+'</span>';
+			} else {
+				formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: #881391;">$1</span>$2') // key in object
+					  .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: #1C00CF;">$2$4$6</span>') //number or boolean value
+					  .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: #C41A16;">$2</span>'); // string value
+			}
+		} else if (type == 'html') {
+			var formattedString2 = str.replace(new RegExp(/&lt;(.*?)&gt;/gi), function(x) { // HTML tags
+		        return '<span style="color: #881280;">'+x+'</span>';
+		    });
+		    
+		    formattedString = formattedString2.replace(new RegExp(/&lt;(?!\/)(.*?)&gt;/gi), function(y) { // HTML tag attributes 
+		        var attr = new RegExp(/ (.*?)="(.*?)"/gi);        
+		        return y.replace(attr, ' <span style="color: #994500;">$1</span>="<span style="color: #1A1AA6;">$2</span>"');
+		    });
+		} else if (type == 'number' || type == 'boolean') {
+			formattedString = '<span style="color: #1C00CF;">'+str+'</span>';
+		}
+
+		return formattedString;
+	}
+
+	/**
 	* @function printHTML
 	* Returns HTML as a string.
 	*
@@ -168,7 +189,7 @@
 			elem = el.cloneNode(true); // Needed to use clone because it was removing orginal elements
 			outputDiv.appendChild(elem);
 		} catch(e) {
-			for (var i=0; i<el.length; i++) {
+			for (var i=0, ii=el.length; i<ii; i++) {
 				var breakLine = document.createTextNode('\n');
 				elem = el[i].cloneNode(true);
 
@@ -177,38 +198,76 @@
 			}
 		}
 
-		html = outputDiv.innerHTML;
-		
 		// Replace entities
-		html = html.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		html = outputDiv.innerHTML.replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 		// Added in for IE
-		html = html.replace(/&lt;\/?([A-Z]+)/g, function(x) {return x.toLowerCase();});
-		html = html.replace(/([a-zA-Z]+)=([a-zA-Z]+-?[a-zA-Z]+)/g, '$1="$2"');
+		html = html.replace(/&lt;\/?([A-Z]+)/g, function(x) {return x.toLowerCase();})
+				   .replace(/([a-zA-Z]+)=([a-zA-Z]+-?[a-zA-Z]+)/g, '$1="$2"');
 
 		return html.replace(/\n/g, '<br>'); // Add breaking space
 	}
 
-	/** 
+	/**
 	* Start of custom console.log
 	*/
 
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-	if (typeof console == 'undefined' || CLisMobile()) {
+	if (typeof console == 'undefined' || CLisMobile()) { 
 		var scriptTags = document.getElementsByTagName('script'),
-			consoleShown = true, output, space = ' ',
+			consoleShown = true, output, space = ' ', 
 			windowHeight = window.innerHeight || document.body.clientHeight,
-			height = Math.round(windowHeight/4),
-			div = CLcreate('div', {id: 'consoleLog'}),
-			header = CLcreate('div'),
-			ul = CLcreate('ul'),
-			input = CLcreate('input', {id: 'consoleLogInput', type: 'text', value: height, maxlength: 3}),
-			toggleText = '['+((!consoleShown) ? 'show' : 'hide')+']',
-			liExecute = CLcreate('li'),
-			inputExecute = CLcreate('textarea', {id: 'consoleLogExecute'}),
-			isExecute = false;
+			height = Math.round(windowHeight/3), newHeight, start, end,
+			isExecute = false, symbol = '<span class="console-log-logs-sym">&gt;</span>',
+			consoleLog = CLcreate('div', {id: 'consoleLog', 'class': 'console-log'}),
+			consoleLogStyles = '{{consoleLogStyles}}',
+			consoleLogStyle = CLcreate('style', {'type': 'text/css', 'id': 'consoleLogStyle', 
+				'html': consoleLogStyles
+			}),
+			consoleLogBody = CLcreate('div', {id: 'consoleLogBody', 'class': 'console-log-body cl-scroll', 'style': 'overflow: auto;', 'html': document.body.innerHTML}),
+			consoleLogHeader = CLcreate('div', {'class': 'console-log-header', 'html': '<h6>Console.Log</h6>'}),
+			consoleLogToggle = CLcreate('a', {href: '#', 'class': 'console-log-toggle', 'html': '<span>Click to hide</span>'}),
+			consoleLogLogs = CLcreate('div', {'class': 'console-log-logs'}),
+			consoleLogLogsUl = CLcreate('ul'),
+			consoleLogMenuBar = CLcreate('div', {'class': 'console-log-menu-bar', 'html': '<a href="#">CLEAR</a><span>Height:</span>'}),
+			consoleLogLogsLiExecute = CLcreate('li', {'id': 'consoleLogLiExecute','class': 'console-log-execute', 'html': '<span class="console-log-logs-sym">&gt;</span><span class="console-log-logs-entry"></span>'}),
+			consoleLogTextarea = CLcreate('textarea', {id: 'consoleLogExecuteTextArea', 'name': 'consoleLogExecuteTextArea'}),
+			consoleLogExecuteBtn = CLcreate('a', {href: '#', 'html': 'Execute'}),
+			consoleLogHeightInput = CLcreate('input', {id: 'consoleLogHeightInput', 'class': 'console-log-text-input', type: 'text', value: height, maxlength: 3}),
+			consoleLogToggleFunc = function() {
+				var toggleTxt = (consoleShown) ? 'hide' : 'show',
+					toggleElem = consoleLogToggle.getElementsByTagName('span')[0];
+        
+				toggleElem.innerHTML = 'Click to '+toggleTxt;
+				consoleLogLogs.style.display = (consoleShown) ? 'block' : 'none';
 
+				if (consoleShown) {consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;}
+				consoleLogViewHeightFunc();
+			},
+			consoleLogHeightFunc = function(h, defVal) {
+				var val = Number(h),
+					winHeight = windowHeight-32;
+
+				// Added 32 to account for title bar
+				if (val <= winHeight && val >= defVal) {
+					newHeight = Number(val);
+				} else {
+					newHeight = Number((val > winHeight) ? winHeight : defVal);
+				}
+
+				consoleLogLogsUl.style.height = newHeight+'px';
+			},
+			consoleLogViewHeightFunc = function() {
+				var consoleLogHeight = (consoleLog.offsetHeight === 0) ? newHeight+64 : consoleLog.offsetHeight;
+
+				if (!consoleShown) {
+					consoleLogHeight = 33;
+				}
+
+				consoleLogBody.style.height = (windowHeight-15)-consoleLogHeight+'px';
+			};
+		
 		// Loop through script tags on page.
 		for(var i=0; i<scriptTags.length; i++){
 			var scTagSrc = scriptTags[i].src;
@@ -218,11 +277,11 @@
 				var queries = scTagSrc.substring(scTagSrc.indexOf('?')+1, scTagSrc.length).split('&');
 
 				// Implement queries
-				for (var j=0; j<queries.length; j++) {
+				for (var j=0, jj=queries.length; j<jj; j++) {
 					var query = queries[j];
 
 					if (Number(query)) {
-						height = (query > windowHeight-30) ? windowHeight-30 : query;
+						height = (query > windowHeight-32) ? windowHeight-32 : query;
 					} else {
 						consoleShown = (query == 'hide') ? false : true;
 					}
@@ -230,70 +289,75 @@
 			}
 		}
 
-		header.innerHTML = '<h6 style="margin:5px 3px;padding:0;float:left;font-size:13px;">CONSOLE LOG</h6>'+
-						   '<a id="consoleLogToggle" href="javascript:void(0);" style="padding:5px; display:block;font-weight:bold;float:right;color:#ccc;text-decoration:none;font-size:13px;">'+toggleText+'</a>'+
-						   '<span style="float:right;margin-right:10px;">Height: </span>';
+		document.body.innerHTML = '';
+		document.body.appendChild(consoleLogBody);
+		document.getElementsByTagName('head')[0].appendChild(consoleLogStyle);
 
-		// Styles the individual elements
-		CLstyleElement(div,{'margin':0, 'padding':0, 'position':"fixed", "bottom":"0", "left": 0, "width":"100%","fontSize":"12px","background":"#fff","zIndex":"999999999","fontFamily": "Arial", 'borderTop':'1px solid #999999'});
-		CLstyleElement(ul,{"margin":0, "padding":0,"overflow":"auto","height":height+"px", "fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000'});
-		CLstyleElement(header,{'overflow': 'auto', "margin":0, "padding":"2px", "borderBottom":"1px solid #ccc", 'color': '#000000'});
-		CLstyleElement(input, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000', 'width': '25px', 'padding': '2px'});
-		CLstyleElement(inputExecute, {"fontFamily":"Times New Roman","fontSize":"12px", 'color': '#000000','padding': '2px', 'width':'76%', 'float': 'left'});
+		consoleLog.appendChild(consoleLogHeader).appendChild(consoleLogToggle);
+		consoleLog.appendChild(consoleLogLogs).appendChild(consoleLogMenuBar).appendChild(consoleLogHeightInput);
+		consoleLogLogs.appendChild(consoleLogLogsUl);
+		consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogTextarea);
+		consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogExecuteBtn);
+		consoleLogHeightInput.value = height;
 
-		div.appendChild(header);
-		div.appendChild(ul);
-		header.getElementsByTagName('span')[0].appendChild(input);
-		document.body.appendChild(div);
+		// function calls
+		consoleLogHeightFunc(height, height);
+		consoleLogToggleFunc();
+		
+		document.body.appendChild(consoleLog);
 
-		// Initially display or hide console.
-		ul.style.display = (!consoleShown) ? 'none' : 'block';
+		var consoleLogNewEntry = function() {
+			// document.getElementById('consoleLogLiExecute').parentNode.removeChild(consoleLogLogsLiExecute);
+			consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
 
-		/**
-		* EVENTS
-		*/
+			consoleLogTextarea.value = '';
 
-		// Toggle console
-		document.onclick = function(e){
-			// http://www.quirksmode.org/js/events_properties.html
-			if (!e) e = window.event;
-			var element = e.target || e.srcElement;
-			if (element.nodeType == 3) // defeat Safari bug
-				element = element.parentNode;
+			// Scroll to latest log
+			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;
 
-			if (element.id == 'consoleLogToggle') {
-				ul.style.display = (consoleShown) ? 'none' : 'block';
-				consoleShown = (consoleShown) ? false : true;
-				element.innerHTML = '['+((!consoleShown) ? 'show' : 'hide')+']';
-			} else if (element.id == 'consoleLogExecuteBtn' && inputExecute.value !== '') {
+			// Reset variable & textarea value
+			isExecute = false;
+		};
+
+		// toggle click
+		consoleLogToggle.onclick = function() {
+			consoleShown = (consoleShown) ? false : true;
+			consoleLogToggleFunc();
+			return false;
+		};
+
+		// execute code button
+		consoleLogExecuteBtn.onclick = function() {
+			if (consoleLogTextarea.value !== '') {
 				isExecute = true;
-				console.log(inputExecute.value, eval(inputExecute.value));
+				console.log('<span style="color:#0080FF;">'+consoleLogTextarea.value+'</span>', eval(consoleLogTextarea.value));
 			}
 
-			if (element.id == 'consoleLogToggle' || element.id == 'consoleLogExecuteBtn') {
-				return false;
-			}
+			return false;
+		};
+
+		// clear button
+		consoleLogMenuBar.childNodes[0].onclick = function() {
+			consoleLogLogsUl.innerHTML = '';
+			consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
+			return false;
+		};
+
+		// height change 
+		consoleLogHeightInput.onkeyup = function() {
+			consoleLogHeightFunc(this.value, this.defaultValue);
+			consoleLogViewHeightFunc();
+			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight; // always keep at bottom
 		};
 
 		window.onerror = function(err, url, line) {
-			console.log(err+'\n'+url+'\n on line: '+line);
-		};
+			var consoleLogLogsLi2 = CLcreate('li', {
+				html: symbol+'<span class="console-log-logs-entry"><span style="color:red;">'+err+'\n'+url+'\n on line: '+line+'</span></span>'
+			});
+			consoleLogLogsUl.insertBefore(consoleLogLogsLi2, consoleLogLogsLiExecute);
 
-		// Change height
-		input.onkeyup = function() {
-			var val = Number(this.value),
-				newHeight,
-				winHeight = windowHeight-30;
-
-			// Added 30 to account for title bar
-			if (val <= winHeight && val >= this.defaultValue) {
-				newHeight = this.value;
-			} else {
-				newHeight = (this.value > winHeight) ? winHeight : this.defaultValue;
-			}
-
-			ul.style.height = newHeight+'px';
-			ul.scrollTop = ul.scrollHeight; // always keep at bottom
+			// Scroll to latest log
+			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;
 		};
 
 		window.console = {
@@ -309,52 +373,53 @@
 				try {
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
-						var param = arguments[i], li = CLcreate('li'), pString = param.toString();
+						var param = arguments[i], pString = param.toString();
+
+						// oldconsole.log(typeof param)
 
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
 							if (pString == '[object Object]') {
-	                            output += '<span style="display:block;word-break:break-all;">Object '+ObjToString(param)+'</span>'+space;
+	                            output = 'Object '+syntaxHighlighting('object', ObjToString(param))+space;
 	                        } else if (pString.match(/^\[object */i)) {
 	                        	if (pString.match(/^\[object HTML*/i) || htmlElem(param)) { // if param is HTML element
-		                        	output += printHTML(param)+space;
+		                        	output = syntaxHighlighting('html', printHTML(param))+space;
 	                        	} else { // Most likely window, document etc...
-									output += 'ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em>'+space;	
+									output = '<span style="color:red;">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>'+space;	
 	                        	}
-	                        } else {
-	                            output += param+space;
+	                        } else { // Most likely an array.
+	                        	if (param.length > 1) {
+	                        		output = '['+param+']';
+	                        	}	                        	
 	                        }
 						} else {
-							output += param+space;
+							output += syntaxHighlighting(typeof param, param)+space;
 						}
-						
 					}
 				} catch(e) {
 					// To account for js keywords
 					if ((typeof param).toLowerCase() == 'object') { 
-						output += param+space;
+						output += syntaxHighlighting(typeof param, param)+space;
 					} else {
-						output += e+space;
+						output += '<span style="color:red;">'+e+'</span>'+space;
 					}
 				}
 
-				// Style li elements
-				CLstyleElement(li, {'padding': '5px 16px 5px 5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-				CLstyleElement(liExecute, {'overflow':'hidden', 'padding': '5px','background': 'white','borderBottom': '1px solid #ccc', 'color': '#000000'});
-				
-				li.innerHTML = output;
-				ul.appendChild(li);
-				
-				ul.appendChild(liExecute);
-				liExecute.innerHTML = '<a href="#" style="display:block;width:21%;text-align:center;padding:10px 0;height:80%;float:right;" id="consoleLogExecuteBtn">EXECUTE</a>';
-				liExecute.appendChild(inputExecute);
+				var consoleLogLogsLi = CLcreate('li', {'html':symbol+'<span class="console-log-logs-entry">'+output+'</span>'});
+				consoleLogLogsUl.appendChild(consoleLogLogsLi);
+				consoleLogNewEntry();			
+			},
 
-				// Scroll to latest log
-				ul.scrollTop = ul.scrollHeight;
+			time: function() {
+				start = new Date().getMilliseconds();
+			},
 
-				// Reset variable & textarea value
-				isExecute = false;
-				inputExecute.value = '';
+			timeEnd: function() {
+				end = new Date().getMilliseconds();
+
+				var consoleLogLogsLi = CLcreate('li', {'html':symbol+'<span class="console-log-logs-entry"><span style="color:#0080FF;">'+arguments[0]+': '+Math.abs(start-end)+'ms</span></span>'});
+				consoleLogLogsUl.appendChild(consoleLogLogsLi);
+				consoleLogNewEntry();
 			}
 		};
 	}
