@@ -1,4 +1,4 @@
-(function () {	
+(function(){
 	/**
 	* UTILITIES
 	* Functions to make accessing the DOM and other functionality easier.
@@ -34,7 +34,8 @@
 	* Returns true or false if we are viewing on a mobile or tablet device.
 	*/
 	function CLisMobile(){
-		return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? true : false;
+		var devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+		return (devices.test(navigator.userAgent)) ? true : false;
 	}
 
 	/**
@@ -209,22 +210,84 @@
 	}
 
 	/**
+	* @function insertRules
+	* Adds CSS rules into a <style> tag.
+	*
+	* @param {HTMLElement} sheet - The <style> element you want to add rules/css into.
+	* @param {String} minifiedCSSFile - Contents of an entire CSS file, minified.
+    */
+	function insertRules(sheet, minifiedCSSFile) {
+		var selectors = [], rules = [], cssSplit = minifiedCSSFile.split('}');
+		for (var i=0; i<cssSplit.length; i++) {
+			var sp = cssSplit[i].split('{');
+
+			if (sp[0] !== '') selectors.push(sp[0]);
+			if (sp[1] !== undefined) rules.push(sp[1]);			
+		}
+
+		for (var i=0; i<selectors.length; i++) {
+			var selector = selectors[i], rule = rules[i];
+			
+			if ('insertRule' in sheet) {
+				sheet.insertRule(selector + '{' + rule + '}', 0);
+			} else if('addRule' in sheet) { // for browsers that do not suppoer insertRule
+				sheet.addRule(selector, rule, 0);
+			}
+		}
+	} 
+
+	/**
+	* @function getWindowHeight
+	* Returns the viewport height of the browser window.
+    */
+	function getWindowHeight() {
+		var winHeight, win = window, doc = document, 
+			docEle = doc.documentElement, body = doc.getElementsByTagName('body')[0];
+
+		if (typeof win.innerHeight != 'undefined') {
+			winHeight = window.innerHeight;
+		} else if (typeof docEle != 'undefined' && typeof docEle.clientHeight != 'undefined' && docEle.clientHeight != 0) {
+			winHeight = docEle.clientHeight;
+		} else {
+			winHeight = body.clientHeight;
+		}
+
+		return winHeight;
+	}
+
+	/** 
+	* @function isIE8or9
+	* Returns true or false if the browser is IE8 or IE9
+	* Credits go to http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
+	*/
+	function isIE8or9() {
+		var rv = -1; // Return value assumes failure.
+		if (navigator.appName == 'Microsoft Internet Explorer') {
+			var ua = navigator.userAgent, 
+				re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+			
+			if (re.exec(ua) != null) rv = parseFloat(RegExp.$1);
+		}
+
+		return (rv === 8 || rv === 9) ? true : false;
+	}
+
+	/**
 	* Start of custom console.log
 	*/
 
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-	if (typeof console == 'undefined' || CLisMobile()) { 
+	if (typeof console == undefined || CLisMobile() || typeof console == 'undefined') { 
 		var scriptTags = document.getElementsByTagName('script'),
 			consoleShown = true, output, space = ' ', 
-			windowHeight = window.innerHeight || document.body.clientHeight,
-			height = Math.round(windowHeight/3), newHeight, start, end,
+			windowHeight = getWindowHeight(),
+			height = Math.round(windowHeight/3), logHeight, start, end,
 			isExecute = false, symbol = '<span class="console-log-logs-sym">&gt;</span>',
 			consoleLog = CLcreate('div', {id: 'consoleLog', 'class': 'console-log'}),
-			consoleLogStyles = '{{consoleLogStyles}}',
-			consoleLogStyle = CLcreate('style', {'type': 'text/css', 'id': 'consoleLogStyle', 
-				'html': consoleLogStyles
-			}),
+			consoleLogMessage = CLcreate('div', {'class': 'consoleLogMessage', 'html': '<p><strong>HINT:</strong> Did you know your browser actually supports the <code>console</code> object?</p><p>All you need to do is open the <strong>Developer Tools</strong>. [<a href="http://stackoverflow.com/a/690300" target="_blank" class="referenceMsg">reference</a>]</p>'}),
+			consoleLogMessageClose = CLcreate('a', {'class': 'closeConsoleMessage', 'href': '#', 'html': 'X'}),
+			consoleLogStyle = CLcreate('style', {'type': 'text/css', 'id': 'consoleLogStyle'}),
 			consoleLogBody = CLcreate('div', {id: 'consoleLogBody', 'class': 'console-log-body cl-scroll', 'style': 'overflow: auto;', 'html': document.body.innerHTML}),
 			consoleLogHeader = CLcreate('div', {'class': 'console-log-header', 'html': '<h6>Console.Log</h6>'}),
 			consoleLogToggle = CLcreate('a', {href: '#', 'class': 'console-log-toggle', 'html': '<span>Click to hide</span>'}),
@@ -234,39 +297,73 @@
 			consoleLogLogsLiExecute = CLcreate('li', {'id': 'consoleLogLiExecute','class': 'console-log-execute', 'html': '<span class="console-log-logs-sym">&gt;</span><span class="console-log-logs-entry"></span>'}),
 			consoleLogTextarea = CLcreate('textarea', {id: 'consoleLogExecuteTextArea', 'name': 'consoleLogExecuteTextArea'}),
 			consoleLogExecuteBtn = CLcreate('a', {href: '#', 'html': 'Execute'}),
-			consoleLogHeightInput = CLcreate('input', {id: 'consoleLogHeightInput', 'class': 'console-log-text-input', type: 'text', value: height, maxlength: 3}),
-			consoleLogToggleFunc = function() {
-				var toggleTxt = (consoleShown) ? 'hide' : 'show',
-					toggleElem = consoleLogToggle.getElementsByTagName('span')[0];
-        
-				toggleElem.innerHTML = 'Click to '+toggleTxt;
-				consoleLogLogs.style.display = (consoleShown) ? 'block' : 'none';
+			consoleLogHeightInput = CLcreate('input', {id: 'consoleLogHeightInput', 'class': 'console-log-text-input', type: 'text', value: height, maxlength: 3});
 
-				if (consoleShown) {consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;}
-				consoleLogViewHeightFunc();
-			},
-			consoleLogHeightFunc = function(h, defVal) {
-				var val = Number(h),
-					winHeight = windowHeight-32;
+		/**
+		* @function consoleLogLatest
+		* Scrolls to the latest log.
+	    */
+		function consoleLogLatest() {
+			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;
+		}
 
-				// Added 32 to account for title bar
-				if (val <= winHeight && val >= defVal) {
-					newHeight = Number(val);
-				} else {
-					newHeight = Number((val > winHeight) ? winHeight : defVal);
-				}
+		/**
+		* @function consoleLogToggleFunc
+		* Hides and shows the console log and changes the toggle text.
+	    */
+		function consoleLogToggleFunc() {
+			var toggleTxt = (consoleShown) ? 'hide' : 'show',
+				toggleElem = consoleLogToggle.getElementsByTagName('span')[0];
+    
+			toggleElem.innerHTML = 'Click to '+toggleTxt;
+			consoleLogLogs.style.display = (consoleShown) ? 'block' : 'none';
 
-				consoleLogLogsUl.style.height = newHeight+'px';
-			},
-			consoleLogViewHeightFunc = function() {
-				var consoleLogHeight = (consoleLog.offsetHeight === 0) ? newHeight+64 : consoleLog.offsetHeight;
+			if (consoleShown) consoleLogLatest();
+			consoleLogViewHeightFunc(null);
+		}
 
-				if (!consoleShown) {
-					consoleLogHeight = 33;
-				}
+		/**
+		* @function consoleLogHeightFunc
+		* Changes the height of the logs <ul> element.
+		*
+		* @param {Number} h - the height to change for the <ul> element.
+	    */
+		function consoleLogHeightFunc(h) {
+			var val = Number(h), winHeight = windowHeight;
 
-				consoleLogBody.style.height = (windowHeight-15)-consoleLogHeight+'px';
-			};
+			if (val >= 90 && val <= (winHeight-64)/2) {
+				logHeight = val;
+			} else {
+				logHeight = winHeight/3;
+			}
+
+			consoleLogLogsUl.style.height = logHeight+'px';
+			consoleLogViewHeightFunc(logHeight)
+		}
+
+		/**
+		* @function consoleLogViewHeightFunc
+		* Changes the height of the body frame.
+		*
+		* @param {Number} h (optional) - the height of the <ul> element. if not passed will grab the variable.
+	    */
+		function consoleLogViewHeightFunc(h) {
+			var toggleHeight = (consoleShown) ? getWindowHeight()-(logHeight+64)-15 : getWindowHeight()-(32+15),
+				viewHeight = (h == null) ? toggleHeight : getWindowHeight()-(h+64)-15;
+
+			consoleLogBody.style.height = viewHeight+'px';
+		}
+
+		/**
+		* @function consoleLogNewEntry
+		* General functionality to be done when a new entry is added to log.
+	    */
+		function consoleLogNewEntry() {
+			consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
+			consoleLogTextarea.value = '';
+			consoleLogLatest();
+			isExecute = false; // Reset variable & textarea value
+		}
 		
 		// Loop through script tags on page.
 		for(var i=0; i<scriptTags.length; i++){
@@ -281,7 +378,7 @@
 					var query = queries[j];
 
 					if (Number(query)) {
-						height = (query > windowHeight-32) ? windowHeight-32 : query;
+						height = query;
 					} else {
 						consoleShown = (query == 'hide') ? false : true;
 					}
@@ -290,6 +387,18 @@
 		}
 
 		document.body.innerHTML = '';
+
+		// Added because IE 8 & 9 does support console.log, just needs to be enabled.
+		if (isIE8or9()) {
+			document.body.appendChild(consoleLogMessage);
+			consoleLogMessage.appendChild(consoleLogMessageClose);
+
+			consoleLogMessageClose.onclick = function() {
+				document.body.removeChild(consoleLogMessage);
+				return false;
+			};
+		}
+
 		document.body.appendChild(consoleLogBody);
 		document.getElementsByTagName('head')[0].appendChild(consoleLogStyle);
 
@@ -299,25 +408,14 @@
 		consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogTextarea);
 		consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogExecuteBtn);
 		consoleLogHeightInput.value = height;
+		consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
 
-		// function calls
-		consoleLogHeightFunc(height, height);
+		insertRules(document.styleSheets[document.styleSheets.length-1], '{{consoleLogStyles}}'); // Replaced by a grunt task
+
+		consoleLogHeightFunc(height);
 		consoleLogToggleFunc();
 		
 		document.body.appendChild(consoleLog);
-
-		var consoleLogNewEntry = function() {
-			// document.getElementById('consoleLogLiExecute').parentNode.removeChild(consoleLogLogsLiExecute);
-			consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
-
-			consoleLogTextarea.value = '';
-
-			// Scroll to latest log
-			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;
-
-			// Reset variable & textarea value
-			isExecute = false;
-		};
 
 		// toggle click
 		consoleLogToggle.onclick = function() {
@@ -331,6 +429,7 @@
 			if (consoleLogTextarea.value !== '') {
 				isExecute = true;
 				console.log('<span style="color:#0080FF;">'+consoleLogTextarea.value+'</span>', eval(consoleLogTextarea.value));
+				consoleLogLatest();
 			}
 
 			return false;
@@ -338,16 +437,24 @@
 
 		// clear button
 		consoleLogMenuBar.childNodes[0].onclick = function() {
-			consoleLogLogsUl.innerHTML = '';
-			consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
+			var logs = consoleLogLogsUl.getElementsByTagName('li'),
+				logsCount = logs.length;
+
+			if (logsCount !== 1) {
+				while (logsCount--) {
+					if (logs[logsCount].id !== 'consoleLogLiExecute') {
+						logs[logsCount].parentNode.removeChild(logs[logsCount]);
+					}
+				}
+			}
+			
 			return false;
 		};
 
 		// height change 
 		consoleLogHeightInput.onkeyup = function() {
-			consoleLogHeightFunc(this.value, this.defaultValue);
-			consoleLogViewHeightFunc();
-			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight; // always keep at bottom
+			consoleLogHeightFunc(this.value);
+			consoleLogLatest()
 		};
 
 		window.onerror = function(err, url, line) {
@@ -355,9 +462,7 @@
 				html: symbol+'<span class="console-log-logs-entry"><span style="color:red;">'+err+'\n'+url+'\n on line: '+line+'</span></span>'
 			});
 			consoleLogLogsUl.insertBefore(consoleLogLogsLi2, consoleLogLogsLiExecute);
-
-			// Scroll to latest log
-			consoleLogLogsUl.scrollTop = consoleLogLogsUl.scrollHeight;
+			consoleLogLatest();
 		};
 
 		window.console = {
@@ -374,8 +479,6 @@
 					// Loop through arguments passed in.
 					for(var i=0; i<arguments.length; i++) {
 						var param = arguments[i], pString = param.toString();
-
-						// oldconsole.log(typeof param)
 
 						// If the parameter is an object special functionality needs to happen.
 						if ((typeof param).toLowerCase() == 'object') {
@@ -423,4 +526,4 @@
 			}
 		};
 	}
-}());
+})();

@@ -10,11 +10,15 @@ A simple script that makes debugging easier on browsers that do not support cons
 A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the `console` object is `undefined`; It then overwrites the `console` object and the `log` function.
 
 ### Features
-*   Does not use any JavaScript libraries
-*   Toggle console
-*   Change height of console.
-*   Query params
-*   Execute code in the browser **NEW!**
+*	Doesn't use JavaScript libraries
+*	Toggle console
+*	Adjust console height
+*	Query params
+*	Recognizable theme **NEW!**
+*	Syntax highlighting **NEW!**
+*	Clear console **NEW!**
+*	New supported functions: `time` & `timeEnd` **NEW!**
+
 
 ### Limitations/Issues
 *   Nested objects (window, document)
@@ -43,10 +47,3 @@ You may also use parameters to set default settings for the console (visibility 
 
 ## Try it out! [View the demo](http://console.mikewgd.com/demo)
 Remember you need to view it on a device or change your user agent.
-
-### Future Features
-*   Clear console button
-*   Syntax highlighting
-*   More function support, not just log
-*   Showing line numbers
-*   Style like Chrome console
