@@ -14,98 +14,88 @@
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
+    <div class="wrapper">
+		<div class="header">
+			
+			<div class="top-part">
+				<h1 class="logo">Console.Log</h1>
+				<p>A tool for developers to view the browser’s console on a browser that does not support console or a mobile device.</p>
+			</div>
 
-        <header>
-          <h1>Console.Log</h1>
-          <h2>A simple script that makes debugging easier on browsers that do not support console and viewing the log on mobile/tablet devices. The script overwrites the console object and the log function. Each calling of console.log gets inserted into an li element.</h2>
-        </header>
+			<div class="subheader">
+				<p>Get the LATEST version (v3.0): </p>
+				<ul class="latest-version">
+					<li><a href="/js/console.min.js" download>Minified (<?php echo KBSize($jsPath.'console.min.js'); ?> KB)</a></li>
+					<li><a target="_blank" href="https://github.com/mikewgd/console-log"><img src="/img/github.png" /> <span>Clone/Fork the repo on GitHub</span></a></li>
+				</ul>				
+				
+				<p class="text">Or just use the HTML below:</p>
+				<pre><code>&lt;script type="text/javascript" src="<?php echo $cdn;?>"&gt;&lt;/script&gt;</code></pre>
+			
+				<p class="prev-versions"><strong>Previous versions:</strong> <?php version('1.0'); version('2.0'); version('2.1'); version('2.2'); ?></p>
+			</div>
+		</div>
+		
+		<div class="content">
+			<div class="section what-is-it">
+				<h2>How It Works/What is it?</h2>
+				<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object and the <code>log</code> function.</p>
+			
+				<div class="list">
+					<h3>Features</h3>
+					<ul>
+						<li>Doesn't use JavaScript libraries</li>
+						<li>Toggle console</li>
+						<li>Adjust console height</li>
+						<li>Query params</li>
+						<li>Recognizable theme <strong class="new">NEW!</strong></li>
+						<li>Syntax highlighting <strong class="new">NEW!</strong></li>
+						<li>Clear console <strong class="new">NEW!</strong></li>
+						<li class="last">New supported functions: <code>time</code> & <code>timeEnd</code> <strong class="new">NEW!</strong></li>
+					</ul>
+				</div>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/mikewgd/console-log/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/mikewgd/console-log/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/mikewgd/console-log" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+				<div class="list fl">
+					<h3>Limitations/Issues</h3>
+					<ul>
+						<li>Nested objects (window, document)</li>
+						<li class="last">Have an issue? <a target="_blank" href="https://github.com/mikewgd/console-log/issues">Log it here!</a></li>
+					</ul>
+				</div>
+			</div>
+		
+			<div class="section">
+				<h2>Implementation</h2>
+				<p>Just add the script on the page before the js file(s) that contain <code>console.log</code> and your good to go! No rewriting code!</p>
+				
+				<h3>Parameters</h3>
+				<p>You may also use parameters to set default settings for the console (visibility and height). Simply add '?' to the end of the src attribute on the script tag.</p>
 
-        <hr>
+				<p><strong>EXAMPLE:</strong></p>
+	
+				<pre><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
 
-        <section id="main_content">
-          <p><strong>Stable Build:</strong> Please go here (<a href="http://console.mikewgd.com/">http://console.mikewgd.com/</a>)<br>
-<strong>CDN:</strong> <code>&lt;script src="http://cdn.jsdelivr.net/console-log/latest/console.min.js"&gt;&lt;/script&gt;</code></p>
+	&lt;!-- Add console log script above the other script. (with default settings) --&gt;
+	&lt;script type=&quot;text/javascript&quot; src=&quot;//console.min.js&quot;&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="//console.min.js?400"&gt;&lt;/script&gt; &lt;!--console expanded, height 400px--&gt;
+	&lt;script type="text/javascript" src="//console.min.js?hide&amp;400"&gt;&lt;/script&gt; &lt;!-- console collapsed, height 400px--&gt;
 
-<h2>
-<a id="how-it-workswhat-is-it" class="anchor" href="#how-it-workswhat-is-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How It Works/What is it?</h2>
-
-<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object and the <code>log</code> function.</p>
-
-<h3>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h3>
-
-<ul>
-<li>  Doesn't use JavaScript libraries</li>
-<li>  Toggle console</li>
-<li>  Adjust console height</li>
-<li>  Query params</li>
-<li>  Recognizable theme <strong>NEW!</strong>
-</li>
-<li>  Syntax highlighting <strong>NEW!</strong>
-</li>
-<li>  Clear console <strong>NEW!</strong>
-</li>
-<li>  New supported functions: <code>time</code> &amp; <code>timeEnd</code> <strong>NEW!</strong>
-</li>
-</ul>
-
-<h3>
-<a id="limitationsissues" class="anchor" href="#limitationsissues" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations/Issues</h3>
-
-<ul>
-<li>  Nested objects (window, document)</li>
-<li>  Have an issue? <a href="https://github.com/mikewgd/console-log/issues">Log it here!</a>
-</li>
-</ul>
-
-<h2>
-<a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementation</h2>
-
-<p>Just add the script on the page before the js file(s) that contain <code>console.log</code> and your good to go! No rewriting code!</p>
-
-<h3>
-<a id="parameters" class="anchor" href="#parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parameters</h3>
-
-<p>You may also use parameters to set default settings for the console (visibility and height). Simply add '?' to the end of the src attribute on the script tag.</p>
-
-<p><strong>EXAMPLE:</strong></p>
-
-<pre><code>        ...
-
-         &lt;!-- Add console log script above the other script. (with default settings) --&gt;
-         &lt;script type="text/javascript" src="//console.min.js"&gt;&lt;/script&gt;
-         &lt;script type="text/javascript" src="//console.min.js?400"&gt;&lt;/script&gt; &lt;!--console expanded, height 400px--&gt;
-         &lt;script type="text/javascript" src="//console.min.js?hide&amp;400"&gt;&lt;/script&gt; &lt;!-- console collapsed, height 400px--&gt;
-
-         &lt;!-- Some random js file with console.log --&gt;
-         &lt;script type="text/javascript" src="//test.js"&gt;&lt;/script&gt;
+	&lt;!-- Some random js file with console.log --&gt;
+	&lt;script type=&quot;text/javascript&quot; src=&quot;//test.js&quot;&gt;&lt;/script&gt;
 
     &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<h2>
-<a id="try-it-out-view-the-demo" class="anchor" href="#try-it-out-view-the-demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Try it out! <a href="http://console.mikewgd.com/demo">View the demo</a>
-</h2>
-
-<p>Remember you need to view it on a device or change your user agent.</p>
-        </section>
-
-        <footer>
-          Console.Log is maintained by <a href="https://github.com/mikewgd">mikewgd</a><br>
-          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
-    </div>
+&lt;/html&gt;</code></pre>				
+			</div>
+			
+			<div class="section last">
+				<h2>Try it out! <a href="/demo">View the demo</a></h2>
+				<p>Remember you need to view it on a device or change your user agent.</p>
+			</div>
+		</div>
+		
+		<div class="footer">
+			<p>&copy; 2014 - <?php echo date('Y');?></p>
+		</div>
+	</div>
   </body>
 </html>
