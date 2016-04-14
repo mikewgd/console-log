@@ -52,6 +52,8 @@ body {
   font-size: 1em;
   line-height: 1.5;
   color: #6d6d6d;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: #e7e7e7 url(../images/body-bg.png) 0 0 repeat;
 }
 
 a {
@@ -82,11 +84,14 @@ header h2 {
   letter-spacing: -1px;
 }
 
+#container {
+  min-height: 595px;
+  background: transparent url(../images/highlight-bg.jpg) 50% 0 no-repeat;
+}
+
 .inner {
-  width: 980px;
-  margin: 3% auto;
-  position: relative;
-  border: 1px solid #505050;
+  width: 620px;
+  margin: 0 auto;
 }
 
 #container .inner img {
