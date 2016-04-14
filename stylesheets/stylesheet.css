@@ -87,8 +87,10 @@ header h2 {
 }
 
 .inner {
-  width: 620px;
-  margin: 0 auto;
+  width: 980px;
+  margin: 3% auto;
+  position: relative;
+  border: 1px solid #505050;
 }
 
 #container .inner img {
