@@ -132,14 +132,14 @@ h3 {
     display: block;
     float: none; }
   .content li {
-    background-image: url("/images/old.gif");
+    background-image: url("../images/old.gif");
     background-repeat: no-repeat;
     background-position: left 6px;
     padding: 6px 15px;
     border-bottom: 1px solid #e6e6e6;
     margin: 0; }
     .content li.last {
-      background-image: url("/images/last.gif");
+      background-image: url("../images/last.gif");
       border-bottom: 0; }
   .content a {
     color: #3781fc; }
