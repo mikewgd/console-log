@@ -1,16 +1,11 @@
-(function(){
+ (function(){
 	/**
-	* UTILITIES
-	* Functions to make accessing the DOM and other functionality easier.
-	*/
-
-	/**
-	* @function CLcreate
 	* Returns an element to be created in the DOM and adds attributes.
 	* NOTE: It is best to put it in a variable.
 	*
-	* @param {String} tag - tag you want to created, i.e "div", "span", etc...
-	* @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
+	* @param {String} tag Tag you want to created, i.e "div", "span", etc...
+	* @param {Object} attrs Attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
+	* @return {HTMLElement}
 	*/
 	function CLcreate(element, attrs) {
 		var elem = document.createElement(element);
@@ -30,8 +25,9 @@
 	}
 
 	/**
-	* @function CLisMobile
 	* Returns true or false if we are viewing on a mobile or tablet device.
+	*
+	* @return {Boolean}
 	*/
 	function CLisMobile(){
 		var devices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
@@ -39,12 +35,12 @@
 	}
 
 	/**
-	* @function ObjToString
 	* Returns an Object as a string
 	* Credits go to https://github.com/douglascrockford/JSON-js
 	* Code was modified to fit certain needs.
 	*
 	* @param {Object} obj - object being passed
+	* @return {String}
 	*/
 	function ObjToString(obj) {
 		var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g, 
@@ -57,10 +53,10 @@
 	    };
 
 	    /**
-		* @function quote
 		* Returns string with quotes
 		*
 		* @param {String} string - string being passed to surround with quotes.
+		* @return {String}
 	    */
 	    var quote = function(string) {
 	        escapable.lastIndex = 0;
@@ -140,11 +136,11 @@
 	}
 
 	/**
-	* @function syntaxHighlighting
 	* Returns string with HTML surrounding, used for coloring.
 	*
 	* @param {String} type - type of argument being passed, i.e. number, null, etc..
 	* @param {String} str - string being passed to surround with.
+	* @return {String}
     */
 	function syntaxHighlighting(type, str) {
 		var formattedString = str;
@@ -174,10 +170,10 @@
 	}
 
 	/**
-	* @function printHTML
 	* Returns HTML as a string.
 	*
 	* @param {HTMLElement/Object} el - the element to be parsed.
+	* @return {String}
 	*/
 	function printHTML(el) {
 		var outputDiv = CLcreate('div'),
@@ -210,7 +206,6 @@
 	}
 
 	/**
-	* @function insertRules
 	* Adds CSS rules into a <style> tag.
 	*
 	* @param {HTMLElement} sheet - The <style> element you want to add rules/css into.
@@ -237,8 +232,9 @@
 	} 
 
 	/**
-	* @function getWindowHeight
 	* Returns the viewport height of the browser window.
+	*
+	* @return {Number}
     */
 	function getWindowHeight() {
 		var winHeight, win = window, doc = document, 
@@ -259,6 +255,7 @@
 	* @function isIE8or9
 	* Returns true or false if the browser is IE8 or IE9
 	* Credits go to http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
+	* @return {Boolean}
 	*/
 	function isIE8or9() {
 		var rv = -1; // Return value assumes failure.
@@ -271,10 +268,6 @@
 
 		return (rv === 8 || rv === 9) ? true : false;
 	}
-
-	/**
-	* Start of custom console.log
-	*/
 
 	// If the console is undefined or you are using a device.
 	// User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
@@ -300,7 +293,6 @@
 			consoleLogHeightInput = CLcreate('input', {id: 'consoleLogHeightInput', 'class': 'console-log-text-input', type: 'text', value: height, maxlength: 3});
 
 		/**
-		* @function consoleLogLatest
 		* Scrolls to the latest log.
 	    */
 		function consoleLogLatest() {
@@ -308,7 +300,6 @@
 		}
 
 		/**
-		* @function consoleLogToggleFunc
 		* Hides and shows the console log and changes the toggle text.
 	    */
 		function consoleLogToggleFunc() {
@@ -323,7 +314,6 @@
 		}
 
 		/**
-		* @function consoleLogHeightFunc
 		* Changes the height of the logs <ul> element.
 		*
 		* @param {Number} h - the height to change for the <ul> element.
@@ -342,7 +332,6 @@
 		}
 
 		/**
-		* @function consoleLogViewHeightFunc
 		* Changes the height of the body frame.
 		*
 		* @param {Number} h (optional) - the height of the <ul> element. if not passed will grab the variable.
@@ -355,7 +344,6 @@
 		}
 
 		/**
-		* @function consoleLogNewEntry
 		* General functionality to be done when a new entry is added to log.
 	    */
 		function consoleLogNewEntry() {
