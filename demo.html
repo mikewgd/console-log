@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Console Log Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=9" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style>body {font-family: "Arial"; font-size:14px;}</style>
+</head>
+
+<body>
+	<h1>Sample Page</h1>
+	<p data-test="p1" class="para" id="para1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit, erat id ullamcorper vestibulum, leo lacus interdum velit, vel posuere eros dolor vitae felis. Nulla ullamcorper massa non purus volutpat convallis. <a href="#" id="addToConsole">ADD TO CONSOLE</a>, Sed nec neque at nisi vestibulum fringilla a sit amet est. Ut lacinia purus ac diam venenatis, in malesuada lectus pellentesque. Morbi nisi tellus, pellentesque in est a, luctus blandit nulla. Sed eleifend, augue et malesuada tristique, nisl libero luctus libero, quis tristique dolor mi in purus. Nunc sed ultrices purus, sed auctor magna. Nunc eu fermentum leo. Cras eu feugiat magna. Maecenas tempus mi elementum, consequat est vitae, pharetra neque. Aliquam posuere viverra mattis. Sed feugiat nibh quis mauris pellentesque, ut ultricies lorem facilisis.</p>
+	<p>Nam quis vulputate libero. Sed sed sapien mattis, sodales enim vitae, laoreet erat. Quisque convallis mi magna, ac semper est varius ac. Etiam feugiat turpis sed nunc sollicitudin posuere. Curabitur ut vehicula dui. Morbi sed condimentum est. Curabitur fringilla ligula sit amet risus adipiscing, quis elementum lacus hendrerit. Fusce scelerisque elementum tortor nec molestie. Mauris accumsan accumsan justo et interdum. Phasellus orci lorem, congue venenatis erat non, mattis cursus metus.</p>
+	<p>Vivamus rutrum interdum ipsum sed luctus. Quisque suscipit justo nulla, nec sodales erat placerat vel. In et convallis sem. Maecenas convallis sollicitudin porta. Pellentesque consectetur quis orci sed mollis. Integer consectetur mollis elit, sit amet dignissim ligula convallis vitae. Aenean ut felis urna. Curabitur euismod ligula vel nibh vehicula euismod. Proin porttitor, ipsum at rhoncus viverra, libero ante gravida ligula, id condimentum lectus velit a odio. Donec at eros nisi. Donec varius lacus pharetra condimentum bibendum. Aliquam id sollicitudin arcu. Pellentesque tempus sagittis volutpat. Nulla feugiat odio in volutpat elementum. Nunc vitae auctor quam, ac euismod metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+	<p>Suspendisse venenatis dapibus risus, et ornare augue egestas non. Cras ornare libero vitae erat interdum, nec blandit libero adipiscing. Integer euismod ipsum non ligula porttitor sollicitudin aliquam eget neque. Morbi hendrerit lacus id sem pulvinar iaculis. Proin vel risus sed orci malesuada pellentesque. Donec lacinia molestie aliquam. Nulla lorem est, eleifend nec cursus eget, elementum sed dolor. Nunc ac ultrices ante. Nunc bibendum elit ac ornare vestibulum. Morbi vitae dui a nulla pulvinar congue et et justo. Duis eget purus in ante egestas tempor.</p>
+
+	<div class="demo-elem" id="demoELem">
+		<h2>Div with nested elements</h2>
+		<p>Proin vel risus sed orci malesuada pellentesque. Donec lacinia molestie aliquam. Nulla lorem est, eleifend nec cursus eget, elementum sed dolor. <strong>Nunc</strong> ac ultrices ante.</p>
+		<ul>
+			<li>List item</li>
+			<li>List item</li>
+		</ul>
+	</div>
+	
+	<script type="text/javascript" src="dist/js/console.min.js?200"></script>
+
+	<script>
+		var objectTest = {fruit: 'apple', car: 'Ford', dessert: 'cupcake', numbers: {'1':'odd', '2': 'even'}},
+			jsonTest = [{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false,"about":"Amet magna duis eiusmod cillum voluptate fugiat. Mollit sint quis Lorem non officia cillum. Cillum irure Lorem aliqua ipsum sit ipsum laborum commodo laborum adipisicing eu. Ea eu sint excepteur irure. Laboris sunt quis officia minim.","latitude":-71.517163,"tags":["est","sunt","ex"],"friends":[{"id":0,"name":"Marshall Cabrera"},{"id":1,"name":"Marcella Estrada"}]}],
+			mixTest = {current: 0, boo: false, test:'ttests asdfasdf', 'stringFunc': function(e,t) {var j=[{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false}];}, init: function() {return this;}},
+			arrayTest = [1,2,3],
+			elementTest = document.getElementsByTagName('p'),
+			elementTest2 = document.getElementById('demoELem')
+			nativeFuncTest = String,
+			nativeObjTest = window; 
+
+		document.getElementById('addToConsole').onclick = function(e) {
+			console.log('i was added via click event.')
+			return false;
+		};
+
+		console.time('timeTest');
+		console.log(objectTest);
+		console.log(jsonTest);
+		console.log(mixTest);
+		console.log(arrayTest);
+		console.log(elementTest);
+		console.log(elementTest2);
+		console.log(nativeFuncTest);
+		console.log(nativeObjTest);
+		console.log('There is only ',1,' cat in the house.');
+		console.log('There is only '+2+' cat in the house.');
+		console.log(2+3);
+		console.timeEnd('timeTest');
+	</script>
+
+</body>
+</html>
