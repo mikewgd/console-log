@@ -362,7 +362,7 @@
       this._entries.appendChild(this._liExecute);
       CLHelpers.eleById('consoleTextarea').value = '';
       this.scrollToBottom();
-      // isExecute = false; // Reset variable & textarea value
+      isExecute = false; // Reset variable & textarea value
     },
 
     scrollToBottom: function() {
