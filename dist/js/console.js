@@ -270,9 +270,9 @@
  }
 
  /** 
-  * @function isIE8or9
   * Returns true or false if the browser is IE8 or IE9
-  * Credits go to http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
+  *
+  * @credit http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
   * @return {Boolean}
   */
  function isIE8or9() {
@@ -297,9 +297,8 @@
      height = Math.round(windowHeight / 3),
      logHeight, start, end,
      isExecute = false,
-     symbol = '<span class="console-log-logs-sym">&gt;</span>',
+     symbol = '<span class="console-log__entry-symbol">&gt;</span>',
      consoleLog = CLcreate('div', {
-       id: 'consoleLog',
        'class': 'console-log'
      }),
      consoleLogMessage = CLcreate('div', {
@@ -322,38 +321,39 @@
        'html': document.body.innerHTML
      }),
      consoleLogHeader = CLcreate('div', {
-       'class': 'console-log-header',
-       'html': '<h6>Console.Log</h6>'
+       'class': 'console-log__header'
      }),
      consoleLogToggle = CLcreate('a', {
        href: '#',
-       'class': 'console-log-toggle',
-       'html': '<span>Click to hide</span>'
+       'class': 'console-log__toggle',
+       'html': '<h6 class="console-log__title">Console.Log</h6>' + '<span class="console-log__toggle-text">Click to hide</span>'
      }),
      consoleLogLogs = CLcreate('div', {
        'class': 'console-log-logs'
      }),
-     consoleLogLogsUl = CLcreate('ul'),
+     consoleLogLogsUl = CLcreate('ul', {
+      'class': 'console-log__entries'
+     }),
      consoleLogMenuBar = CLcreate('div', {
-       'class': 'console-log-menu-bar',
-       'html': '<a href="#">CLEAR</a><span>Height:</span>'
+       'class': 'console-log__menu',
+       'html': '<a class="console-log__clear" href="#">CLEAR</a><span class="console-log__menu-label">Height:</span>'
      }),
      consoleLogLogsLiExecute = CLcreate('li', {
-       'id': 'consoleLogLiExecute',
-       'class': 'console-log-execute',
-       'html': '<span class="console-log-logs-sym">&gt;</span><span class="console-log-logs-entry"></span>'
+       'class': 'console-log__entry console-log__entry--execute',
+       'html': '<span class="console-log__entry-symbol">&gt;</span><span class="console-log__entry-text"></span>'
      }),
      consoleLogTextarea = CLcreate('textarea', {
        id: 'consoleLogExecuteTextArea',
+       'class': 'console-log__execute-textarea',
        'name': 'consoleLogExecuteTextArea'
      }),
      consoleLogExecuteBtn = CLcreate('a', {
        href: '#',
+       'class': 'console-log__execute-btn',
        'html': 'Execute'
      }),
      consoleLogHeightInput = CLcreate('input', {
-       id: 'consoleLogHeightInput',
-       'class': 'console-log-text-input',
+       'class': 'console-log__height-input',
        type: 'text',
        value: height,
        maxlength: 3
@@ -459,14 +459,15 @@
    document.getElementsByTagName('head')[0].appendChild(consoleLogStyle);
 
    consoleLog.appendChild(consoleLogHeader).appendChild(consoleLogToggle);
-   consoleLog.appendChild(consoleLogLogs).appendChild(consoleLogMenuBar).appendChild(consoleLogHeightInput);
-   consoleLogLogs.appendChild(consoleLogLogsUl);
+   consoleLog.appendChild(consoleLogMenuBar).appendChild(consoleLogHeightInput);
+   consoleLog.appendChild(consoleLogLogsUl);
+
    consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogTextarea);
    consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogExecuteBtn);
    consoleLogHeightInput.value = height;
    consoleLogLogsUl.appendChild(consoleLogLogsLiExecute);
 
-   insertRules(document.styleSheets[document.styleSheets.length - 1], '.console-log{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:1;background:#fff}.consoleLogMessage{background:#fff;border:1px solid red;color:#333;padding:10px;text-align:center;position:absolute;top:10px;width:500px;left:50%;margin-left:-250px}.consoleLogMessage p{margin:0;padding:0;font-size:12px}.consoleLogMessage a{color:#333;font-weight:700;text-decoration:underline}.consoleLogMessage .closeConsoleMessage{position:absolute;display:block;width:40px;line-height:30px;text-align:center;top:0;right:0;text-decoration:none}.console-log a{color:#333;display:block;text-decoration:none;outline:none}.console-log-header,.console-log-header h6,.console-log-logs,.console-log-toggle{font-family:Lucida Grande,Lucida Sans,sans-serif;font-size:12px}.console-log-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3}.console-log-header h6{margin:4px 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400}.console-log-toggle{padding:8px 0;text-align:right}.console-log-toggle span{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px}.console-log-logs{background:#fff;overflow:auto}.console-log-menu-bar{overflow:auto;border-bottom:1px solid #e6e6e6}.console-log-menu-bar span{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.console-log-menu-bar a{padding:8px 10px;text-decoration:none;color:#666;float:left}.console-log-menu-bar input{width:23px;padding:2px;margin:4px;float:left}.console-log-logs ul{overflow:auto;margin:0;padding:0;list-style-type:none}.console-log-logs li{clear:right;position:relative;min-height:16px;list-style-type:none;font-size:11px}.console-log-execute textarea,.console-log-logs-entry{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log-logs-entry{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative}.console-log-logs-sym{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0}.console-log-execute{overflow:hidden}.console-log-execute .console-log-logs-entry{overflow:auto;padding-right:0}.console-log-execute .console-log-logs-sym{color:#2d7df9}.console-log-execute textarea{width:76%;float:left;padding:3px;height:30px}.console-log-execute a{display:block;float:right;width:21%;text-align:center;text-decoration:none;text-transform:uppercase;line-height:38px}'); // Replaced by a grunt task
+   insertRules(document.styleSheets[document.styleSheets.length - 1], '.console-log{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:1;background:#fff;font-size:12px}.console-log__entries,.console-log__header,.console-log__title,.console-log__toggle{font-family:Lucida Grande,Lucida Sans,sans-serif;font-size:12px}.console-log__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3}.console-log__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400}.console-log__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right}.console-log__toggle-text{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.console-log__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6}.console-log__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.console-log__clear{color:#333;display:block;outline:none;padding:8px 10px;text-decoration:none;color:#666;float:left}.console-log__height-input{width:23px;padding:2px;margin:4px;float:left;border:0}.console-log__entries{background:#fff;overflow:auto;margin:0;padding:0;list-style-type:none}.console-log__entry{clear:right;position:relative;min-height:16px;list-style-type:none;font-size:11px}.console-log__entry-symbol{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0}.console-log__entry-text{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__entry--execute{overflow:hidden}.console-log__entry--execute .console-log__entry-symbol{color:#2d7df9}.console-log__entry--execute .console-log__entry-text{overflow:auto;padding-right:0}.console-log__execute-textarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__execute-btn{color:#333;outline:none;display:block;float:right;width:21%;text-align:center;text-decoration:none;text-transform:uppercase;line-height:38px}'); // Replaced by a grunt task
 
    consoleLogHeightFunc(height);
    consoleLogToggleFunc();
@@ -515,7 +516,7 @@
 
    window.onerror = function(err, url, line) {
      var consoleLogLogsLi2 = CLcreate('li', {
-       html: symbol + '<span class="console-log-logs-entry"><span style="color:red;">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+       html: symbol + '<span class="console-log__entry-text"><span style="color:red;">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
      });
      consoleLogLogsUl.insertBefore(consoleLogLogsLi2, consoleLogLogsLiExecute);
      consoleLogLatest();
@@ -566,7 +567,8 @@
        }
 
        var consoleLogLogsLi = CLcreate('li', {
-         'html': symbol + '<span class="console-log-logs-entry">' + output + '</span>'
+        'class': 'console-log__entry',
+         'html': symbol + '<span class="console-log__entry-text">' + output + '</span>'
        });
        consoleLogLogsUl.appendChild(consoleLogLogsLi);
        consoleLogNewEntry();
@@ -580,7 +582,8 @@
        end = new Date().getMilliseconds();
 
        var consoleLogLogsLi = CLcreate('li', {
-         'html': symbol + '<span class="console-log-logs-entry"><span style="color:#0080FF;">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'class': 'console-log__entry',
+         'html': symbol + '<span class="console-log__entry-text"><span style="color:#0080FF;">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
        });
        consoleLogLogsUl.appendChild(consoleLogLogsLi);
        consoleLogNewEntry();

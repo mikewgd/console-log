@@ -270,9 +270,9 @@
  }
 
  /** 
-  * @function isIE8or9
   * Returns true or false if the browser is IE8 or IE9
-  * Credits go to http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
+  *
+  * @credit http://blogs.msdn.com/b/giorgio/archive/2009/04/14/how-to-detect-ie8-using-javascript-client-side.aspx
   * @return {Boolean}
   */
  function isIE8or9() {
@@ -297,9 +297,8 @@
      height = Math.round(windowHeight / 3),
      logHeight, start, end,
      isExecute = false,
-     symbol = '<span class="console-log-logs-sym">&gt;</span>',
+     symbol = '<span class="console-log__entry-symbol">&gt;</span>',
      consoleLog = CLcreate('div', {
-       id: 'consoleLog',
        'class': 'console-log'
      }),
      consoleLogMessage = CLcreate('div', {
@@ -322,38 +321,39 @@
        'html': document.body.innerHTML
      }),
      consoleLogHeader = CLcreate('div', {
-       'class': 'console-log-header',
-       'html': '<h6>Console.Log</h6>'
+       'class': 'console-log__header'
      }),
      consoleLogToggle = CLcreate('a', {
        href: '#',
-       'class': 'console-log-toggle',
-       'html': '<span>Click to hide</span>'
+       'class': 'console-log__toggle',
+       'html': '<h6 class="console-log__title">Console.Log</h6>' + '<span class="console-log__toggle-text">Click to hide</span>'
      }),
      consoleLogLogs = CLcreate('div', {
        'class': 'console-log-logs'
      }),
-     consoleLogLogsUl = CLcreate('ul'),
+     consoleLogLogsUl = CLcreate('ul', {
+      'class': 'console-log__entries'
+     }),
      consoleLogMenuBar = CLcreate('div', {
-       'class': 'console-log-menu-bar',
-       'html': '<a href="#">CLEAR</a><span>Height:</span>'
+       'class': 'console-log__menu',
+       'html': '<a class="console-log__clear" href="#">CLEAR</a><span class="console-log__menu-label">Height:</span>'
      }),
      consoleLogLogsLiExecute = CLcreate('li', {
-       'id': 'consoleLogLiExecute',
-       'class': 'console-log-execute',
-       'html': '<span class="console-log-logs-sym">&gt;</span><span class="console-log-logs-entry"></span>'
+       'class': 'console-log__entry console-log__entry--execute',
+       'html': '<span class="console-log__entry-symbol">&gt;</span><span class="console-log__entry-text"></span>'
      }),
      consoleLogTextarea = CLcreate('textarea', {
        id: 'consoleLogExecuteTextArea',
+       'class': 'console-log__execute-textarea',
        'name': 'consoleLogExecuteTextArea'
      }),
      consoleLogExecuteBtn = CLcreate('a', {
        href: '#',
+       'class': 'console-log__execute-btn',
        'html': 'Execute'
      }),
      consoleLogHeightInput = CLcreate('input', {
-       id: 'consoleLogHeightInput',
-       'class': 'console-log-text-input',
+       'class': 'console-log__height-input',
        type: 'text',
        value: height,
        maxlength: 3
@@ -459,8 +459,9 @@
    document.getElementsByTagName('head')[0].appendChild(consoleLogStyle);
 
    consoleLog.appendChild(consoleLogHeader).appendChild(consoleLogToggle);
-   consoleLog.appendChild(consoleLogLogs).appendChild(consoleLogMenuBar).appendChild(consoleLogHeightInput);
-   consoleLogLogs.appendChild(consoleLogLogsUl);
+   consoleLog.appendChild(consoleLogMenuBar).appendChild(consoleLogHeightInput);
+   consoleLog.appendChild(consoleLogLogsUl);
+
    consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogTextarea);
    consoleLogLogsLiExecute.childNodes[1].appendChild(consoleLogExecuteBtn);
    consoleLogHeightInput.value = height;
@@ -515,7 +516,7 @@
 
    window.onerror = function(err, url, line) {
      var consoleLogLogsLi2 = CLcreate('li', {
-       html: symbol + '<span class="console-log-logs-entry"><span style="color:red;">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+       html: symbol + '<span class="console-log__entry-text"><span style="color:red;">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
      });
      consoleLogLogsUl.insertBefore(consoleLogLogsLi2, consoleLogLogsLiExecute);
      consoleLogLatest();
@@ -566,7 +567,8 @@
        }
 
        var consoleLogLogsLi = CLcreate('li', {
-         'html': symbol + '<span class="console-log-logs-entry">' + output + '</span>'
+        'class': 'console-log__entry',
+         'html': symbol + '<span class="console-log__entry-text">' + output + '</span>'
        });
        consoleLogLogsUl.appendChild(consoleLogLogsLi);
        consoleLogNewEntry();
@@ -580,7 +582,8 @@
        end = new Date().getMilliseconds();
 
        var consoleLogLogsLi = CLcreate('li', {
-         'html': symbol + '<span class="console-log-logs-entry"><span style="color:#0080FF;">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'class': 'console-log__entry',
+         'html': symbol + '<span class="console-log__entry-text"><span style="color:#0080FF;">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
        });
        consoleLogLogsUl.appendChild(consoleLogLogsLi);
        consoleLogNewEntry();
