@@ -26,9 +26,14 @@ gulp.task('browserSync', function() {
   });
 });
 
-gulp.task('sass', function() {
+gulp.task('css', function() {
   return gulp.src(paths.scss + '/*.scss') // Gets all files ending with .scss in app/scss and children dirs
     .pipe(sass()) // Passes it through a gulp-sass
+    .pipe(gulp.dest(paths.buildCss)) // Outputs it in the css folder
+    .pipe(cssnano())
+    .pipe(rename({
+      suffix: '.min'
+    }))
     .pipe(gulp.dest(paths.buildCss)) // Outputs it in the css folder
     .pipe(browserSync.reload({ // Reloading with Browser Sync
       stream: true
@@ -36,8 +41,7 @@ gulp.task('sass', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.scss + '/*.scss', ['sass']);
-  gulp.watch(paths.buildCss + '/console-style.css', ['css']);
+  gulp.watch(paths.scss + '/*.scss', ['dist']);
   gulp.watch('demo.html', browserSync.reload);
   gulp.watch(paths.js + '/*.js', ['js-style', 'js']);
 });
@@ -54,24 +58,19 @@ gulp.task('js', function() {
     }));
 });
 
-gulp.task('css', function() {
-  return gulp.src(paths.buildCss + '/console-style.css')
-    .pipe(cssnano())
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(gulp.dest(paths.buildCss));
+gulp.task('dist', function() {
+  runSequence('css', 'js-style', 'js');
 });
 
 gulp.task('js-style', function() {
-  return gulp.src(paths.js + '/*.js')
+  return gulp.src(paths.js + '/console.js')
     .pipe(replace(/{{consoleLogStyles}}/, function(s) {
-        var style = fs.readFileSync(paths.buildCss + '/console-style.min.css', 'utf8');
-        return style;
+      var style = fs.readFileSync(paths.buildCss + '/console-style.min.css', 'utf8');
+      return style;
     }))
     .pipe(gulp.dest(paths.buildJs));
 });
 
 gulp.task('default', function(callback) {
-  runSequence(['sass', 'browserSync', 'watch'], callback);
+  runSequence('dist', ['browserSync', 'watch'], callback);
 });
