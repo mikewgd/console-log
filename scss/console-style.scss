@@ -1,3 +1,10 @@
+@mixin link-style() {
+  color: #333;
+  display: block;
+  text-decoration: none;
+  outline: none;
+}
+
 .console-log {
   position: fixed;
   bottom: 0;
@@ -6,9 +13,10 @@
   border-top: 1px solid #A3A3A3;
   z-index: 999999999;
   background: #fff;
+  font-size: 12px;
 }
 
-.consoleLogMessage {
+/* .consoleLogMessage {
   background:#fff;
   border:1px solid red;
   color:#333;
@@ -42,58 +50,63 @@
     right:0;
     text-decoration: none;
   }
-}
+} */
 
-.console-log a {
+/* .console-log a {
   color: #333;
   display: block;
   text-decoration: none;
   outline: none;
-} 
-.console-log-header,
-.console-log-header h6,
-.console-log-toggle,
-.console-log-logs {
+}  */
+.console-log__header,
+.console-log__title,
+.console-log__toggle,
+.console-log__entries {
   font-family: Lucida Grande, Lucida Sans, sans-serif;
   font-size: 12px;
 }
-.console-log-header {
+
+/** header **/
+.console-log__header {
   overflow: auto;
   background: #ECECEC;
   border-bottom: 1px solid #A3A3A3;
 }
 
-.console-log-header h6 {
-  margin: 4px 0 0 10px;
+.console-log__title {
+  margin: 0 0 0 10px;
   line-height: 15px;
   border: 1px solid #A3A3A3;
   border-bottom: 0;
   float: left;
   background: #fff;
   padding: 5px 8px 6px;
-  font-weight: normal;
+  font-weight: normal; 
 }
-.console-log-toggle {
-  padding: 8px 0;
+
+.console-log__toggle {
+  @include link-style;
+  padding: 4px 0;
   text-align: right;
 }
-.console-log-toggle span {
+
+.console-log__toggle-text {
   background: #A3A3A3;
   color: #fff;
   font-size: 11px;
   padding: 4px;
   margin-right: 4px;
-}
-.console-log-logs {
-  background: #fff;
-  overflow: auto;
+  display: inline-block;
 }
 
-.console-log-menu-bar {
+/** menu bar **/
+.console-log__menu {
+  background: #fff;
   overflow: auto;
   border-bottom: 1px solid #E6E6E6;
 }
-.console-log-menu-bar span {
+
+.console-log__menu-label {
   float: left;
   font-size: 11px;
   padding: 4px 0 4px 8px;
@@ -101,25 +114,33 @@
   text-transform: uppercase;
   border-left: 1px solid #A3A3A3;
 }
-.console-log-menu-bar a {
+
+.console-log__clear {
+  @include link-style;
   padding: 8px 10px;
   text-decoration: none;
   color: #666;
   float: left;
 }
-.console-log-menu-bar input {
+
+.console-log__height-input {
   width: 23px;
   padding: 2px;
   margin: 4px;
   float: left;
+  border: 0;
 }
-.console-log-logs ul {
+
+/** log entries **/
+.console-log__entries {
+  background: #fff;
   overflow: auto;
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-.console-log-logs li {
+
+.console-log__entry {
   clear: right;
   position: relative;
   min-height: 16px;
@@ -127,21 +148,7 @@
   font-size: 11px;
 }
 
-.console-log-logs-entry,
-.console-log-execute textarea {
-  font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
-  font-size:11px;
-}
-
-.console-log-logs-entry {
-  margin-left: 28px;
-  border-bottom: 1px solid #F0F0F0;
-  display: block;
-  padding: 4px 22px 4px 0;
-  word-wrap: break-word;
-  position: relative;
-}
-.console-log-logs-sym {
+.console-log__entry-symbol {
   border: 0;
   position: absolute;
   margin: 0 0 0 12px;
@@ -151,23 +158,44 @@
   font-size: 12px;
   padding: 3px 0;
 }
-.console-log-execute {
+
+.console-log__entry-text {
+  margin-left: 28px;
+  border-bottom: 1px solid #F0F0F0;
+  display: block;
+  padding: 4px 22px 4px 0;
+  word-wrap: break-word;
+  position: relative;
+  font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
+  font-size:11px;
+}
+
+/* execute */
+.console-log__entry--execute {
   overflow: hidden;
+
+  .console-log__entry-symbol {
+    color: #2d7df9;
+  }
+
+  .console-log__entry-text {
+    overflow: auto;
+    padding-right: 0;
+  }
 }
-.console-log-execute .console-log-logs-entry {
-  overflow: auto;
-  padding-right: 0;
-}
-.console-log-execute .console-log-logs-sym {
-  color: #2d7df9;
-}
-.console-log-execute textarea {
+
+.console-log__execute-textarea {
   width: 76%;
   float: left;
   padding: 3px;
   height: 30px;
+  border: 0;
+  font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
+  font-size:11px;
 }
-.console-log-execute a {
+
+.console-log__execute-btn {
+  @include link-style;
   display: block;
   float: right;
   width: 21%;
