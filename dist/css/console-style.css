@@ -8,47 +8,9 @@
   background: #fff;
   font-size: 12px; }
 
-/* .consoleLogMessage {
-  background:#fff;
-  border:1px solid red;
-  color:#333;
-  padding:10px;
-  text-align:center;
-  position:absolute;
-  top:10px;
-  width:500px;
-  left:50%;
-  margin-left:-250px;
+* html .console-log {
+  position: absolute; }
 
-  p {
-    margin:0;
-    padding:0;
-    font-size:12px;
-  }
-
-  a {
-    color:#333;
-    font-weight: bold;
-    text-decoration: underline;
-  }
-
-  .closeConsoleMessage {
-    position: absolute;
-    display: block;
-    width:40px;
-    line-height: 30px;
-    text-align: center;
-    top:0;
-    right:0;
-    text-decoration: none;
-  }
-} */
-/* .console-log a {
-  color: #333;
-  display: block;
-  text-decoration: none;
-  outline: none;
-}  */
 .console-log__header,
 .console-log__title,
 .console-log__toggle,
@@ -153,6 +115,36 @@
   position: relative;
   font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
   font-size: 11px; }
+
+.console-log__entry-type--obj {
+  color: #881391; }
+
+.console-log__entry-type--str {
+  color: #C41A16; }
+
+.console-log__entry-type--numboo {
+  color: #1C00CF; }
+
+.console-log__entry-type--null {
+  color: #808080; }
+
+.console-log__entry-type--tag {
+  color: #881280; }
+
+.console-log__entry-type--tagattr {
+  color: #994500; }
+
+.console-log__entry-type--tagval {
+  color: #1A1AA6; }
+
+.console-log__entry-type--time {
+  color: #0080FF; }
+
+.console-log__entry-type--err {
+  color: red; }
+
+.console-log__entry-type--exe {
+  color: #0080FF; }
 
 /* execute */
 .console-log__entry--execute {
