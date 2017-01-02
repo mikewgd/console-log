@@ -548,14 +548,13 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (console === undefined || CLHelpers.isMobile()) {
+  if (typeof console !== 'object' || CLHelpers.isMobile() || console === undefined) {
     var start = 0;
     var end = 0;
     var symbol = '<span class="console-log__entry-symbol">&gt;</span>';
     var output = '';
     var space = ' ';
     var isExecute = false;
-    var console = {};
 
     CL.init();
 
