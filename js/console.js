@@ -279,7 +279,7 @@
         'html':
           '<div class="console-log__header">' +
             '<a href="#" class="console-log__toggle" id="consoleToggle">' +
-              '<h6 class="console-log__title">Console.Log</h6>' +
+              '<h6 class="console-log__title">Console</h6>' +
               '<span id="consoleToggleText" class="console-log__toggle-text">Click to hide</span>' +
             '</a>' +
           '</div>' +
