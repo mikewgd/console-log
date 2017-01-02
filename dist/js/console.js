@@ -580,7 +580,7 @@
 
         try {
           // Loop through arguments passed in.
-          for (var i = 0, ii = arguments.legth; i < ii; i++) {
+          for (var i = 0, ii = arguments.length; i < ii; i++) {
             param = arguments[i];
             pString = param.toString();
 
