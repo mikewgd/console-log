@@ -318,7 +318,7 @@
       var self = this;
 
       // Loop through script tags on page.
-      for (var i = 0; i < scriptTags.length; i++) {
+      for (var i = 0, ii = scriptTags.length; i < ii; i++) {
         scTagSrc = scriptTags[i].src;
 
         // Grab all script tags, if its console or console.min then check for param
@@ -526,14 +526,14 @@
       var cssSplit = minifiedCSSFile.split('}');
       var sp = [];
 
-      for (var i = 0; i < cssSplit.length; i++) {
+      for (var i = 0, ii = cssSplit.length; i < ii; i++) {
         sp = cssSplit[i].split('{');
 
         if (sp[0] !== '') selectors.push(sp[0]);
         if (sp[1] !== undefined) rules.push(sp[1]);
       }
 
-      for (var j = 0; j < selectors.length; j++) {
+      for (var j = 0, jj = selectors.length; j < jj; j++) {
         selector = selectors[j];
         rule = rules[j];
 
@@ -580,7 +580,7 @@
 
         try {
           // Loop through arguments passed in.
-          for (var i = 0; i < arguments.length; i++) {
+          for (var i = 0, ii = arguments.legth; i < ii; i++) {
             param = arguments[i];
             pString = param.toString();
 
