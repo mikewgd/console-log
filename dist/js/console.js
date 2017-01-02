@@ -195,8 +195,20 @@
   };
 
   var CL = {
-    show: true, 
+    show: true,
     height: 0,
+    syntaxColor: {
+      error: '#FF0000',
+      _null: '#808080',
+      objkey: '#881391',
+      str: '#C41A16',
+      numberBoolean: '#1C00CF',
+      htmlTag: '#881280',
+      htmlTagAttr: '#994500',
+      htmlTagVal: '#1A1AA6',
+      time: '#0080FF',
+      execute: '#0080FF'
+    },
 
     _console: null,
     _liExecute: null,
@@ -204,7 +216,7 @@
 
     init: function() {
       this.addMarkup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.console-log{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:1;background:#fff;font-size:12px}* html .console-log{position:absolute}.console-log__entries,.console-log__header,.console-log__title,.console-log__toggle{font-family:Lucida Grande,Lucida Sans,sans-serif;font-size:12px}.console-log__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3}.console-log__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400}.console-log__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right}.console-log__toggle-text{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.console-log__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6}.console-log__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.console-log__clear{color:#333;display:block;outline:none;padding:8px 10px;text-decoration:none;color:#666;float:left}.console-log__height-input{width:23px;padding:2px;margin:4px;float:left;border:0}.console-log__entries{background:#fff;overflow:auto;margin:0;padding:0;list-style-type:none}.console-log__entry{clear:right;position:relative;min-height:16px;list-style-type:none;font-size:11px}.console-log__entry-symbol{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0}.console-log__entry-text{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__entry-type--obj{color:#881391}.console-log__entry-type--str{color:#c41a16}.console-log__entry-type--numboo{color:#1c00cf}.console-log__entry-type--null{color:gray}.console-log__entry-type--tag{color:#881280}.console-log__entry-type--tagattr{color:#994500}.console-log__entry-type--tagval{color:#1a1aa6}.console-log__entry-type--time{color:#0080ff}.console-log__entry-type--err{color:red}.console-log__entry-type--exe{color:#0080ff}.console-log__entry--execute{overflow:hidden}.console-log__entry--execute .console-log__entry-symbol{color:#2d7df9}.console-log__entry--execute .console-log__entry-text{overflow:auto;padding-right:0}.console-log__execute-textarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__execute-btn{color:#333;outline:none;display:block;float:right;width:21%;text-align:center;text-decoration:none;text-transform:uppercase;line-height:38px}'); // Replaced by a grunt task
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.console-log{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:3;background:#fff;font-size:12px;z-index:2}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1;background-attachment:fixed}* html #consolelog{position:absolute;right:auto;bottom:auto;top:expression((0 - consolelog.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.console-log__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;font-family:Lucida Grande;font-size:12px;*height:32px}.console-log__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;font-family:Lucida Grande;font-size:12px}.console-log__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.console-log__toggle-text{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.console-log__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.console-log__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.console-log__clear{color:#333;display:block;outline:none;padding:8px 10px;text-decoration:none;color:#666;float:left}.console-log__height-input{width:23px;padding:2px;margin:4px;float:left;border:0}.console-log__height-input:focus{outline:none}.console-log__entries{background:#fff;overflow:auto;position:relative;margin:0;padding:0;list-style-type:none;font-family:Lucida Grande;font-size:12px;width:100%}.console-log__entry{clear:both;position:relative;min-height:16px;list-style-type:none;font-size:11px;z-index:1;*zoom:1}.console-log__entry-symbol{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0;left:0}.console-log__entry-text{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px;*zoom:1}.console-log__entry--execute{overflow:hidden}.console-log__entry--execute .console-log__entry-symbol{color:#2d7df9}.console-log__entry--execute .console-log__entry-text{overflow:auto;padding-right:0;*zoom:0}.console-log__execute-textarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__execute-textarea:focus{outline:none}.console-log__execute-btn{color:#333;outline:none;display:block;float:right;width:21%;text-align:center;text-decoration:none;text-transform:uppercase;line-height:38px}'); // Replaced by a grunt task
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
@@ -230,6 +242,7 @@
 
       this._console = CLHelpers.create('div', {
         'class': 'console-log',
+        id: 'consolelog',
         'html':
           '<div class="console-log__header">' +
             '<a href="#" class="console-log__toggle" id="consoleToggle">' +
@@ -321,7 +334,7 @@
       CLHelpers.eleById('consoleExecuteBtn').onclick = function() {
         if (CLHelpers.eleById('consoleTextarea').value !== '') {
           isExecute = true;
-          console.log('<span class="console-log__entry-type--exe">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
+          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
           CL.scrollToBottom();
         }
 
@@ -361,6 +374,7 @@
     newLog: function() {
       this._entries.appendChild(this._liExecute);
       CLHelpers.eleById('consoleTextarea').value = '';
+      CLHelpers.eleById('consoleTextarea').focus();
       this.scrollToBottom();
       isExecute = false; // Reset variable & textarea value
     },
@@ -378,26 +392,27 @@
     */
     syntax: function(type, str) {
       var formattedString = str;
+      var self = this;
 
       if (type == 'object') {
         if (str === null) {
-          formattedString = '<span class="console-log__entry-type--null">' + str + '</span>';
+          formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
         } else {
-          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span class="console-log__entry-type--obj">$1</span>$2') // key in object
-          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span class="console-log__entry-type--numboo">$2$4$6</span>') //number or boolean value
-          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span class="console-log__entry-type--str">$2</span>'); // string value
+          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.syntaxColor.objkey + '">$1</span>$2') // key in object
+          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.syntaxColor.numberBoolean + '">$2$4$6</span>') //number or boolean value
+          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.syntaxColor.str + '">$2</span>'); // string value
         }
       } else if (type == 'html') {
         var formattedString2 = str.replace(new RegExp(/&lt;(.*?)&gt;/gi), function(x) { // HTML tags
-          return '<span class="console-log__entry-type--tag">' + x + '</span>';
+          return '<span style="color: ' + self.syntaxColor.htmlTag + '">' + x + '</span>';
         });
 
         formattedString = formattedString2.replace(new RegExp(/&lt;(?!\/)(.*?)&gt;/gi), function(y) { // HTML tag attributes 
           var attr = new RegExp(/ (.*?)="(.*?)"/gi);
-          return y.replace(attr, ' <span class="console-log__entry-type--tagattr">$1</span>="<span class="console-log__entry-type--tagval">$2</span>"');
+          return y.replace(attr, ' <span style="color: ' + self.syntaxColor.htmlTagAttr + '">$1</span>="<span style="color: ' + self.syntaxColor.htmlTagVal + '">$2</span>"');
         });
       } else if (type == 'number' || type == 'boolean') {
-        formattedString = '<span class="console-log__entry-type--numboo">' + str + '</span>';
+        formattedString = '<span style="color: ' + this.syntaxColor.numberBoolean + '">' + str + '</span>';
       }
 
       return formattedString;
@@ -470,7 +485,7 @@
 
         if ('insertRule' in sheet) {
           sheet.insertRule(selector + '{' + rule + '}', 0);
-        } else if ('addRule' in sheet) { // for browsers that do not suppoer insertRule
+        } else if ('addRule' in sheet) {
           sheet.addRule(selector, rule, 0);
         }
       }
@@ -479,26 +494,27 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (typeof console === undefined || CLHelpers.isMobile()) {
+  if (console === undefined || CLHelpers.isMobile()) {
     var start = 0;
     var end = 0;
     var symbol = '<span class="console-log__entry-symbol">&gt;</span>';
     var output = '';
     var space = ' ';
     var isExecute = false;
+    var console = {};
 
     CL.init();
 
     window.onerror = function(err, url, line) {
       var li = CLHelpers.create('li', {
-        html: symbol + '<span class="console-log__entry-text"><span class="console-log__entry-type--err">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+        html: symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
       });
 
       CL._entries.insertBefore(li, CL._liExecute);
       CL.scrollToBottom();
     };
 
-    window.console = {
+    window.console = console = {
       log: function() {
         var li = null;
         var param = null;
@@ -522,7 +538,7 @@
                 if (pString.match(/^\[object HTML*/i) || CLHelpers.isHtmlElem(param)) { // if param is HTML element
                   output = CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
-                  output = '<span class="console-log__entry-type--err">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
+                  output = '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
                 if (param.length > 1) {
@@ -538,7 +554,7 @@
           if ((typeof param).toLowerCase() == 'object') {
             output += CL.syntax(typeof param, param) + space;
           } else {
-            output += '<span class="console-log__entry-type--err">' + e + '</span>' + space;
+            output += '<span style="color: ' + CL.syntaxColor.error + '">' + e + '</span>' + space;
           }
         }
 
@@ -560,7 +576,7 @@
 
         var li = CLHelpers.create('li', {
           'class': 'console-log__entry',
-          'html': symbol + '<span class="console-log__entry-text"><span class="console-log__entry-type--time">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'html': symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);

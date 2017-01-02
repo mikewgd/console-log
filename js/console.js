@@ -195,8 +195,20 @@
   };
 
   var CL = {
-    show: true, 
+    show: true,
     height: 0,
+    syntaxColor: {
+      error: '#FF0000',
+      _null: '#808080',
+      objkey: '#881391',
+      str: '#C41A16',
+      numberBoolean: '#1C00CF',
+      htmlTag: '#881280',
+      htmlTagAttr: '#994500',
+      htmlTagVal: '#1A1AA6',
+      time: '#0080FF',
+      execute: '#0080FF'
+    },
 
     _console: null,
     _liExecute: null,
@@ -230,6 +242,7 @@
 
       this._console = CLHelpers.create('div', {
         'class': 'console-log',
+        id: 'consolelog',
         'html':
           '<div class="console-log__header">' +
             '<a href="#" class="console-log__toggle" id="consoleToggle">' +
@@ -321,7 +334,7 @@
       CLHelpers.eleById('consoleExecuteBtn').onclick = function() {
         if (CLHelpers.eleById('consoleTextarea').value !== '') {
           isExecute = true;
-          console.log('<span class="console-log__entry-type--exe">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
+          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
           CL.scrollToBottom();
         }
 
@@ -361,6 +374,7 @@
     newLog: function() {
       this._entries.appendChild(this._liExecute);
       CLHelpers.eleById('consoleTextarea').value = '';
+      CLHelpers.eleById('consoleTextarea').focus();
       this.scrollToBottom();
       isExecute = false; // Reset variable & textarea value
     },
@@ -378,26 +392,27 @@
     */
     syntax: function(type, str) {
       var formattedString = str;
+      var self = this;
 
       if (type == 'object') {
         if (str === null) {
-          formattedString = '<span class="console-log__entry-type--null">' + str + '</span>';
+          formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
         } else {
-          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span class="console-log__entry-type--obj">$1</span>$2') // key in object
-          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span class="console-log__entry-type--numboo">$2$4$6</span>') //number or boolean value
-          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span class="console-log__entry-type--str">$2</span>'); // string value
+          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.syntaxColor.objkey + '">$1</span>$2') // key in object
+          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.syntaxColor.numberBoolean + '">$2$4$6</span>') //number or boolean value
+          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.syntaxColor.str + '">$2</span>'); // string value
         }
       } else if (type == 'html') {
         var formattedString2 = str.replace(new RegExp(/&lt;(.*?)&gt;/gi), function(x) { // HTML tags
-          return '<span class="console-log__entry-type--tag">' + x + '</span>';
+          return '<span style="color: ' + self.syntaxColor.htmlTag + '">' + x + '</span>';
         });
 
         formattedString = formattedString2.replace(new RegExp(/&lt;(?!\/)(.*?)&gt;/gi), function(y) { // HTML tag attributes 
           var attr = new RegExp(/ (.*?)="(.*?)"/gi);
-          return y.replace(attr, ' <span class="console-log__entry-type--tagattr">$1</span>="<span class="console-log__entry-type--tagval">$2</span>"');
+          return y.replace(attr, ' <span style="color: ' + self.syntaxColor.htmlTagAttr + '">$1</span>="<span style="color: ' + self.syntaxColor.htmlTagVal + '">$2</span>"');
         });
       } else if (type == 'number' || type == 'boolean') {
-        formattedString = '<span class="console-log__entry-type--numboo">' + str + '</span>';
+        formattedString = '<span style="color: ' + this.syntaxColor.numberBoolean + '">' + str + '</span>';
       }
 
       return formattedString;
@@ -470,7 +485,7 @@
 
         if ('insertRule' in sheet) {
           sheet.insertRule(selector + '{' + rule + '}', 0);
-        } else if ('addRule' in sheet) { // for browsers that do not suppoer insertRule
+        } else if ('addRule' in sheet) {
           sheet.addRule(selector, rule, 0);
         }
       }
@@ -479,26 +494,27 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (typeof console === undefined || CLHelpers.isMobile()) {
+  if (console === undefined || CLHelpers.isMobile()) {
     var start = 0;
     var end = 0;
     var symbol = '<span class="console-log__entry-symbol">&gt;</span>';
     var output = '';
     var space = ' ';
     var isExecute = false;
+    var console = {};
 
     CL.init();
 
     window.onerror = function(err, url, line) {
       var li = CLHelpers.create('li', {
-        html: symbol + '<span class="console-log__entry-text"><span class="console-log__entry-type--err">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+        html: symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
       });
 
       CL._entries.insertBefore(li, CL._liExecute);
       CL.scrollToBottom();
     };
 
-    window.console = {
+    window.console = console = {
       log: function() {
         var li = null;
         var param = null;
@@ -522,7 +538,7 @@
                 if (pString.match(/^\[object HTML*/i) || CLHelpers.isHtmlElem(param)) { // if param is HTML element
                   output = CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
-                  output = '<span class="console-log__entry-type--err">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
+                  output = '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
                 if (param.length > 1) {
@@ -538,7 +554,7 @@
           if ((typeof param).toLowerCase() == 'object') {
             output += CL.syntax(typeof param, param) + space;
           } else {
-            output += '<span class="console-log__entry-type--err">' + e + '</span>' + space;
+            output += '<span style="color: ' + CL.syntaxColor.error + '">' + e + '</span>' + space;
           }
         }
 
@@ -560,7 +576,7 @@
 
         var li = CLHelpers.create('li', {
           'class': 'console-log__entry',
-          'html': symbol + '<span class="console-log__entry-text"><span class="console-log__entry-type--time">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'html': symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
