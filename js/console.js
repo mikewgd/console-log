@@ -1,4 +1,8 @@
 (function() {
+  /**
+  * @namespace CLHelpers
+  * Helper/Utility functions.
+  */
   var CLHelpers = {
     /**
     * Returns an element to be created in the DOM and adds attributes.
@@ -33,10 +37,22 @@
       return (devices.test(navigator.userAgent)) ? true : false;
     },
 
+    /**
+    * Returns an element based on id.
+    *
+    * @param {String} id The id of the element to return.
+    * @return {htmlelement}
+    */
     eleById: function(id) {
       return document.getElementById(id);
     },
 
+    /**
+     * Returns true/false if a node is an HTML tag.
+     *
+     * @param {object} p The node to test if it is an HTML tag.
+     * @return {Boolean}
+     */
     isHtmlElem: function(p) {
       return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
     },
@@ -84,7 +100,7 @@
     * Credits go to https://github.com/douglascrockford/JSON-js
     * Code was modified to fit certain needs.
     *
-    * @param {Object} obj - object being passed
+    * @param {Object} obj Object being passed
     * @return {String}
     */
     ObjToString: function(obj) {
@@ -194,6 +210,17 @@
     }
   };
 
+  /**
+  * @namespace CL
+  * Functionality used for the custom console.
+  *
+  * @property {boolean} show Console visibility.
+  * @property {int} height Height of the console.
+  * @property {object} syntaxColor Color mapping for syntax highlighting.
+  * @property {HTMLDivElement} _console The main div for the console, .console-log
+  * @property {HTMLLiElement} _liExecute The last LI element, execute code.
+  * @property {HTMLUlElement} _entries The UL element that holds all LIs
+  */
   var CL = {
     show: true,
     height: 0,
@@ -214,9 +241,12 @@
     _liExecute: null,
     _entries: null,
 
+    /**
+     * Initializes the custom console functions.
+     */
     init: function() {
       this.addMarkup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '{{consoleLogStyles}}'); // Replaced by a grunt task
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '{{consoleLogStyles}}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
@@ -224,12 +254,15 @@
         alert('IE 8 & 9 support the console. The developer tools need to be opened for the console to work.')
       }
       
-      this.setHeight(this.height, false); 
+      this.setHeight(this.height, true);
       this.toggle();
        
       this.bindEvents();
     },
 
+    /**
+     * Creates the console markup and appends to the document.
+     */
     addMarkup: function() {
       var style = CLHelpers.create('style', {
         'type': 'text/css',
@@ -274,6 +307,9 @@
       document.body.appendChild(this._console);
     },
 
+    /**
+     * Changes the default settings via query parameter in the script tag.
+     */
     scriptParams: function() {
       var scriptTags = document.getElementsByTagName('script');
       var scTagSrc = '';
@@ -303,6 +339,9 @@
       }
     },
 
+    /**
+     * Events bound to elements in the custom console.
+     */
     bindEvents: function() {
       var self = this;
 
@@ -313,7 +352,7 @@
       };
 
       CLHelpers.eleById('consoleHeight').onkeyup = function(e) {
-        self.setHeight(this.value, e);
+        self.setHeight(this.value, false);
       };
 
       CLHelpers.eleById('consoleClear').onclick = function() {
@@ -342,6 +381,9 @@
       };
     }, 
 
+    /**
+     * Handles the toggling (hiding/showing) of the custom console.
+     */
     toggle: function() {
       var toggleTxt = (this.show) ? 'hide' : 'show';
       var toggleElem = CLHelpers.eleById('consoleToggleText');
@@ -354,7 +396,13 @@
       if (this.show) this.scrollToBottom();
     },
 
-    setHeight: function(h, ev) {
+    /**
+     * Sets the height of the console entries.
+     *
+     * @param {string} h The new height for the entries.
+     * @param {boolean} init Used to determine if height is being set in initialization or via input field.
+     */
+    setHeight: function(h, init) {
       var val = Number(h);
 
       if (val >= 90 && val <= (CLHelpers.getWindowHeight() - 64) / 2) {
@@ -363,7 +411,7 @@
         this.height = CLHelpers.getWindowHeight() / 3;
       }
 
-      if (!ev) {
+      if (init) {
         CLHelpers.eleById('consoleHeight').value = this.height;
       }
 
@@ -371,6 +419,9 @@
       this.scrollToBottom();
     },
 
+    /**
+     * Functionality that occurs when a new entry is added to the console.
+     */
     newLog: function() {
       this._entries.appendChild(this._liExecute);
       CLHelpers.eleById('consoleTextarea').value = '';
@@ -379,6 +430,9 @@
       isExecute = false; // Reset variable & textarea value
     },
 
+    /**
+     * Ensures the entries list is always scrolled to the bottom.
+     */
     scrollToBottom: function() {
       this._entries.scrollTop = this._entries.scrollHeight;
     },
@@ -386,8 +440,8 @@
     /**
     * Returns string with HTML surrounding, used for coloring.
     *
-    * @param {String} type - type of argument being passed, i.e. number, null, etc..
-    * @param {String} str - string being passed to surround with.
+    * @param {String} type Type of argument being passed, i.e. number, null, etc..
+    * @param {String} str String being passed to surround with.
     * @return {String}
     */
     syntax: function(type, str) {
@@ -421,7 +475,7 @@
     /**
     * Returns HTML as a string.
     *
-    * @param {HTMLElement/Object} el - the element to be parsed.
+    * @param {HTMLElement/Object} el The element to be parsed.
     * @return {String}
     */
     printHTML: function(el) {
@@ -461,8 +515,8 @@
     /**
     * Adds CSS rules into a <style> tag.
     *
-    * @param {HTMLElement} sheet - The <style> element you want to add rules/css into.
-    * @param {String} minifiedCSSFile - Contents of an entire CSS file, minified.
+    * @param {HTMLElement} sheet The <style> element you want to add rules/css into.
+    * @param {String} minifiedCSSFile Contents of an entire CSS file, minified.
     */
     insertRules: function(sheet, minifiedCSSFile) {
       var selectors = [];
