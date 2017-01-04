@@ -217,7 +217,7 @@
   * @property {boolean} show Console visibility.
   * @property {int} height Height of the console.
   * @property {object} syntaxColor Color mapping for syntax highlighting.
-  * @property {HTMLDivElement} _console The main div for the console, .console-log
+  * @property {HTMLDivElement} _console The main div for the console, .CL
   * @property {HTMLLiElement} _liExecute The last LI element, execute code.
   * @property {HTMLUlElement} _entries The UL element that holds all LIs
   */
@@ -246,7 +246,7 @@
      */
     init: function() {
       this.addMarkup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.console-log{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:3;background:#fff;font-size:12px;z-index:2}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #consolelog{position:absolute;right:auto;bottom:auto;top:expression((0 - consolelog.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.console-log__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;font-family:Lucida Grande;font-size:12px;*height:32px}.console-log__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;font-family:Lucida Grande;font-size:12px;*margin:0 0 0 5px}.console-log__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.console-log__toggle-text{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.console-log__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.console-log__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.console-log__clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.console-log__height-input{width:23px;padding:2px;margin:4px;float:left;border:0}.console-log__height-input:focus{outline:none}.console-log__entries{background:#fff;overflow:auto;position:relative;margin:0;padding:0;list-style-type:none;font-family:Lucida Grande;font-size:12px;width:100%}.console-log__entry{clear:both;position:relative;min-height:16px;list-style-type:none;font-size:11px;z-index:1;*zoom:1}.console-log__entry-symbol{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0;left:0}.console-log__entry-text{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px;*zoom:1}.console-log__entry--execute{overflow:hidden}.console-log__entry--execute .console-log__entry-symbol{color:#2d7df9}.console-log__entry--execute .console-log__entry-text{overflow:auto;padding-right:0;*zoom:0}.console-log__execute-textarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.console-log__execute-textarea:focus{outline:none}.console-log__execute-btn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:3;background:#fff;font-size:12px;z-index:2}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL__header,.CL__title{font-family:Lucida Grande;font-size:12px}.CL__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL__toggletext{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL__clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL__input{width:23px;padding:2px;margin:4px;float:left;border:0}.CL__input:focus{outline:none}.CL__entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL__entries,.CL__entry{position:relative;list-style-type:none}.CL__entry{clear:both;min-height:16px;font-size:11px;z-index:1;*zoom:1}.CL__sym{border:0;position:absolute;margin:0 0 0 12px;font-family:Century Gothic;font-weight:700;color:#acacac;font-size:12px;padding:3px 0;left:0}.CL__entry-text{margin-left:28px;border-bottom:1px solid #f0f0f0;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px;*zoom:1}.CL__execute{overflow:hidden}.CL__execute .CL__sym{color:#2d7df9}.CL__execute .CL__entry-text{overflow:auto;padding-right:0;*zoom:0}.CL__execute-textarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL__execute-textarea:focus{outline:none}.CL__execute-btn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
@@ -265,39 +265,38 @@
      */
     addMarkup: function() {
       var style = CLHelpers.create('style', {
-        'type': 'text/css',
-        'id': 'consoleLogStyle'
+        'type': 'text/css'
       });
 
       this._entries = CLHelpers.create('ul', {
-        'class': 'console-log__entries'
+        'class': 'CL__entries'
       });
 
       this._console = CLHelpers.create('div', {
-        'class': 'console-log',
-        id: 'consolelog',
+        'class': 'CL',
+        id: 'customconsole',
         'html':
-          '<div class="console-log__header">' +
-            '<a href="#" class="console-log__toggle" id="consoleToggle">' +
-              '<h6 class="console-log__title">Console</h6>' +
-              '<span id="consoleToggleText" class="console-log__toggle-text">Click to hide</span>' +
+          '<div class="CL__header">' +
+            '<a href="#" class="CL__toggle" id="CLTog">' +
+              '<h6 class="CL__title">Console</h6>' +
+              '<span id="CLTogText" class="CL__toggletext">Click to hide</span>' +
             '</a>' +
           '</div>' +
-          '<div class="console-log__menu" id="consoleMenu">' +
-            '<a class="console-log__clear" id="consoleClear" href="#">CLEAR</a>' +
-            '<span class="console-log__menu-label">Height:</span>' +
-            '<input id="consoleHeight" type="text" value="' + this.height + '" maxlength="3" class="console-log__height-input" />' +
+          '<div class="CL__menu" id="CLMenu">' +
+            '<a class="CL__clear" id="CLClear" href="#">CLEAR</a>' +
+            '<span class="CL__menu-label">Height:</span>' +
+            '<input id="CLHeight" type="text" value="' + this.height + '" maxlength="3" class="CL__input" />' +
           '</div>'
       });
 
       this._liExecute = CLHelpers.create('li', {
-        'class': 'console-log__entry console-log__entry--execute',
-        id: 'consoleLIExecute',
+        'class': 'CL__entry CL__execute',
+        id: 'CLExecute',
         'html':
-          '<span class="console-log__entry-symbol">&gt;</span>' +
-            '<span class="console-log__entry-text">' +
-            '<textarea id="consoleTextarea" class="console-log__execute-textarea"></textarea>' +
-            '<a class="console-log__execute-btn" id="consoleExecuteBtn" href="#">Execute</a>' +
+          '<span class="CL__sym">&gt;</span>' +
+            '<span class="CL__entry-text">' +
+            '<textarea id="CLTextarea" class="CL__textarea"></textarea>' +
+            '<a class="CL__execute-btn" id="CLExeBtn" href="#">Execute</a>' +
           '</span>'
       });
 
@@ -345,23 +344,23 @@
     bindEvents: function() {
       var self = this;
 
-      CLHelpers.eleById('consoleToggle').onclick = function() {
+      CLHelpers.eleById('CLTog').onclick = function() {
         self.show = self.show ? false : true;  
         self.toggle();
         return false;
       };
 
-      CLHelpers.eleById('consoleHeight').onkeyup = function(e) {
+      CLHelpers.eleById('CLHeight').onkeyup = function(e) {
         self.setHeight(this.value, false);
       };
 
-      CLHelpers.eleById('consoleClear').onclick = function() {
+      CLHelpers.eleById('CLClear').onclick = function() {
         var logs = self._entries.getElementsByTagName('li');
         var logsCount = logs.length;
  
         if (logsCount !== 1) {
           while (logsCount--) {
-            if (logs[logsCount].id !== 'consoleLIExecute') {
+            if (logs[logsCount].id !== 'CLExecute') {
               logs[logsCount].parentNode.removeChild(logs[logsCount]);
             }
           }
@@ -370,10 +369,10 @@
         return false;
       };
 
-      CLHelpers.eleById('consoleExecuteBtn').onclick = function() {
-        if (CLHelpers.eleById('consoleTextarea').value !== '') {
+      CLHelpers.eleById('CLExeBtn').onclick = function() {
+        if (CLHelpers.eleById('CLTextarea').value !== '') {
           isExecute = true;
-          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
+          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('CLTextarea').value + '</span>', eval(CLHelpers.eleById('CLTextarea').value));
           CL.scrollToBottom();
         }
 
@@ -386,12 +385,12 @@
      */
     toggle: function() {
       var toggleTxt = (this.show) ? 'hide' : 'show';
-      var toggleElem = CLHelpers.eleById('consoleToggleText');
+      var toggleElem = CLHelpers.eleById('CLTogText');
 
       toggleElem.innerHTML = 'Click to ' + toggleTxt;
 
       this._entries.style.display = (this.show) ? 'block' : 'none';
-      CLHelpers.eleById('consoleMenu').style.display = (this.show) ? 'block' : 'none';
+      CLHelpers.eleById('CLMenu').style.display = (this.show) ? 'block' : 'none';
 
       if (this.show) this.scrollToBottom();
     },
@@ -412,7 +411,7 @@
       }
 
       if (init) {
-        CLHelpers.eleById('consoleHeight').value = this.height;
+        CLHelpers.eleById('CLHeight').value = this.height;
       }
 
       this._entries.style.height = this.height + 'px';
@@ -424,8 +423,8 @@
      */
     newLog: function() {
       this._entries.appendChild(this._liExecute);
-      CLHelpers.eleById('consoleTextarea').value = '';
-      CLHelpers.eleById('consoleTextarea').focus();
+      CLHelpers.eleById('CLTextarea').value = '';
+      CLHelpers.eleById('CLTextarea').focus();
       this.scrollToBottom();
       isExecute = false; // Reset variable & textarea value
     },
@@ -551,7 +550,7 @@
   if (typeof console !== 'object' || CLHelpers.isMobile() || console === undefined) {
     var start = 0;
     var end = 0;
-    var symbol = '<span class="console-log__entry-symbol">&gt;</span>';
+    var symbol = '<span class="CL__sym">&gt;</span>';
     var output = '';
     var space = ' ';
     var isExecute = false;
@@ -560,7 +559,7 @@
 
     window.onerror = function(err, url, line) {
       var li = CLHelpers.create('li', {
-        html: symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+        html: symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
       });
 
       CL._entries.insertBefore(li, CL._liExecute);
@@ -612,8 +611,8 @@
         }
 
         li = CLHelpers.create('li', {
-          'class': 'console-log__entry',
-          'html': symbol + '<span class="console-log__entry-text">' + output + '</span>'
+          'class': 'CL__entry',
+          'html': symbol + '<span class="CL__entry-text">' + output + '</span>'
         });
 
         CL._entries.appendChild(li);
@@ -628,8 +627,8 @@
         end = new Date().getMilliseconds();
 
         var li = CLHelpers.create('li', {
-          'class': 'console-log__entry',
-          'html': symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'class': 'CL__entry',
+          'html': symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
