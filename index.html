@@ -12,7 +12,7 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <title>Console.Log by mikewgd</title>
+    <title>Console by mikewgd</title>
   </head>
 
   <body>
@@ -20,7 +20,7 @@
 		<div class="header">
 			
 			<div class="top-part">
-				<h1 class="logo">Console.Log</h1>
+				<h1 class="logo">Console</h1>
 				<p>A tool for developers to view the browser’s console on a browser that does not support console or a mobile device.</p>
 			</div>
 
@@ -46,7 +46,7 @@
 		<div class="content">
 			<div class="section what-is-it">
 				<h2>How It Works/What is it?</h2>
-				<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object and the <code>log</code> function.</p>
+				<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object.</p>
 			
 				<div class="list">
 					<h3>Features</h3>
@@ -58,7 +58,7 @@
 						<li>Recognizable theme <strong class="new">NEW!</strong></li>
 						<li>Syntax highlighting <strong class="new">NEW!</strong></li>
 						<li>Clear console <strong class="new">NEW!</strong></li>
-						<li class="last">New supported functions: <code>time</code> & <code>timeEnd</code> <strong class="new">NEW!</strong></li>
+						<li class="last">Supported functions: <code>log</code>, <code>time</code> & <code>timeEnd</code></li>
 					</ul>
 				</div>
 
@@ -73,25 +73,14 @@
 		
 			<div class="section">
 				<h2>Implementation</h2>
-				<p>Just add the script on the page before the js file(s) that contain <code>console.log</code> and your good to go! No rewriting code!</p>
+				<p>Just add the script on the page before the js file(s) that contain <code>console</code> and you're good to go! No rewriting code!</p>
 				
 				<h3>Parameters</h3>
 				<p>You may also use parameters to set default settings for the console (visibility and height). Simply add '?' to the end of the src attribute on the script tag.</p>
 
 				<p><strong>EXAMPLE:</strong></p>
 	
-				<pre><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
-
-	&lt;!-- Add console log script above the other script. (with default settings) --&gt;
-	&lt;script type=&quot;text/javascript&quot; src=&quot;//console.min.js&quot;&gt;&lt;/script&gt;
-	&lt;script type="text/javascript" src="//console.min.js?400"&gt;&lt;/script&gt; &lt;!--console expanded, height 400px--&gt;
-	&lt;script type="text/javascript" src="//console.min.js?hide&amp;400"&gt;&lt;/script&gt; &lt;!-- console collapsed, height 400px--&gt;
-
-	&lt;!-- Some random js file with console.log --&gt;
-	&lt;script type=&quot;text/javascript&quot; src=&quot;//test.js&quot;&gt;&lt;/script&gt;
-
-    &lt;/body&gt;
-&lt;/html&gt;</code></pre>				
+				<pre><code>&nbsp;&nbsp;&nbsp;&nbsp;...<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Add console log script above the other script. (with default settings) --&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type=&quot;text/javascript&quot; src=&quot;//console.min.js&quot;&gt;&lt;/script&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript" src="//console.min.js?400"&gt;&lt;/script&gt; &lt;!--console expanded, height 400px--&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript" src="//console.min.js?hide&amp;400"&gt;&lt;/script&gt; &lt;!-- console collapsed, height 400px--&gt;<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Some random js file with console.log --&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type=&quot;text/javascript&quot; src=&quot;//test.js&quot;&gt;&lt;/script&gt<br><br>&nbsp;&nbsp;&lt;/body&gt;<br>&lt;/html&gt;</code></pre>				
 			</div>
 			
 			<div class="section last">
@@ -101,7 +90,7 @@
 		</div>
 		
 		<div class="footer">
-			<p>&copy; 2014 - 2016</p>
+			<p>&copy; 2014 - 2017</p>
 		</div>
 	</div>
   </body>
