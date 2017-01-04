@@ -16,8 +16,7 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    zoom: 1;
-    background-attachment: fixed; }
+    zoom: 1; }
   * html #consolelog {
     position: absolute;
     right: auto;
@@ -85,7 +84,6 @@
   text-decoration: none;
   outline: none;
   padding: 8px 10px;
-  text-decoration: none;
   color: #666;
   float: left; }
 
@@ -171,6 +169,5 @@
   float: right;
   width: 21%;
   text-align: center;
-  text-decoration: none;
   text-transform: uppercase;
   line-height: 38px; }
