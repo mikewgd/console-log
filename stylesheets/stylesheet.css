@@ -5,6 +5,7 @@ body {
 
 .wrapper {
   width: 980px;
+  *width:  90%;
   margin: 3% auto;
   position: relative;
   border: 1px solid #505050; }
@@ -19,7 +20,7 @@ pre {
   padding: 8px;
   border: 1px solid #505050;
   display: block;
-  clear: both; }
+  clear: both; *zoom: 1; }
   pre code {
     color: #000;
     margin: 0;
@@ -61,13 +62,13 @@ h3 {
 
 .top-part {
   padding: 5px 10px;
-  border-bottom: 1px solid #505050; }
+  border-bottom: 1px solid #505050; *zoom: 1; }
 
 .subheader {
   background: #fff;
   border-bottom: 1px solid #e6e6e6;
   padding: 20px 10px;
-  overflow: auto; }
+  overflow: auto; *zoom: 1; }
   .subheader p {
     font-weight: bold;
     float: left;
@@ -102,7 +103,7 @@ h3 {
     font-weight: normal;
     clear: both;
     line-height: normal;
-    margin: 0 0 10px 0; }
+    margin: 0 0 10px 0; width: 100%; }
   .subheader .prev-versions {
     margin: 20px 0 0 0;
     line-height: 15px;
@@ -140,18 +141,18 @@ h3 {
     margin: 0; }
     .content li.last {
       background-image: url("../images/last.gif");
-      border-bottom: 0; }
+      border-bottom: 0; float: left; }
   .content a {
     color: #3781fc; }
 
 .section {
   padding: 10px;
   border-bottom: 1px solid #e6e6e6;
-  overflow: auto; }
+  overflow: auto; *zoom: 1; }
   .section:after {
     content: "";
     clear: both;
-    display: block; }
+    display: block; *zoom: 1; }
   .section.last {
     border: 0;
     text-align: center;
