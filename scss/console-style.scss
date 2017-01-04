@@ -5,7 +5,7 @@
   outline: none;
 }
 
-.console-log {
+.CL {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -28,18 +28,18 @@
     zoom: 1;
   }
 
-  #consolelog {
+  #customconsole {
     position: absolute;
 
     // http://www.howtocreate.co.uk/fixedPosition.html
     right: auto;
     bottom: auto;
-    top: expression( ( 0 - consolelog.offsetHeight + ( document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight ) + ( ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ) ) + 'px' );
+    top: expression( ( 0 - customconsole.offsetHeight + ( document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight ) + ( ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ) ) + 'px' );
   }
 }
 
 /** header **/
-.console-log__header {
+.CL__header {
   overflow: auto;
   background: #ECECEC;
   border-bottom: 1px solid #A3A3A3;
@@ -48,7 +48,7 @@
   *height: 32px;
 }
 
-.console-log__title {
+.CL__title {
   margin: 0 0 0 10px;
   line-height: 15px;
   border: 1px solid #A3A3A3;
@@ -62,7 +62,7 @@
   *margin: 0 0 0 5px;
 }
 
-.console-log__toggle {
+.CL__toggle {
   @include link-style;
   padding: 4px 0;
   text-align: right;
@@ -70,7 +70,7 @@
   font-size: 12px;
 }
 
-.console-log__toggle-text {
+.CL__toggletext {
   background: #A3A3A3;
   color: #fff;
   font-size: 11px;
@@ -80,14 +80,14 @@
 }
 
 /** menu bar **/
-.console-log__menu {
+.CL__menu {
   background: #fff;
   overflow: auto;
   border-bottom: 1px solid #E6E6E6;
   *height: 31px;
 }
 
-.console-log__menu-label {
+.CL__menu-label {
   float: left;
   font-size: 11px;
   padding: 4px 0 4px 8px;
@@ -96,14 +96,14 @@
   border-left: 1px solid #A3A3A3;
 }
 
-.console-log__clear {
+.CL__clear {
   @include link-style;
   padding: 8px 10px;
   color: #666;
   float: left;
 }
 
-.console-log__height-input {
+.CL__input {
   width: 23px;
   padding: 2px;
   margin: 4px;
@@ -115,8 +115,8 @@
   }
 }
 
-/** log entries **/
-.console-log__entries {
+/** console entries **/
+.CL__entries {
   background: #fff;
   overflow: auto;
   position: relative;
@@ -129,7 +129,7 @@
 
 }
 
-.console-log__entry {
+.CL__entry {
   clear: both;
   position: relative;
   min-height: 16px;
@@ -139,7 +139,8 @@
   *zoom: 1;
 }
 
-.console-log__entry-symbol {
+/* the > in the log */
+.CL__sym {
   border: 0;
   position: absolute;
   margin: 0 0 0 12px;
@@ -151,7 +152,7 @@
   left: 0;
 }
 
-.console-log__entry-text {
+.CL__entry-text {
   margin-left: 28px;
   border-bottom: 1px solid #F0F0F0;
   display: block;
@@ -164,21 +165,21 @@
 }
 
 /* execute */
-.console-log__entry--execute {
+.CL__execute {
   overflow: hidden;
 
-  .console-log__entry-symbol {
+  .CL__sym {
     color: #2d7df9;
   }
 
-  .console-log__entry-text {
+  .CL__entry-text {
     overflow: auto;
     padding-right: 0;
     *zoom: 0;
   }
 }
 
-.console-log__execute-textarea {
+.CL__execute-textarea {
   width: 76%;
   float: left;
   padding: 3px;
@@ -192,7 +193,7 @@
   }
 }
 
-.console-log__execute-btn {
+.CL__execute-btn {
   @include link-style;
   display: block;
   float: right;
