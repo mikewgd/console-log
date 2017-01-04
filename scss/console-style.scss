@@ -26,7 +26,6 @@
     padding: 0;
     height: 100%;
     zoom: 1;
-    background-attachment: fixed;
   }
 
   #consolelog {
@@ -100,7 +99,6 @@
 .console-log__clear {
   @include link-style;
   padding: 8px 10px;
-  text-decoration: none;
   color: #666;
   float: left;
 }
@@ -200,7 +198,6 @@
   float: right;
   width: 21%;
   text-align: center;
-  text-decoration: none;
   text-transform: uppercase;
   line-height: 38px;
 }
