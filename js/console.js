@@ -217,6 +217,7 @@
   * @property {boolean} show Console visibility.
   * @property {int} height Height of the console.
   * @property {object} syntaxColor Color mapping for syntax highlighting.
+  * @property {string} textareaVal Execute textarea value.
   * @property {HTMLDivElement} _console The main div for the console, .CL
   * @property {HTMLLiElement} _liExecute The last LI element, execute code.
   * @property {HTMLUlElement} _entries The UL element that holds all LIs
@@ -236,6 +237,7 @@
       time: '#0080FF',
       execute: '#0080FF'
     },
+    textareaVal: '',
 
     _console: null,
     _liExecute: null,
@@ -285,7 +287,7 @@
           '<div class="CL__menu" id="CLMenu">' +
             '<a class="CL__clear" id="CLClear" href="#">CLEAR</a>' +
             '<span class="CL__menu-label">Height:</span>' +
-            '<input id="CLHeight" type="text" value="' + this.height + '" maxlength="3" class="CL__input" />' +
+            '<input id="CLHeight" type="text" maxlength="3" class="CL__input" />' +
           '</div>'
       });
 
@@ -343,9 +345,11 @@
      */
     bindEvents: function() {
       var self = this;
+      var textarea = CLHelpers.eleById('CLTextarea');
+      var reg = /console\.*?.*/g;
 
       CLHelpers.eleById('CLTog').onclick = function() {
-        self.show = self.show ? false : true;  
+        self.show = self.show ? false : true;
         self.toggle();
         return false;
       };
@@ -370,10 +374,21 @@
       };
 
       CLHelpers.eleById('CLExeBtn').onclick = function() {
-        if (CLHelpers.eleById('CLTextarea').value !== '') {
+        if (textarea.value !== '') {
           isExecute = true;
-          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('CLTextarea').value + '</span>', eval(CLHelpers.eleById('CLTextarea').value));
-          CL.scrollToBottom();
+          self.textareaVal = textarea.value;
+
+          if ((textarea.value).match(reg)) {
+            textarea.value = '';
+            alert('Currently you can not execute console functions.');
+            textarea.focus();
+            return false;
+          } else {
+            eval(textarea.value);
+            console.log(textarea.value, eval(textarea.value));
+          }
+
+          isExecute = false;
         }
 
         return false;
@@ -422,11 +437,14 @@
      * Functionality that occurs when a new entry is added to the console.
      */
     newLog: function() {
+      var textarea = CLHelpers.eleById('CLTextarea');
       this._entries.appendChild(this._liExecute);
-      CLHelpers.eleById('CLTextarea').value = '';
-      CLHelpers.eleById('CLTextarea').focus();
+      textarea.value = '';
+      // this.textareaVal = '';
+      textarea.focus();
       this.scrollToBottom();
       isExecute = false; // Reset variable & textarea value
+      error = false;
     },
 
     /**
@@ -466,6 +484,8 @@
         });
       } else if (type == 'number' || type == 'boolean') {
         formattedString = '<span style="color: ' + this.syntaxColor.numberBoolean + '">' + str + '</span>';
+      } else if (type === 'undefined') {
+        formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
       }
 
       return formattedString;
@@ -550,28 +570,42 @@
   if (typeof console !== 'object' || CLHelpers.isMobile() || console === undefined) {
     var start = 0;
     var end = 0;
-    var symbol = '<span class="CL__sym">&gt;</span>';
+    var newLogSym = '<span class="CL__sym">&gt;</span>';
+    var errSym = '<span class="CL__sym">x</span>';
+    var symbol = '';
+    var entryClass = 'CL__entry';
     var output = '';
     var space = ' ';
+    var error = false;
     var isExecute = false;
 
     CL.init();
 
     window.onerror = function(err, url, line) {
-      var li = CLHelpers.create('li', {
-        html: symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
-      });
+      error = '_true';
 
-      CL._entries.insertBefore(li, CL._liExecute);
-      CL.scrollToBottom();
+      if (!isExecute) {
+        entryClass += ' CL__error';
+
+        var li = CLHelpers.create('li', {
+          'class': entryClass,
+          html: symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+        });
+
+        CL._entries.insertBefore(li, CL._liExecute);
+        CL.newLog();
+      } else {
+        console.log(CL.textareaVal)
+      }
     };
 
-    window.console = console = {
+    window.console = {
       log: function() {
         var li = null;
         var param = null;
         var pString = null;
 
+        error = (error === '_true') ? true : false;
         output = ''; // used to clear the output each time
 
         if (isExecute) space = '<br>';
@@ -580,24 +614,39 @@
           // Loop through arguments passed in.
           for (var i = 0, ii = arguments.length; i < ii; i++) {
             param = arguments[i];
-            pString = param.toString();
+
+            if (isExecute && error) {
+              entryClass = 'CL__entry';
+
+              li = CLHelpers.create('li', {
+                'class': entryClass,
+                'html': symbol + '<span class="CL__entry-text">' + param + '</span>'
+              });
+
+              CL._entries.appendChild(li);
+              eval(param);
+            }
 
             // If the parameter is an object special functionality needs to happen.
             if ((typeof param).toLowerCase() == 'object') {
+              pString = param.toString();
+              entryClass = 'CL__entry';
+
               if (pString == '[object Object]') {
-                output = 'Object ' + CL.syntax('object', CLHelpers.ObjToString(param)) + space;
+                output += 'Object ' + CL.syntax('object', CLHelpers.ObjToString(param)) + space;
               } else if (pString.match(/^\[object */i)) {
                 if (pString.match(/^\[object HTML*/i) || CLHelpers.isHtmlElem(param)) { // if param is HTML element
-                  output = CL.syntax('html', CL.printHTML(param)) + space;
+                  output += CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
-                  output = '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
+                  output += '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
                 if (param.length > 1) {
-                  output = '[' + param + ']';
+                  output += '[' + param + ']';
                 }
               }
             } else {
+              entryClass = 'CL__entry';
               output += CL.syntax(typeof param, param) + space;
             }
           }
@@ -606,12 +655,13 @@
           if ((typeof param).toLowerCase() == 'object') {
             output += CL.syntax(typeof param, param) + space;
           } else {
+            entryClass += ' CL__error'
             output += '<span style="color: ' + CL.syntaxColor.error + '">' + e + '</span>' + space;
           }
         }
 
         li = CLHelpers.create('li', {
-          'class': 'CL__entry',
+          'class': entryClass,
           'html': symbol + '<span class="CL__entry-text">' + output + '</span>'
         });
 
@@ -620,14 +670,16 @@
       }, 
 
       time: function() {
+        error = (error === '_true') ? true : false;
         start = new Date().getMilliseconds();
       },
 
       timeEnd: function() {
+        error = (error === '_true') ? true : false;
         end = new Date().getMilliseconds();
 
         var li = CLHelpers.create('li', {
-          'class': 'CL__entry',
+          'class': entryClass,
           'html': symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
