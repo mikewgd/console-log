@@ -136,25 +136,48 @@
   list-style-type: none;
   font-size: 11px;
   z-index: 1;
+  border-bottom: 1px solid #F0F0F0;
   *zoom: 1;
+
+  /* error */
+  &.CL__error {
+    color: #FF0000;
+    background: #fff0f0;
+  }
+  
+  /* execute */
+  &.CL__execute {
+    overflow: hidden;
+    border-bottom: 0;
+
+    .CL__sym {
+      color: #2d7df9;
+    }
+
+    .CL__entry-text {
+      overflow: auto;
+      padding-right: 0;
+      *zoom: 0;
+    }
+  }
 }
 
 /* the > in the log */
 .CL__sym {
   border: 0;
   position: absolute;
-  margin: 0 0 0 12px;
+  margin: 0 0 0 10px;
   font-family: Century Gothic;
-  font-weight: 700;
-  color: #acacac;
+  font-weight: 900;
+  color: #939393;
   font-size: 12px;
   padding: 3px 0;
   left: 0;
 }
 
 .CL__entry-text {
-  margin-left: 28px;
-  border-bottom: 1px solid #F0F0F0;
+  margin-left: 24px;
+  
   display: block;
   padding: 4px 22px 4px 0;
   word-wrap: break-word;
@@ -164,22 +187,7 @@
   *zoom: 1;
 }
 
-/* execute */
-.CL__execute {
-  overflow: hidden;
-
-  .CL__sym {
-    color: #2d7df9;
-  }
-
-  .CL__entry-text {
-    overflow: auto;
-    padding-right: 0;
-    *zoom: 0;
-  }
-}
-
-.CL__execute-textarea {
+.CL__textarea {
   width: 76%;
   float: left;
   padding: 3px;
