@@ -232,6 +232,7 @@
     textareaVal: '',
     funcs: {
       log: function() {'[native code]'},
+      debug: function() {'[native code]'},
       time: function() {'[native code]'},
       timeEnd: function() {'[native code]'}
     },
