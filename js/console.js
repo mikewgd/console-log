@@ -685,93 +685,25 @@
           }
         }
 
-        li = Helpers.create('li', {
-          'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
-        });
+        if (output !== '') {
+          li = Helpers.create('li', {
+            'class': entryClass,
+            'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
+          });
 
-        CL._entries.appendChild(li);
-        CL.newLog();
+          CL._entries.appendChild(li);
+          CL.newLog();          
+        }
       },
 
       debug: function() {
-        var li = null;
-        var param = null;
-        var pString = '%CL%ML101417';
-
-        error = (error === '_true') ? true : false;
-        output = ''; // used to clear the output each time
-
-        if (isExec) space = '<br>';
-
-        try {
-          // Loop through arguments passed in.
-          for (var i = 0, ii = arguments.length; i < ii; i++) {
-            param = arguments[i];
-
-            if (isExec && error) {
-              entryClass = 'CL-entry';
-
-              li = Helpers.create('li', {
-                'class': entryClass,
-                'html': sym + '<span class="CL-entrytxt">' + param + '</span>'
-              });
-
-              CL._entries.appendChild(li);
-              eval(param);
-            }
-
-            // If the parameter is an object special functionality needs to happen.
-            if ((typeof param).toLowerCase() == 'object') {
-              pString = param.toString();
-              entryClass = 'CL-entry';
-
-              if (pString == '[object Object]') {
-                strObj = Helpers.ObjString(param);
-
-                if (/\%CL\%ML101417/g.test(strObj)) {
-                  strObj = Helpers.ObjString(CL.funcs);
-                }
-
-                output += 'Object ' + CL.syntax('object', strObj) + space;
-              } else if (pString.match(/^\[object */i)) {
-                if (pString.match(/^\[object HTML*/i) || Helpers.isHtmlEl(param)) { // if param is HTML element
-                  output += CL.syntax('html', CL.printHTML(param)) + space;
-                } else { // Most likely window, document etc...
-                  output += '<span style="color: ' + CL.synColor.err + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
-                }
-              } else { // Most likely an array.
-                if (param.length > 1) {
-                  output += '[' + param + ']';
-                }
-              }
-            } else {
-              entryClass = 'CL-entry';
-
-              if (/\%CL\%ML101417/g.test(param)) {
-                param = Helpers.ObjString(CL.funcs.log);
-              }
-
-              output += CL.syntax(typeof param, param) + space;
-            }
-          }
-        } catch (e) {
-          // To account for js keywords
-          if ((typeof param).toLowerCase() == 'object') {
-            output += CL.syntax(typeof param, param) + space;
-          } else {
-            entryClass += ' CL-err';
-            output += '<span style="color: ' + CL.synColor.err + '">' + e + '</span>' + space;
-          }
-        }
-
-        li = Helpers.create('li', {
-          'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
-        });
-
-        CL._entries.appendChild(li);
-        CL.newLog();
+        var args = arguments;
+        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
+          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
+          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
+          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
+          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
+          args[10] === undefined ? '' : args[10]);
       },
 
       time: function() {
