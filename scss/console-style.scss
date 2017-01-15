@@ -12,9 +12,7 @@
   left: 0;
   border-top: 1px solid #A3A3A3;
   z-index: 999999999;
-  background: #fff;
   font-size: 12px;
-  z-index: 100000;
 }
 
 /* for ie */
@@ -34,12 +32,12 @@
     // http://www.howtocreate.co.uk/fixedPosition.html
     right: auto;
     bottom: auto;
-    top: expression( ( 0 - customconsole.offsetHeight + ( document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight ) + ( ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ) ) + 'px' );
+    top: expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px');
   }
 }
 
 /** header **/
-.CL__header {
+.CL-header {
   overflow: auto;
   background: #ECECEC;
   border-bottom: 1px solid #A3A3A3;
@@ -48,7 +46,7 @@
   *height: 32px;
 }
 
-.CL__title {
+.CL-title {
   margin: 0 0 0 10px;
   line-height: 15px;
   border: 1px solid #A3A3A3;
@@ -62,7 +60,7 @@
   *margin: 0 0 0 5px;
 }
 
-.CL__toggle {
+.CL-tog {
   @include link-style;
   padding: 4px 0;
   text-align: right;
@@ -70,7 +68,7 @@
   font-size: 12px;
 }
 
-.CL__toggletext {
+.CL-togtxt {
   background: #A3A3A3;
   color: #fff;
   font-size: 11px;
@@ -80,14 +78,14 @@
 }
 
 /** menu bar **/
-.CL__menu {
+.CL-menu {
   background: #fff;
   overflow: auto;
   border-bottom: 1px solid #E6E6E6;
   *height: 31px;
 }
 
-.CL__menu-label {
+.CL-label {
   float: left;
   font-size: 11px;
   padding: 4px 0 4px 8px;
@@ -96,27 +94,23 @@
   border-left: 1px solid #A3A3A3;
 }
 
-.CL__clear {
+.CL-clear {
   @include link-style;
   padding: 8px 10px;
   color: #666;
   float: left;
 }
 
-.CL__input {
+.CL-inp {
   width: 23px;
   padding: 2px;
   margin: 4px;
   float: left;
   border: 0;
-
-  &:focus {
-    outline: none;
-  }
 }
 
 /** console entries **/
-.CL__entries {
+.CL-entries {
   background: #fff;
   overflow: auto;
   position: relative;
@@ -126,10 +120,9 @@
   font-family: Lucida Grande;
   font-size: 12px;
   width: 100%;
-
 }
 
-.CL__entry {
+.CL-entry {
   clear: both;
   position: relative;
   min-height: 16px;
@@ -140,21 +133,21 @@
   *zoom: 1;
 
   /* error */
-  &.CL__error {
-    color: #FF0000;
+  &.CL-err {
+    color: #FF0;
     background: #fff0f0;
   }
   
   /* execute */
-  &.CL__execute {
+  &.CL-exec {
     overflow: hidden;
     border-bottom: 0;
 
-    .CL__sym {
+    .CL-sym {
       color: #2d7df9;
     }
 
-    .CL__entry-text {
+    .CL-entrytxt {
       overflow: auto;
       padding-right: 0;
       *zoom: 0;
@@ -163,10 +156,10 @@
 }
 
 /* the > in the log */
-.CL__sym {
+.CL-sym {
   border: 0;
   position: absolute;
-  margin: 0 0 0 10px;
+  margin-left: 10px;
   font-family: Century Gothic;
   font-weight: 900;
   color: #939393;
@@ -175,9 +168,8 @@
   left: 0;
 }
 
-.CL__entry-text {
+.CL-entrytxt {
   margin-left: 24px;
-  
   display: block;
   padding: 4px 22px 4px 0;
   word-wrap: break-word;
@@ -187,7 +179,7 @@
   *zoom: 1;
 }
 
-.CL__textarea {
+.CL-txtarea {
   width: 76%;
   float: left;
   padding: 3px;
@@ -195,13 +187,9 @@
   border: 0;
   font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
   font-size:11px;
-
-  &:focus {
-    outline: none;
-  }
 }
 
-.CL__execute-btn {
+.CL-execbtn {
   @include link-style;
   display: block;
   float: right;
