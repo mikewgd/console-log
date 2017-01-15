@@ -1,9 +1,9 @@
 (function() {
   /**
-  * @namespace CLHelpers
+  * @namespace Helpers
   * Helper/Utility functions.
   */
-  var CLHelpers = {
+  var Helpers = {
     /**
     * Returns an element to be created in the DOM and adds attributes.
     *
@@ -12,20 +12,20 @@
     * @return {HTMLElement}
     */
     create: function(element, attrs) {
-      var elem = document.createElement(element);
+      var ele = document.createElement(element);
 
       if (attrs) {
         for (var attr in attrs) {
           if (attr === 'html') {
-            elem.innerHTML = attrs[attr];
+            ele.innerHTML = attrs[attr];
           } else {
             // IE does not support support setting class name with set attribute
-            ([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
+            ([attr] == 'class') ? ele.className = attrs[attr] : ele.setAttribute([attr], attrs[attr]);
           }
         }
       }
 
-      return elem;
+      return ele;
     },
 
     /**
@@ -43,7 +43,7 @@
     * @param {String} id The id of the element to return.
     * @return {htmlelement}
     */
-    eleById: function(id) {
+    $: function(id) {
       return document.getElementById(id);
     },
 
@@ -53,7 +53,7 @@
      * @param {object} p The node to test if it is an HTML tag.
      * @return {Boolean}
      */
-    isHtmlElem: function(p) {
+    isHtmlEl: function(p) {
       return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
     },
 
@@ -78,21 +78,21 @@
     * Returns the viewport height of the browser window.
     * @return {Number}
     */
-    getWindowHeight: function() {
-      var winHeight = 0;
+    getWinH: function() {
+      var winH = 0;
       var win = window;
       var doc = document;
       var docEle = doc.documentElement;
 
       if (typeof win.innerHeight != 'undefined') {
-        winHeight = window.innerHeight;
+        winH = window.innerHeight;
       } else if (typeof docEle != 'undefined' && typeof docEle.clientHeight != 'undefined' && docEle.clientHeight !== 0) {
-        winHeight = docEle.clientHeight;
+        winH = docEle.clientHeight;
       } else {
-        winHeight = doc.getElementsByTagName('body')[0].clientHeight;
+        winH = doc.getElementsByTagName('body')[0].clientHeight;
       }
 
-      return winHeight;
+      return winH;
     },
 
     /**
@@ -103,7 +103,7 @@
     * @param {Object} obj Object being passed
     * @return {String}
     */
-    ObjToString: function(obj) {
+    ObjString: function(obj) {
       var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
       var gap = '';
       var indent = '';
@@ -214,98 +214,94 @@
   * @namespace CL
   * Functionality used for the custom console.
   *
-  * @property {boolean} show Console visibility.
-  * @property {int} height Height of the console.
-  * @property {object} syntaxColor Color mapping for syntax highlighting.
-  * @property {string} textareaVal Execute textarea value.
-  * @property {HTMLDivElement} _console The main div for the console, .CL
-  * @property {HTMLLiElement} _liExecute The last LI element, execute code.
-  * @property {HTMLUlElement} _entries The UL element that holds all LIs
   */
   var CL = {
     show: true,
     height: 0,
-    syntaxColor: {
-      error: '#FF0000',
+    synColor: {
+      err: '#FF0000',
       _null: '#808080',
-      objkey: '#881391',
+      obj: '#881391',
       str: '#C41A16',
-      numberBoolean: '#1C00CF',
-      htmlTag: '#881280',
-      htmlTagAttr: '#994500',
-      htmlTagVal: '#1A1AA6',
-      time: '#0080FF',
-      execute: '#0080FF'
+      numBoo: '#1C00CF',
+      tag: '#881280',
+      tagAttr: '#994500',
+      tagVal: '#1A1AA6',
+      time: '#0080FF'
     },
     textareaVal: '',
+    funcs: {
+      log: function() {'[native code]'},
+      time: function() {'[native code]'},
+      timeEnd: function() {'[native code]'}
+    },
 
-    _console: null,
-    _liExecute: null,
+    _el: null,
+    _liExec: null,
     _entries: null,
 
     /**
      * Initializes the custom console functions.
      */
     init: function() {
-      this.addMarkup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:3;background:#fff;font-size:12px;z-index:2}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL__header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL__header,.CL__title{font-family:Lucida Grande;font-size:12px}.CL__title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL__toggle{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL__toggletext{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL__menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL__menu-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL__clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL__input{width:23px;padding:2px;margin:4px;float:left;border:0}.CL__input:focus{outline:none}.CL__entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL__entries,.CL__entry{position:relative;list-style-type:none}.CL__entry{clear:both;min-height:16px;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;*zoom:1}.CL__entry.CL__error{color:red;background:#fff0f0}.CL__entry.CL__execute{overflow:hidden;border-bottom:0}.CL__entry.CL__execute .CL__sym{color:#2d7df9}.CL__entry.CL__execute .CL__entry-text{overflow:auto;padding-right:0;*zoom:0}.CL__sym{border:0;position:absolute;margin:0 0 0 10px;font-family:Century Gothic;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL__entry-text{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;*zoom:1}.CL__entry-text,.CL__textarea{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL__textarea{width:76%;float:left;padding:3px;height:30px;border:0}.CL__textarea:focus{outline:none}.CL__execute-btn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
+      this.setup();
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:2;font-size:12px}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL-header,.CL-title{font-family:Lucida Grande;font-size:12px}.CL-title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL-tog{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL-togtxt{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL-menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL-clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL-inp{width:23px;padding:2px;margin:4px;float:left;border:0}.CL-entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL-entries,.CL-entry{position:relative;list-style-type:none}.CL-entry{clear:both;min-height:16px;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;*zoom:1}.CL-entry.CL-err{color:#ff0;background:#fff0f0}.CL-entry.CL-exec{overflow:hidden;border-bottom:0}.CL-entry.CL-exec .CL-sym{color:#2d7df9}.CL-entry.CL-exec .CL-entrytxt{overflow:auto;padding-right:0;*zoom:0}.CL-sym{border:0;position:absolute;margin-left:10px;font-family:Century Gothic;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL-entrytxt{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;*zoom:1}.CL-entrytxt,.CL-txtarea{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL-txtarea{width:76%;float:left;padding:3px;height:30px;border:0}.CL-execbtn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
-      if (CLHelpers.isIE8or9()) {
+      if (Helpers.isIE8or9()) {
         alert('IE 8 & 9 support the console. The developer tools need to be opened for the console to work.')
       }
       
       this.setHeight(this.height, true);
       this.toggle();
-       
       this.bindEvents();
     },
 
     /**
      * Creates the console markup and appends to the document.
      */
-    addMarkup: function() {
-      var style = CLHelpers.create('style', {
+    setup: function() {
+      var style = Helpers.create('style', {
         'type': 'text/css'
       });
 
-      this._entries = CLHelpers.create('ul', {
-        'class': 'CL__entries'
+      this._entries = Helpers.create('ul', {
+        'class': 'CL-entries'
       });
 
-      this._console = CLHelpers.create('div', {
+      this._el = Helpers.create('div', {
         'class': 'CL',
         id: 'customconsole',
         'html':
-          '<div class="CL__header">' +
-            '<a href="#" class="CL__toggle" id="CLTog">' +
-              '<h6 class="CL__title">Console</h6>' +
-              '<span id="CLTogText" class="CL__toggletext">Click to hide</span>' +
+          '<div class="CL-header">' +
+            '<a href="#" class="CL-tog" id="CLTog">' +
+              '<h6 class="CL-title">Console</h6>' +
+              '<span id="CLTogText" class="CL-togtxt">Click to hide</span>' +
             '</a>' +
           '</div>' +
-          '<div class="CL__menu" id="CLMenu">' +
-            '<a class="CL__clear" id="CLClear" href="#">CLEAR</a>' +
-            '<span class="CL__menu-label">Height:</span>' +
-            '<input id="CLHeight" type="text" maxlength="3" class="CL__input" />' +
+          '<div class="CL-menu" id="CLMenu">' +
+            '<a class="CL-clear" id="CLClear" href="#">CLEAR</a>' +
+            '<span class="CL-label">Height:</span>' +
+            '<input id="CLHeight" type="text" maxlength="3" class="CL-inp" />' +
           '</div>'
       });
 
-      this._liExecute = CLHelpers.create('li', {
-        'class': 'CL__entry CL__execute',
+      this._liExec = Helpers.create('li', {
+        'class': 'CL-entry CL-exec',
         id: 'CLExecute',
         'html':
-          '<span class="CL__sym">&gt;</span>' +
-            '<span class="CL__entry-text">' +
-            '<textarea id="CLTextarea" class="CL__textarea"></textarea>' +
-            '<a class="CL__execute-btn" id="CLExeBtn" href="#">Execute</a>' +
+          '<span class="CL-sym">&gt;</span>' +
+            '<span class="CL-entrytxt">' +
+            '<textarea id="CLTextarea" class="CL-txtarea"></textarea>' +
+            '<a class="CL-execbtn" id="CLExeBtn" href="#">Execute</a>' +
           '</span>'
       });
 
       document.getElementsByTagName('head')[0].appendChild(style);
-      this._console.appendChild(this._entries);
-      this._entries.appendChild(this._liExecute);
-      document.body.appendChild(this._console);
+      this._el.appendChild(this._entries);
+      this._entries.appendChild(this._liExec);
+      document.body.appendChild(this._el);
     },
 
     /**
@@ -345,23 +341,22 @@
      */
     bindEvents: function() {
       var self = this;
-      var textarea = CLHelpers.eleById('CLTextarea');
-      var reg = /console\.*?.*/g;
+      var textarea = Helpers.$('CLTextarea');
 
-      CLHelpers.eleById('CLTog').onclick = function() {
+      Helpers.$('CLTog').onclick = function() {
         self.show = self.show ? false : true;
         self.toggle();
         return false;
       };
 
-      CLHelpers.eleById('CLHeight').onkeyup = function(e) {
+      Helpers.$('CLHeight').onkeyup = function(e) {
         self.setHeight(this.value, false);
       };
 
-      CLHelpers.eleById('CLClear').onclick = function() {
+      Helpers.$('CLClear').onclick = function() {
         var logs = self._entries.getElementsByTagName('li');
         var logsCount = logs.length;
- 
+
         if (logsCount !== 1) {
           while (logsCount--) {
             if (logs[logsCount].id !== 'CLExecute') {
@@ -373,41 +368,60 @@
         return false;
       };
 
-      CLHelpers.eleById('CLExeBtn').onclick = function() {
+      Helpers.$('CLExeBtn').onclick = function() {
         if (textarea.value !== '') {
-          isExecute = true;
+          isExec = true;
           self.textareaVal = textarea.value;
-
-          if ((textarea.value).match(reg)) {
-            textarea.value = '';
-            alert('Currently you can not execute console functions.');
-            textarea.focus();
-            return false;
-          } else {
-            eval(textarea.value);
-            console.log(textarea.value, eval(textarea.value));
-          }
-
-          isExecute = false;
+          self.executeCode(self.textareaVal);
+          isExec = false;
         }
 
         return false;
       };
-    }, 
+    },
+
+    /**
+     * WHen executing code from the textarea.
+     *
+     * @param {string} val The textarea value.
+     */
+    executeCode: function(val) {
+      var reg = /console\.*?.*/g;
+      var reg2 = /console.*?\((.*)\)/;
+
+      if ((val).match(reg)) {
+        if (val.match(reg2)) {
+          console.log(eval(val));
+        } else {
+          if (val === 'console') {
+            console.log(val, this.funcs);
+          } else {
+            for (var key in this.funcs) {
+              if (val === 'console.' + key) {
+                console.log(val, this.funcs[key]);
+              }
+            }
+          }
+        }
+      } else {
+        eval(val);
+        console.log(val, eval(val));
+      }
+    },
 
     /**
      * Handles the toggling (hiding/showing) of the custom console.
      */
     toggle: function() {
       var toggleTxt = (this.show) ? 'hide' : 'show';
-      var toggleElem = CLHelpers.eleById('CLTogText');
+      var toggleElem = Helpers.$('CLTogText');
 
       toggleElem.innerHTML = 'Click to ' + toggleTxt;
 
       this._entries.style.display = (this.show) ? 'block' : 'none';
-      CLHelpers.eleById('CLMenu').style.display = (this.show) ? 'block' : 'none';
+      Helpers.$('CLMenu').style.display = (this.show) ? 'block' : 'none';
 
-      if (this.show) this.scrollToBottom();
+      if (this.show) this.scrl2Btm();
     },
 
     /**
@@ -419,38 +433,37 @@
     setHeight: function(h, init) {
       var val = Number(h);
 
-      if (val >= 90 && val <= (CLHelpers.getWindowHeight() - 64) / 2) {
+      if (val >= 90 && val <= (Helpers.getWinH() - 64) / 2) {
         this.height = val;
       } else {
-        this.height = CLHelpers.getWindowHeight() / 3;
+        this.height = Helpers.getWinH() / 3;
       }
 
       if (init) {
-        CLHelpers.eleById('CLHeight').value = this.height;
+        Helpers.$('CLHeight').value = this.height;
       }
 
       this._entries.style.height = this.height + 'px';
-      this.scrollToBottom();
+      this.scrl2Btm();
     },
 
     /**
      * Functionality that occurs when a new entry is added to the console.
      */
     newLog: function() {
-      var textarea = CLHelpers.eleById('CLTextarea');
-      this._entries.appendChild(this._liExecute);
+      var textarea = Helpers.$('CLTextarea');
+      this._entries.appendChild(this._liExec);
       textarea.value = '';
-      // this.textareaVal = '';
       textarea.focus();
-      this.scrollToBottom();
-      isExecute = false; // Reset variable & textarea value
+      this.scrl2Btm();
+      isExec = false;
       error = false;
     },
 
     /**
      * Ensures the entries list is always scrolled to the bottom.
      */
-    scrollToBottom: function() {
+    scrl2Btm: function() {
       this._entries.scrollTop = this._entries.scrollHeight;
     },
 
@@ -467,25 +480,25 @@
 
       if (type == 'object') {
         if (str === null) {
-          formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
+          formattedString = '<span style="color: ' + this.synColor._null + '">' + str + '</span>';
         } else {
-          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.syntaxColor.objkey + '">$1</span>$2') // key in object
-          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.syntaxColor.numberBoolean + '">$2$4$6</span>') //number or boolean value
-          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.syntaxColor.str + '">$2</span>'); // string value
+          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.synColor.obj + '">$1</span>$2') // key in object
+          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.synColor.numBoo + '">$2$4$6</span>') //number or boolean value
+          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.synColor.str + '">$2</span>'); // string value
         }
       } else if (type == 'html') {
         var formattedString2 = str.replace(new RegExp(/&lt;(.*?)&gt;/gi), function(x) { // HTML tags
-          return '<span style="color: ' + self.syntaxColor.htmlTag + '">' + x + '</span>';
+          return '<span style="color: ' + self.synColor.tag + '">' + x + '</span>';
         });
 
         formattedString = formattedString2.replace(new RegExp(/&lt;(?!\/)(.*?)&gt;/gi), function(y) { // HTML tag attributes 
           var attr = new RegExp(/ (.*?)="(.*?)"/gi);
-          return y.replace(attr, ' <span style="color: ' + self.syntaxColor.htmlTagAttr + '">$1</span>="<span style="color: ' + self.syntaxColor.htmlTagVal + '">$2</span>"');
+          return y.replace(attr, ' <span style="color: ' + self.synColor.tagAttr + '">$1</span>="<span style="color: ' + self.synColor.tagVal + '">$2</span>"');
         });
       } else if (type == 'number' || type == 'boolean') {
-        formattedString = '<span style="color: ' + this.syntaxColor.numberBoolean + '">' + str + '</span>';
+        formattedString = '<span style="color: ' + this.synColor.numBoo + '">' + str + '</span>';
       } else if (type === 'undefined') {
-        formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
+        formattedString = '<span style="color: ' + this.synColor._null + '">' + str + '</span>';
       }
 
       return formattedString;
@@ -498,7 +511,7 @@
     * @return {String}
     */
     printHTML: function(el) {
-      var outputDiv = CLHelpers.create('div');
+      var outputDiv = Helpers.create('div');
       var elem = null;
       var html = '';
       var breakLine = null;
@@ -567,60 +580,60 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (typeof console !== 'object' || CLHelpers.isMobile() || console === undefined) {
+  if (typeof console !== 'object' || Helpers.isMobile() || console === undefined) {
     var start = 0;
     var end = 0;
-    var newLogSym = '<span class="CL__sym">&gt;</span>';
-    var errSym = '<span class="CL__sym">x</span>';
-    var symbol = '';
-    var entryClass = 'CL__entry';
+    var sym = '';
+    var entryClass = 'CL-entry';
     var output = '';
+    var strObj = '';
     var space = ' ';
     var error = false;
-    var isExecute = false;
+    var isExec = false;
 
     CL.init();
 
     window.onerror = function(err, url, line) {
       error = '_true';
 
-      if (!isExecute) {
-        entryClass += ' CL__error';
+      if (!isExec) {
+        entryClass += ' CL-err';
 
-        var li = CLHelpers.create('li', {
+        var li = Helpers.create('li', {
           'class': entryClass,
-          html: symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+          html: sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
         });
 
-        CL._entries.insertBefore(li, CL._liExecute);
+        CL._entries.insertBefore(li, CL._liExec);
         CL.newLog();
       } else {
-        console.log(CL.textareaVal)
+        console.log(CL.textareaVal);
       }
     };
 
     window.console = {
+      ID: '%CL%ML101417',
       log: function() {
         var li = null;
         var param = null;
-        var pString = null;
+        var pString = '%CL%ML101417';
 
         error = (error === '_true') ? true : false;
         output = ''; // used to clear the output each time
 
-        if (isExecute) space = '<br>';
+        if (isExec) space = '<br>';
 
         try {
           // Loop through arguments passed in.
           for (var i = 0, ii = arguments.length; i < ii; i++) {
             param = arguments[i];
 
-            if (isExecute && error) {
-              entryClass = 'CL__entry';
+            if (isExec && error) {
+              entryClass = 'CL-entry';
 
-              li = CLHelpers.create('li', {
+              li = Helpers.create('li', {
                 'class': entryClass,
-                'html': symbol + '<span class="CL__entry-text">' + param + '</span>'
+                'html': sym + '<span class="CL-entrytxt">' + param + '</span>'
               });
 
               CL._entries.appendChild(li);
@@ -630,15 +643,21 @@
             // If the parameter is an object special functionality needs to happen.
             if ((typeof param).toLowerCase() == 'object') {
               pString = param.toString();
-              entryClass = 'CL__entry';
+              entryClass = 'CL-entry';
 
               if (pString == '[object Object]') {
-                output += 'Object ' + CL.syntax('object', CLHelpers.ObjToString(param)) + space;
+                strObj = Helpers.ObjString(param);
+
+                if (/\%CL\%ML101417/g.test(strObj)) {
+                  strObj = Helpers.ObjString(CL.funcs);
+                }
+
+                output += 'Object ' + CL.syntax('object', strObj) + space;
               } else if (pString.match(/^\[object */i)) {
-                if (pString.match(/^\[object HTML*/i) || CLHelpers.isHtmlElem(param)) { // if param is HTML element
+                if (pString.match(/^\[object HTML*/i) || Helpers.isHtmlEl(param)) { // if param is HTML element
                   output += CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
-                  output += '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
+                  output += '<span style="color: ' + CL.synColor.err + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
                 if (param.length > 1) {
@@ -646,7 +665,12 @@
                 }
               }
             } else {
-              entryClass = 'CL__entry';
+              entryClass = 'CL-entry';
+
+              if (/\%CL\%ML101417/g.test(param)) {
+                param = Helpers.ObjString(CL.funcs.log);
+              }
+
               output += CL.syntax(typeof param, param) + space;
             }
           }
@@ -655,32 +679,34 @@
           if ((typeof param).toLowerCase() == 'object') {
             output += CL.syntax(typeof param, param) + space;
           } else {
-            entryClass += ' CL__error'
-            output += '<span style="color: ' + CL.syntaxColor.error + '">' + e + '</span>' + space;
+            entryClass += ' CL-err';
+            output += '<span style="color: ' + CL.synColor.err + '">' + e + '</span>' + space;
           }
         }
 
-        li = CLHelpers.create('li', {
+        li = Helpers.create('li', {
           'class': entryClass,
-          'html': symbol + '<span class="CL__entry-text">' + output + '</span>'
+          'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
         });
 
         CL._entries.appendChild(li);
         CL.newLog();
-      }, 
+      },
 
       time: function() {
+        entryClass = '%CL%ML101417';
         error = (error === '_true') ? true : false;
         start = new Date().getMilliseconds();
       },
 
       timeEnd: function() {
+        var li = '%CL%ML101417';
         error = (error === '_true') ? true : false;
         end = new Date().getMilliseconds();
 
-        var li = CLHelpers.create('li', {
+        li = Helpers.create('li', {
           'class': entryClass,
-          'html': symbol + '<span class="CL__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'html': sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
