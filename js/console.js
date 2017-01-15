@@ -613,6 +613,7 @@
 
     window.console = {
       ID: '%CL%ML101417',
+
       log: function() {
         var li = null;
         var param = null;
@@ -691,6 +692,21 @@
 
         CL._entries.appendChild(li);
         CL.newLog();
+      },
+
+      clear: function() {
+        var logs = CL._entries.getElementsByTagName('li');
+        var logsCount = logs.length;
+
+        if (logsCount !== 1) {
+          while (logsCount--) {
+            if (logs[logsCount].id !== 'CLExecute') {
+              logs[logsCount].parentNode.removeChild(logs[logsCount]);
+            }
+          }
+        }
+
+        console.log('Console was cleared');
       },
 
       time: function() {
