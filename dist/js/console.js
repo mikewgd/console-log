@@ -233,7 +233,8 @@
     funcs: {
       log: function() {'[native code]'},
       time: function() {'[native code]'},
-      timeEnd: function() {'[native code]'}
+      timeEnd: function() {'[native code]'},
+      error: function() {'[native code]'}
     },
 
     _el: null,
@@ -245,7 +246,7 @@
      */
     init: function() {
       this.setup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:2;font-size:12px}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL-header,.CL-title{font-family:Lucida Grande;font-size:12px}.CL-title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL-tog{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL-togtxt{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL-menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL-clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL-inp{width:23px;padding:2px;margin:4px;float:left;border:0}.CL-entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL-entries,.CL-entry{position:relative;list-style-type:none}.CL-entry{clear:both;min-height:16px;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;*zoom:1}.CL-entry.CL-err{color:#ff0;background:#fff0f0}.CL-entry.CL-exec{overflow:hidden;border-bottom:0}.CL-entry.CL-exec .CL-sym{color:#2d7df9}.CL-entry.CL-exec .CL-entrytxt{overflow:auto;padding-right:0;*zoom:0}.CL-sym{border:0;position:absolute;margin-left:10px;font-family:Century Gothic;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL-entrytxt{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;*zoom:1}.CL-entrytxt,.CL-txtarea{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL-txtarea{width:76%;float:left;padding:3px;height:30px;border:0}.CL-execbtn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:2;font-size:12px}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL-header,.CL-title{font-family:Lucida Grande;font-size:12px}.CL-title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL-tog{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL-togtxt{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL-menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL-clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL-inp{width:23px;padding:2px;margin:4px;float:left;border:0}.CL-entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL-entries,.CL-entry{position:relative;list-style-type:none}.CL-entry{clear:both;min-height:16px;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;*zoom:1}.CL-entry.CL-err{color:red;background:#fff0f0}.CL-entry.CL-exec{overflow:hidden;border-bottom:0}.CL-entry.CL-exec .CL-sym{color:#2d7df9}.CL-entry.CL-exec .CL-entrytxt{overflow:auto;padding-right:0;*zoom:0}.CL-sym{border:0;position:absolute;margin-left:10px;font-family:Century Gothic;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL-entrytxt{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;*zoom:1}.CL-entrytxt,.CL-txtarea{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL-txtarea{width:76%;float:left;padding:3px;height:30px;border:0}.CL-execbtn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
@@ -684,6 +685,10 @@
           }
         }
 
+        if (error) {
+          entryClass = 'CL-entry CL-err';
+        }
+
         li = Helpers.create('li', {
           'class': entryClass,
           'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
@@ -691,6 +696,20 @@
 
         CL._entries.appendChild(li);
         CL.newLog();
+      },
+
+      error: function() {
+        var args = arguments;
+
+        entryClass = '%CL%ML101417';
+        error = '_true';
+
+        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
+          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
+          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
+          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
+          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
+          args[10] === undefined ? '' : args[10]);
       },
 
       time: function() {

@@ -116,7 +116,7 @@
   /* error */
   /* execute */ }
   .CL-entry.CL-err {
-    color: #FF0;
+    color: #FF0000;
     background: #fff0f0; }
   .CL-entry.CL-exec {
     overflow: hidden;
