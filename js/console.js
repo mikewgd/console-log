@@ -307,6 +307,30 @@
       document.body.appendChild(this._el);
     },
 
+    override: function() {
+      var result = false;
+      var scriptTags = document.getElementsByTagName('script');
+      var scTagSrc = '';
+      var queries = '';
+
+      // Loop through script tags on page.
+      for (var i = 0, ii = scriptTags.length; i < ii; i++) {
+        scTagSrc = scriptTags[i].src;
+
+        // Grab all script tags, if its console or console.min then check for param
+        if (/.*console(\.min)?\.js/gi.test(scTagSrc) && scTagSrc.indexOf('?') > 0) {
+          queries = scTagSrc.substring(scTagSrc.indexOf('?') + 1, scTagSrc.length).split('&');
+
+          // Implement queries
+          for (var j = 0, jj = queries.length; j < jj; j++) {
+            result = (queries[j] === 'override') ? true : false;
+          }
+        }
+      }
+
+      return result;
+    },
+
     /**
      * Changes the default settings via query parameter in the script tag.
      */
@@ -583,7 +607,7 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (typeof console !== 'object' || Helpers.isMobile() || console === undefined) {
+  if (typeof console !== 'object' || Helpers.isMobile() || console === undefined || CL.override()) {
     var start = 0;
     var end = 0;
     var sym = '';
