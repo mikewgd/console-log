@@ -705,6 +705,7 @@
       clear: function() {
         var logs = CL._entries.getElementsByTagName('li');
         var logsCount = logs.length;
+        var ID = '%CL%ML101417';
 
         if (logsCount !== 1) {
           while (logsCount--) {
