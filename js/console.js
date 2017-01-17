@@ -232,9 +232,9 @@
     textareaVal: '',
     funcs: {
       log: function() {'[native code]'},
-      debug: function() {'[native code]'},
       time: function() {'[native code]'},
-      timeEnd: function() {'[native code]'}
+      timeEnd: function() {'[native code]'},
+      error: function() {'[native code]'}
     },
 
     _el: null,
@@ -614,7 +614,6 @@
 
     window.console = {
       ID: '%CL%ML101417',
-
       log: function() {
         var li = null;
         var param = null;
@@ -686,40 +685,31 @@
           }
         }
 
-        if (output !== '') {
-          li = Helpers.create('li', {
-            'class': entryClass,
-            'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
-          });
-
-          CL._entries.appendChild(li);
-          CL.newLog();          
+        if (error) {
+          entryClass = 'CL-entry CL-err';
         }
+
+        li = Helpers.create('li', {
+          'class': entryClass,
+          'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
+        });
+
+        CL._entries.appendChild(li);
+        CL.newLog();
       },
 
-      debug: function() {
+      error: function() {
         var args = arguments;
+
+        entryClass = '%CL%ML101417';
+        error = '_true';
+
         console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
           args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
           args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
           args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
           args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
           args[10] === undefined ? '' : args[10]);
-      },
-
-      clear: function() {
-        var logs = CL._entries.getElementsByTagName('li');
-        var logsCount = logs.length;
-
-        if (logsCount !== 1) {
-          while (logsCount--) {
-            if (logs[logsCount].id !== 'CLExecute') {
-              logs[logsCount].parentNode.removeChild(logs[logsCount]);
-            }
-          }
-        }
-
-        console.log('Console was cleared');
       },
 
       time: function() {
