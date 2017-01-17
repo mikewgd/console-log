@@ -1,9 +1,9 @@
 (function() {
   /**
-  * @namespace Helpers
+  * @namespace CLHelpers
   * Helper/Utility functions.
   */
-  var Helpers = {
+  var CLHelpers = {
     /**
     * Returns an element to be created in the DOM and adds attributes.
     *
@@ -12,20 +12,20 @@
     * @return {HTMLElement}
     */
     create: function(element, attrs) {
-      var ele = document.createElement(element);
+      var elem = document.createElement(element);
 
       if (attrs) {
         for (var attr in attrs) {
           if (attr === 'html') {
-            ele.innerHTML = attrs[attr];
+            elem.innerHTML = attrs[attr];
           } else {
             // IE does not support support setting class name with set attribute
-            ([attr] == 'class') ? ele.className = attrs[attr] : ele.setAttribute([attr], attrs[attr]);
+            ([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
           }
         }
       }
 
-      return ele;
+      return elem;
     },
 
     /**
@@ -43,7 +43,7 @@
     * @param {String} id The id of the element to return.
     * @return {htmlelement}
     */
-    $: function(id) {
+    eleById: function(id) {
       return document.getElementById(id);
     },
 
@@ -53,7 +53,7 @@
      * @param {object} p The node to test if it is an HTML tag.
      * @return {Boolean}
      */
-    isHtmlEl: function(p) {
+    isHtmlElem: function(p) {
       return ((p.length) ? p[0].nodeType : p.nodeType === 1) ? true : false;
     },
 
@@ -78,21 +78,21 @@
     * Returns the viewport height of the browser window.
     * @return {Number}
     */
-    getWinH: function() {
-      var winH = 0;
+    getWindowHeight: function() {
+      var winHeight = 0;
       var win = window;
       var doc = document;
       var docEle = doc.documentElement;
 
       if (typeof win.innerHeight != 'undefined') {
-        winH = window.innerHeight;
+        winHeight = window.innerHeight;
       } else if (typeof docEle != 'undefined' && typeof docEle.clientHeight != 'undefined' && docEle.clientHeight !== 0) {
-        winH = docEle.clientHeight;
+        winHeight = docEle.clientHeight;
       } else {
-        winH = doc.getElementsByTagName('body')[0].clientHeight;
+        winHeight = doc.getElementsByTagName('body')[0].clientHeight;
       }
 
-      return winH;
+      return winHeight;
     },
 
     /**
@@ -103,7 +103,7 @@
     * @param {Object} obj Object being passed
     * @return {String}
     */
-    ObjString: function(obj) {
+    ObjToString: function(obj) {
       var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
       var gap = '';
       var indent = '';
@@ -214,95 +214,121 @@
   * @namespace CL
   * Functionality used for the custom console.
   *
+  * @property {boolean} show Console visibility.
+  * @property {int} height Height of the console.
+  * @property {object} syntaxColor Color mapping for syntax highlighting.
+  * @property {HTMLDivElement} _console The main div for the console, .console-log
+  * @property {HTMLLiElement} _liExecute The last LI element, execute code.
+  * @property {HTMLUlElement} _entries The UL element that holds all LIs
   */
   var CL = {
     show: true,
     height: 0,
-    synColor: {
-      err: '#FF0000',
+    syntaxColor: {
+      error: '#FF0000',
       _null: '#808080',
-      obj: '#881391',
+      objkey: '#881391',
       str: '#C41A16',
-      numBoo: '#1C00CF',
-      tag: '#881280',
-      tagAttr: '#994500',
-      tagVal: '#1A1AA6',
-      time: '#0080FF'
-    },
-    textareaVal: '',
-    funcs: {
-      log: function() {'[native code]'},
-      time: function() {'[native code]'},
-      timeEnd: function() {'[native code]'},
-      error: function() {'[native code]'}
+      numberBoolean: '#1C00CF',
+      htmlTag: '#881280',
+      htmlTagAttr: '#994500',
+      htmlTagVal: '#1A1AA6',
+      time: '#0080FF',
+      execute: '#0080FF'
     },
 
-    _el: null,
-    _liExec: null,
+    _console: null,
+    _liExecute: null,
     _entries: null,
 
     /**
      * Initializes the custom console functions.
      */
     init: function() {
-      this.setup();
+      this.addMarkup();
       this.insertRules(document.styleSheets[document.styleSheets.length - 1], '{{consoleLogStyles}}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
-      if (Helpers.isIE8or9()) {
+      if (CLHelpers.isIE8or9()) {
         alert('IE 8 & 9 support the console. The developer tools need to be opened for the console to work.')
       }
       
       this.setHeight(this.height, true);
       this.toggle();
+       
       this.bindEvents();
     },
 
     /**
      * Creates the console markup and appends to the document.
      */
-    setup: function() {
-      var style = Helpers.create('style', {
-        'type': 'text/css'
+    addMarkup: function() {
+      var style = CLHelpers.create('style', {
+        'type': 'text/css',
+        'id': 'consoleLogStyle'
       });
 
-      this._entries = Helpers.create('ul', {
-        'class': 'CL-entries'
+      this._entries = CLHelpers.create('ul', {
+        'class': 'console-log__entries'
       });
 
-      this._el = Helpers.create('div', {
-        'class': 'CL',
-        id: 'customconsole',
+      this._console = CLHelpers.create('div', {
+        'class': 'console-log',
+        id: 'consolelog',
         'html':
-          '<div class="CL-header">' +
-            '<a href="#" class="CL-tog" id="CLTog">' +
-              '<h6 class="CL-title">Console</h6>' +
-              '<span id="CLTogText" class="CL-togtxt">Click to hide</span>' +
+          '<div class="console-log__header">' +
+            '<a href="#" class="console-log__toggle" id="consoleToggle">' +
+              '<h6 class="console-log__title">Console</h6>' +
+              '<span id="consoleToggleText" class="console-log__toggle-text">Click to hide</span>' +
             '</a>' +
           '</div>' +
-          '<div class="CL-menu" id="CLMenu">' +
-            '<a class="CL-clear" id="CLClear" href="#">CLEAR</a>' +
-            '<span class="CL-label">Height:</span>' +
-            '<input id="CLHeight" type="text" maxlength="3" class="CL-inp" />' +
+          '<div class="console-log__menu" id="consoleMenu">' +
+            '<a class="console-log__clear" id="consoleClear" href="#">CLEAR</a>' +
+            '<span class="console-log__menu-label">Height:</span>' +
+            '<input id="consoleHeight" type="text" value="' + this.height + '" maxlength="3" class="console-log__height-input" />' +
           '</div>'
       });
 
-      this._liExec = Helpers.create('li', {
-        'class': 'CL-entry CL-exec',
-        id: 'CLExecute',
+      this._liExecute = CLHelpers.create('li', {
+        'class': 'console-log__entry console-log__entry--execute',
+        id: 'consoleLIExecute',
         'html':
-          '<span class="CL-sym">&gt;</span>' +
-            '<span class="CL-entrytxt">' +
-            '<textarea id="CLTextarea" class="CL-txtarea"></textarea>' +
-            '<a class="CL-execbtn" id="CLExeBtn" href="#">Execute</a>' +
+          '<span class="console-log__entry-symbol">&gt;</span>' +
+            '<span class="console-log__entry-text">' +
+            '<textarea id="consoleTextarea" class="console-log__execute-textarea"></textarea>' +
+            '<a class="console-log__execute-btn" id="consoleExecuteBtn" href="#">Execute</a>' +
           '</span>'
       });
 
       document.getElementsByTagName('head')[0].appendChild(style);
-      this._el.appendChild(this._entries);
-      this._entries.appendChild(this._liExec);
-      document.body.appendChild(this._el);
+      this._console.appendChild(this._entries);
+      this._entries.appendChild(this._liExecute);
+      document.body.appendChild(this._console);
+    },
+
+    override: function() {
+      var result = false;
+      var scriptTags = document.getElementsByTagName('script');
+      var scTagSrc = '';
+      var queries = '';
+
+      // Loop through script tags on page.
+      for (var i = 0, ii = scriptTags.length; i < ii; i++) {
+        scTagSrc = scriptTags[i].src;
+
+        // Grab all script tags, if its console or console.min then check for param
+        if (/.*console(\.min)?\.js/gi.test(scTagSrc) && scTagSrc.indexOf('?') > 0) {
+          queries = scTagSrc.substring(scTagSrc.indexOf('?') + 1, scTagSrc.length).split('&');
+
+          // Implement queries
+          for (var j = 0, jj = queries.length; j < jj; j++) {
+            result = (queries[j] === 'override') ? true : false;
+          }
+        }
+      }
+
+      return result;
     },
 
     /**
@@ -342,25 +368,24 @@
      */
     bindEvents: function() {
       var self = this;
-      var textarea = Helpers.$('CLTextarea');
 
-      Helpers.$('CLTog').onclick = function() {
-        self.show = self.show ? false : true;
+      CLHelpers.eleById('consoleToggle').onclick = function() {
+        self.show = self.show ? false : true;  
         self.toggle();
         return false;
       };
 
-      Helpers.$('CLHeight').onkeyup = function(e) {
+      CLHelpers.eleById('consoleHeight').onkeyup = function(e) {
         self.setHeight(this.value, false);
       };
 
-      Helpers.$('CLClear').onclick = function() {
+      CLHelpers.eleById('consoleClear').onclick = function() {
         var logs = self._entries.getElementsByTagName('li');
         var logsCount = logs.length;
-
+ 
         if (logsCount !== 1) {
           while (logsCount--) {
-            if (logs[logsCount].id !== 'CLExecute') {
+            if (logs[logsCount].id !== 'consoleLIExecute') {
               logs[logsCount].parentNode.removeChild(logs[logsCount]);
             }
           }
@@ -369,60 +394,30 @@
         return false;
       };
 
-      Helpers.$('CLExeBtn').onclick = function() {
-        if (textarea.value !== '') {
-          isExec = true;
-          self.textareaVal = textarea.value;
-          self.executeCode(self.textareaVal);
-          isExec = false;
+      CLHelpers.eleById('consoleExecuteBtn').onclick = function() {
+        if (CLHelpers.eleById('consoleTextarea').value !== '') {
+          isExecute = true;
+          console.log('<span style="color: ' + self.syntaxColor.execute + '">' + CLHelpers.eleById('consoleTextarea').value + '</span>', eval(CLHelpers.eleById('consoleTextarea').value));
+          CL.scrollToBottom();
         }
 
         return false;
       };
-    },
-
-    /**
-     * WHen executing code from the textarea.
-     *
-     * @param {string} val The textarea value.
-     */
-    executeCode: function(val) {
-      var reg = /console\.*?.*/g;
-      var reg2 = /console.*?\((.*)\)/;
-
-      if ((val).match(reg)) {
-        if (val.match(reg2)) {
-          console.log(eval(val));
-        } else {
-          if (val === 'console') {
-            console.log(val, this.funcs);
-          } else {
-            for (var key in this.funcs) {
-              if (val === 'console.' + key) {
-                console.log(val, this.funcs[key]);
-              }
-            }
-          }
-        }
-      } else {
-        eval(val);
-        console.log(val, eval(val));
-      }
-    },
+    }, 
 
     /**
      * Handles the toggling (hiding/showing) of the custom console.
      */
     toggle: function() {
       var toggleTxt = (this.show) ? 'hide' : 'show';
-      var toggleElem = Helpers.$('CLTogText');
+      var toggleElem = CLHelpers.eleById('consoleToggleText');
 
       toggleElem.innerHTML = 'Click to ' + toggleTxt;
 
       this._entries.style.display = (this.show) ? 'block' : 'none';
-      Helpers.$('CLMenu').style.display = (this.show) ? 'block' : 'none';
+      CLHelpers.eleById('consoleMenu').style.display = (this.show) ? 'block' : 'none';
 
-      if (this.show) this.scrl2Btm();
+      if (this.show) this.scrollToBottom();
     },
 
     /**
@@ -434,37 +429,35 @@
     setHeight: function(h, init) {
       var val = Number(h);
 
-      if (val >= 90 && val <= (Helpers.getWinH() - 64) / 2) {
+      if (val >= 90 && val <= (CLHelpers.getWindowHeight() - 64) / 2) {
         this.height = val;
       } else {
-        this.height = Helpers.getWinH() / 3;
+        this.height = CLHelpers.getWindowHeight() / 3;
       }
 
       if (init) {
-        Helpers.$('CLHeight').value = this.height;
+        CLHelpers.eleById('consoleHeight').value = this.height;
       }
 
       this._entries.style.height = this.height + 'px';
-      this.scrl2Btm();
+      this.scrollToBottom();
     },
 
     /**
      * Functionality that occurs when a new entry is added to the console.
      */
     newLog: function() {
-      var textarea = Helpers.$('CLTextarea');
-      this._entries.appendChild(this._liExec);
-      textarea.value = '';
-      textarea.focus();
-      this.scrl2Btm();
-      isExec = false;
-      error = false;
+      this._entries.appendChild(this._liExecute);
+      CLHelpers.eleById('consoleTextarea').value = '';
+      CLHelpers.eleById('consoleTextarea').focus();
+      this.scrollToBottom();
+      isExecute = false; // Reset variable & textarea value
     },
 
     /**
      * Ensures the entries list is always scrolled to the bottom.
      */
-    scrl2Btm: function() {
+    scrollToBottom: function() {
       this._entries.scrollTop = this._entries.scrollHeight;
     },
 
@@ -481,25 +474,23 @@
 
       if (type == 'object') {
         if (str === null) {
-          formattedString = '<span style="color: ' + this.synColor._null + '">' + str + '</span>';
+          formattedString = '<span style="color: ' + this.syntaxColor._null + '">' + str + '</span>';
         } else {
-          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.synColor.obj + '">$1</span>$2') // key in object
-          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.synColor.numBoo + '">$2$4$6</span>') //number or boolean value
-          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.synColor.str + '">$2</span>'); // string value
+          formattedString = str.replace(new RegExp(/(\w+)(\:)/g), '<span style="color: ' + this.syntaxColor.objkey + '">$1</span>$2') // key in object
+          .replace(new RegExp(/(&nbsp;)(-?\d+\D?\d+)|(&nbsp;)(-?\d)|(&nbsp;)(true|false)/g), '$1$3$5<span style="color: ' + this.syntaxColor.numberBoolean + '">$2$4$6</span>') //number or boolean value
+          .replace(new RegExp(/(&nbsp;)(".*?")/g), '$1<span style="color: ' + this.syntaxColor.str + '">$2</span>'); // string value
         }
       } else if (type == 'html') {
         var formattedString2 = str.replace(new RegExp(/&lt;(.*?)&gt;/gi), function(x) { // HTML tags
-          return '<span style="color: ' + self.synColor.tag + '">' + x + '</span>';
+          return '<span style="color: ' + self.syntaxColor.htmlTag + '">' + x + '</span>';
         });
 
         formattedString = formattedString2.replace(new RegExp(/&lt;(?!\/)(.*?)&gt;/gi), function(y) { // HTML tag attributes 
           var attr = new RegExp(/ (.*?)="(.*?)"/gi);
-          return y.replace(attr, ' <span style="color: ' + self.synColor.tagAttr + '">$1</span>="<span style="color: ' + self.synColor.tagVal + '">$2</span>"');
+          return y.replace(attr, ' <span style="color: ' + self.syntaxColor.htmlTagAttr + '">$1</span>="<span style="color: ' + self.syntaxColor.htmlTagVal + '">$2</span>"');
         });
       } else if (type == 'number' || type == 'boolean') {
-        formattedString = '<span style="color: ' + this.synColor.numBoo + '">' + str + '</span>';
-      } else if (type === 'undefined') {
-        formattedString = '<span style="color: ' + this.synColor._null + '">' + str + '</span>';
+        formattedString = '<span style="color: ' + this.syntaxColor.numberBoolean + '">' + str + '</span>';
       }
 
       return formattedString;
@@ -512,7 +503,7 @@
     * @return {String}
     */
     printHTML: function(el) {
-      var outputDiv = Helpers.create('div');
+      var outputDiv = CLHelpers.create('div');
       var elem = null;
       var html = '';
       var breakLine = null;
@@ -581,97 +572,57 @@
 
   // If the console is undefined or you are using a device.
   // User agent detection: Android, webOS, iPhone, iPad, iPod, Blackberry, IEMobile and Opera Mini
-  if (typeof console !== 'object' || Helpers.isMobile() || console === undefined) {
+  if (typeof console !== 'object' || CLHelpers.isMobile() || console === undefined || CL.override()) {
     var start = 0;
     var end = 0;
-    var sym = '';
-    var entryClass = 'CL-entry';
+    var symbol = '<span class="console-log__entry-symbol">&gt;</span>';
     var output = '';
-    var strObj = '';
     var space = ' ';
-    var error = false;
-    var isExec = false;
+    var isExecute = false;
 
     CL.init();
 
     window.onerror = function(err, url, line) {
-      error = '_true';
+      var li = CLHelpers.create('li', {
+        html: symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.error + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+      });
 
-      if (!isExec) {
-        entryClass += ' CL-err';
-
-        var li = Helpers.create('li', {
-          'class': entryClass,
-          html: sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
-        });
-
-        CL._entries.insertBefore(li, CL._liExec);
-        CL.newLog();
-      } else {
-        console.log(CL.textareaVal);
-      }
+      CL._entries.insertBefore(li, CL._liExecute);
+      CL.scrollToBottom();
     };
 
-    window.console = {
-      ID: '%CL%ML101417',
+    window.console = console = {
       log: function() {
         var li = null;
         var param = null;
-        var pString = '%CL%ML101417';
+        var pString = null;
 
-        error = (error === '_true') ? true : false;
         output = ''; // used to clear the output each time
 
-        if (isExec) space = '<br>';
+        if (isExecute) space = '<br>';
 
         try {
           // Loop through arguments passed in.
           for (var i = 0, ii = arguments.length; i < ii; i++) {
             param = arguments[i];
-
-            if (isExec && error) {
-              entryClass = 'CL-entry';
-
-              li = Helpers.create('li', {
-                'class': entryClass,
-                'html': sym + '<span class="CL-entrytxt">' + param + '</span>'
-              });
-
-              CL._entries.appendChild(li);
-              eval(param);
-            }
+            pString = param.toString();
 
             // If the parameter is an object special functionality needs to happen.
             if ((typeof param).toLowerCase() == 'object') {
-              pString = param.toString();
-              entryClass = 'CL-entry';
-
               if (pString == '[object Object]') {
-                strObj = Helpers.ObjString(param);
-
-                if (/\%CL\%ML101417/g.test(strObj)) {
-                  strObj = Helpers.ObjString(CL.funcs);
-                }
-
-                output += 'Object ' + CL.syntax('object', strObj) + space;
+                output = 'Object ' + CL.syntax('object', CLHelpers.ObjToString(param)) + space;
               } else if (pString.match(/^\[object */i)) {
-                if (pString.match(/^\[object HTML*/i) || Helpers.isHtmlEl(param)) { // if param is HTML element
-                  output += CL.syntax('html', CL.printHTML(param)) + space;
+                if (pString.match(/^\[object HTML*/i) || CLHelpers.isHtmlElem(param)) { // if param is HTML element
+                  output = CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
-                  output += '<span style="color: ' + CL.synColor.err + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
+                  output = '<span style="color: ' + CL.syntaxColor.error + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
                 if (param.length > 1) {
-                  output += '[' + param + ']';
+                  output = '[' + param + ']';
                 }
               }
             } else {
-              entryClass = 'CL-entry';
-
-              if (/\%CL\%ML101417/g.test(param)) {
-                param = Helpers.ObjString(CL.funcs.log);
-              }
-
               output += CL.syntax(typeof param, param) + space;
             }
           }
@@ -680,52 +631,29 @@
           if ((typeof param).toLowerCase() == 'object') {
             output += CL.syntax(typeof param, param) + space;
           } else {
-            entryClass += ' CL-err';
-            output += '<span style="color: ' + CL.synColor.err + '">' + e + '</span>' + space;
+            output += '<span style="color: ' + CL.syntaxColor.error + '">' + e + '</span>' + space;
           }
         }
 
-        if (error) {
-          entryClass = 'CL-entry CL-err';
-        }
-
-        li = Helpers.create('li', {
-          'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
+        li = CLHelpers.create('li', {
+          'class': 'console-log__entry',
+          'html': symbol + '<span class="console-log__entry-text">' + output + '</span>'
         });
 
         CL._entries.appendChild(li);
         CL.newLog();
-      },
-
-      error: function() {
-        var args = arguments;
-
-        entryClass = '%CL%ML101417';
-        error = '_true';
-
-        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
-          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
-          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
-          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
-          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
-          args[10] === undefined ? '' : args[10]);
-      },
+      }, 
 
       time: function() {
-        entryClass = '%CL%ML101417';
-        error = (error === '_true') ? true : false;
         start = new Date().getMilliseconds();
       },
 
       timeEnd: function() {
-        var li = '%CL%ML101417';
-        error = (error === '_true') ? true : false;
         end = new Date().getMilliseconds();
 
-        li = Helpers.create('li', {
-          'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+        var li = CLHelpers.create('li', {
+          'class': 'console-log__entry',
+          'html': symbol + '<span class="console-log__entry-text"><span style="color: ' + CL.syntaxColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
