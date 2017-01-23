@@ -236,7 +236,7 @@
       time: function() {'[native code]'},
       timeEnd: function() {'[native code]'},
       clear: function() {'[native code]'},
-      error: function() {'[native code'}
+      error: function() {'[native code]'}
     },
 
     _el: null,
@@ -684,6 +684,7 @@
                 if (pString.match(/^\[object HTML*/i) || Helpers.isHtmlEl(param)) { // if param is HTML element
                   output += CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
+                  entryClass += ' CL-err';
                   output += '<span style="color: ' + CL.synColor.err + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
