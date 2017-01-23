@@ -27,35 +27,26 @@
 	<script type="text/javascript" src="dist/js/console.js?200"></script>
 
 	<script>
-		var objectTest = {fruit: 'apple', car: 'Ford', dessert: 'cupcake', numbers: {'1':'odd', '2': 'even'}},
-			jsonTest = [{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false,"about":"Amet magna duis eiusmod cillum voluptate fugiat. Mollit sint quis Lorem non officia cillum. Cillum irure Lorem aliqua ipsum sit ipsum laborum commodo laborum adipisicing eu. Ea eu sint excepteur irure. Laboris sunt quis officia minim.","latitude":-71.517163,"tags":["est","sunt","ex"],"friends":[{"id":0,"name":"Marshall Cabrera"},{"id":1,"name":"Marcella Estrada"}]}],
-			mixTest = {current: 0, boo: false, test:'ttests asdfasdf', 'stringFunc': function(e,t) {var j=[{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false}];}, init: function() {return this;}},
-			arrayTest = [1,2,3],
-			elementTest = document.getElementsByTagName('p'),
-			elementTest2 = document.getElementById('demoELem')
-			nativeFuncTest = String,
-			nativeObjTest = window; 
+		var jsonTest = [{"_id":"546cfd1b0614b87896815c02","index":0,"isActive":false,"about":"Amet magna duis eiusmod cillum voluptate fugiat. Mollit sint quis Lorem non officia cillum. Cillum irure Lorem aliqua ipsum sit ipsum laborum commodo laborum adipisicing eu. Ea eu sint excepteur irure. Laboris sunt quis officia minim.","latitude":-71.517163,"tags":["est","sunt","ex"],"friends":[{"id":0,"name":"Marshall Cabrera"},{"id":1,"name":"Marcella Estrada"}]}];
+		var elementTest = document.getElementById('demoELem');
+		var nativeFuncTest = String;
+		var nativeObjTest = window; 
 
 		document.getElementById('addToConsole').onclick = function(e) {
-			console.log('i was added via click event.')
+			console.log('i was added via click event.');
+			console.error('There was an error ... NOT!')
 			return false;
 		};
 
-		console.debug('dfdfd', 4+4, objectTest);
-		console.time('timeTest');
-		console.log('aaa', 'bbb')
-		console.log(objectTest);
-		console.log(jsonTest);
-		console.log(mixTest);
-		console.log(arrayTest);
-		console.log(elementTest);
-		console.log(elementTest2);
-		console.log(nativeFuncTest);
-		console.log(nativeObjTest);
+		console.debug('console.debug test:', 4+4);
+		console.time('console.time test');
+		console.log('console.log TEST json: ', jsonTest);
+		console.log('console.log TEST HTML: ', elementTest);
+		console.log('console.log TEST NativeFunction: ', nativeFuncTest);
+		console.log('console.log TEST NativeObject: ', nativeObjTest);
 		console.log('There is only ',1,' cat in the house.');
-		console.log('There is only '+2+' cat in the house.');
-		console.log(2+3);
-		console.timeEnd('timeTest');
+		console.log('There is only '+(2+3)+' cat in the house.');
+		console.timeEnd('console.time test');
 	</script>
 
 </body>
