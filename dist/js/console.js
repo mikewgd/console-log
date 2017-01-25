@@ -236,7 +236,8 @@
       time: function() {'[native code]'},
       timeEnd: function() {'[native code]'},
       clear: function() {'[native code]'},
-      error: function() {'[native code]'}
+      error: function() {'[native code]'},
+      warn: function() {'[native code]'}
     },
 
     _el: null,
