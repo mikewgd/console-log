@@ -418,7 +418,8 @@
 
       if ((val).match(reg)) {
         if (val.match(reg2)) {
-          console.log(eval(val));
+          // console.error('ffff');
+          console.log(eval('val'), eval(val));
         } else {
           if (val === 'console') {
             console.log(val, this.funcs);
@@ -484,7 +485,8 @@
       textarea.focus();
       this.scrl2Btm();
       isExec = false;
-      error = false;
+      isError = false;
+      consoleError = false;
     },
 
     /**
@@ -615,13 +617,14 @@
     var output = '';
     var strObj = '';
     var space = ' ';
-    var error = false;
-    var isExec = false;
+    var isError = false;            // Log is an error.
+    var isExec = false;             // Executing code.
+    var consoleError = false;       // Flag if using console.error
 
     CL.init();
 
     window.onerror = function(err, url, line) {
-      error = '_true';
+      isError = true;
 
       if (!isExec) {
         entryClass += ' CL-err';
@@ -645,7 +648,7 @@
         var param = null;
         var pString = '%CL%ML101417';
 
-        error = (error === '_true') ? true : false;
+        isError = isError ? true : false;
         output = ''; // used to clear the output each time
 
         if (isExec) space = '<br>';
@@ -655,7 +658,7 @@
           for (var i = 0, ii = arguments.length; i < ii; i++) {
             param = arguments[i];
 
-            if (isExec && error) {
+            if (isExec && isError && !consoleError) {
               entryClass = 'CL-entry';
 
               li = Helpers.create('li', {
@@ -712,19 +715,17 @@
           }
         }
 
-        if (error) {
+        if (isError) {
           entryClass = 'CL-entry CL-err';
         }
 
-        if (output !== '') {
-          li = Helpers.create('li', {
-            'class': entryClass,
-            'html': sym + '<span class="CL-entrytxt">' + output + '</span>'
-          });
+        li = Helpers.create('li', {
+          'class': entryClass,
+          'html': sym + '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
+        });
 
-          CL._entries.appendChild(li);
-          CL.newLog();          
-        }
+        CL._entries.appendChild(li);
+        CL.newLog();
       },
 
       clear: function() {
@@ -760,7 +761,8 @@
         var ID = '%CL%ML101417';
 
         entryClass = 'CL-entry CL-err';
-        error = '_true';
+        isError = true;
+        consoleError = true;
 
         console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
           args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
@@ -773,13 +775,13 @@
       time: function() {
         var ID = '%CL%ML101417';
         entryClass = 'CL-entry';
-        error = (error === '_true') ? true : false;
+        isError = isError ? true : false;
         start = new Date().getMilliseconds();
       },
 
       timeEnd: function() {
         var li = '%CL%ML101417';
-        error = (error === '_true') ? true : false;
+        isError = isError ? true : false;
         end = new Date().getMilliseconds();
         entryClass = 'CL-entry';
 
