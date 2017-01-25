@@ -418,7 +418,6 @@
 
       if ((val).match(reg)) {
         if (val.match(reg2)) {
-          // console.error('ffff');
           console.log(eval('val'), eval(val));
         } else {
           if (val === 'console') {
@@ -487,6 +486,7 @@
       isExec = false;
       isError = false;
       consoleError = false;
+      entryClass = 'CL-entry';
     },
 
     /**
@@ -648,7 +648,7 @@
         var param = null;
         var pString = '%CL%ML101417';
 
-        isError = isError ? true : false;
+        // isError = isError ? true : false;
         output = ''; // used to clear the output each time
 
         if (isExec) space = '<br>';
@@ -696,7 +696,7 @@
                 }
               }
             } else {
-              entryClass = 'CL-entry';
+              // entryClass = 'CL-entry';
 
               if (/\%CL\%ML101417/g.test(param)) {
                 param = Helpers.ObjString(CL.funcs.log);
@@ -748,6 +748,9 @@
         var args = arguments;
         var ID = '%CL%ML101417';
 
+        isError = isError ? true : false;
+        entryClass = 'CL-entry';
+
         console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
           args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
           args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
@@ -772,16 +775,31 @@
           args[10] === undefined ? '' : args[10]);
       },
 
+      warn: function() {
+        var args = arguments;
+        var ID = '%CL%ML101417';
+
+        entryClass = 'CL-entry CL-warn';
+        // isError = isError ? true : false;
+
+        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
+          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
+          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
+          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
+          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
+          args[10] === undefined ? '' : args[10]);
+      },
+
       time: function() {
         var ID = '%CL%ML101417';
         entryClass = 'CL-entry';
-        isError = isError ? true : false;
+        // isError = isError ? true : false;
         start = new Date().getMilliseconds();
       },
 
       timeEnd: function() {
         var li = '%CL%ML101417';
-        isError = isError ? true : false;
+        // isError = isError ? true : false;
         end = new Date().getMilliseconds();
         entryClass = 'CL-entry';
 

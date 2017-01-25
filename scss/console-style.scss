@@ -138,6 +138,12 @@
     background: #fff0f0;
   }
   
+  /* warn */
+  &.CL-warn {
+    background: #fffbe6;
+    color: #5c3b00;
+  }
+  
   /* execute */
   &.CL-exec {
     overflow: hidden;

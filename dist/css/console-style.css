@@ -114,10 +114,14 @@
   border-bottom: 1px solid #F0F0F0;
   *zoom: 1;
   /* error */
+  /* warn */
   /* execute */ }
   .CL-entry.CL-err {
     color: #FF0000;
     background: #fff0f0; }
+  .CL-entry.CL-warn {
+    background: #fffbe6;
+    color: #5c3b00; }
   .CL-entry.CL-exec {
     overflow: hidden;
     border-bottom: 0; }

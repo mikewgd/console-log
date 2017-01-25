@@ -34,10 +34,11 @@
 
 		document.getElementById('addToConsole').onclick = function(e) {
 			console.log('i was added via click event.');
-			console.error('There was an error ... NOT!')
+			console.error('There was an error!!')
 			return false;
 		};
 
+		console.warn('Warning here.')
 		console.debug('console.debug test:', 4+4);
 		console.time('console.time test');
 		console.log('console.log TEST json: ', jsonTest);
