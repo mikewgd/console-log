@@ -119,6 +119,10 @@
   .CL-entry.CL-err {
     color: #FF0000;
     background: #fff0f0; }
+    .CL-entry.CL-err .CL-sym {
+      color: #FF0000; }
+  .CL-entry.CL-cleared .CL-sym {
+    display: none; }
   .CL-entry.CL-warn {
     background: #fffbe6;
     color: #5c3b00; }
@@ -137,12 +141,15 @@
   border: 0;
   position: absolute;
   margin-left: 10px;
-  font-family: Century Gothic;
+  font-family: Arial;
   font-weight: 900;
   color: #939393;
   font-size: 12px;
   padding: 3px 0;
   left: 0; }
+
+.CL-sym2 {
+  color: #bababa; }
 
 .CL-entrytxt {
   margin-left: 24px;

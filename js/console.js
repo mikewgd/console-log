@@ -231,13 +231,14 @@
     },
     textareaVal: '',
     funcs: {
-      log: function() {'[native code]'},
-      debug: function() {'[native code]'},
-      time: function() {'[native code]'},
-      timeEnd: function() {'[native code]'},
-      clear: function() {'[native code]'},
-      error: function() {'[native code]'},
-      warn: function() {'[native code]'}
+      log: function() {'[native code]';},
+      debug: function() {'[native code]';},
+      time: function() {'[native code]';},
+      timeEnd: function() {'[native code]';},
+      clear: function() {'[native code]';},
+      error: function() {'[native code]';},
+      warn: function() {'[native code]';},
+      assert: function() {'[native code]';}
     },
 
     _el: null,
@@ -254,7 +255,7 @@
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
       if (Helpers.isIE8or9()) {
-        alert('IE 8 & 9 support the console. The developer tools need to be opened for the console to work.')
+        alert('IE 8 & 9 support the console. The developer tools need to be opened for the console to work.');
       }
       
       this.setHeight(this.height, true);
@@ -419,21 +420,32 @@
 
       if ((val).match(reg)) {
         if (val.match(reg2)) {
-          console.log(eval('val'), eval(val));
+          sym = '<span class="CL-sym">&gt;</span>';
+          console.log(val);
+          sym = '<span class="CL-sym Cl-sym2">&lt;</span>';
+          console.log(eval(val));
         } else {
           if (val === 'console') {
-            console.log(val, this.funcs);
+            sym = '<span class="CL-sym">&gt;</span>';
+            console.log(val);
+            sym = '<span class="CL-sym Cl-sym2">&lt;</span>';
+            console.log(this.funcs);
           } else {
             for (var key in this.funcs) {
               if (val === 'console.' + key) {
-                console.log(val, this.funcs[key]);
+                sym = '<span class="CL-sym">&gt;</span>';
+                console.log(val);
+                sym = '<span class="CL-sym Cl-sym2">&lt;</span>';
+                console.log(this.funcs[key]);
               }
             }
           }
         }
       } else {
-        eval(val);
-        console.log(val, eval(val));
+        sym = '<span class="CL-sym">&gt;</span>';
+        console.log(val);
+        sym = '<span class="CL-sym Cl-sym2">&lt;</span>';
+        console.log(eval(val));
       }
     },
 
@@ -461,7 +473,7 @@
     setHeight: function(h, init) {
       var val = Number(h);
 
-      if (val >= 90 && val <= (Helpers.getWinH() - 64) / 2) {
+      if (val >= 90 && val <= (Helpers.getWinH() - 64)) {
         this.height = val;
       } else {
         this.height = Helpers.getWinH() / 3;
@@ -484,10 +496,9 @@
       textarea.value = '';
       textarea.focus();
       this.scrl2Btm();
-      isExec = false;
-      isError = false;
-      consoleError = false;
+      isExec = isError = consoleError = consoleAssert = false;
       entryClass = 'CL-entry';
+      sym = '';
     },
 
     /**
@@ -621,6 +632,7 @@
     var isError = false;            // Log is an error.
     var isExec = false;             // Executing code.
     var consoleError = false;       // Flag if using console.error
+    var consoleAssert = false;
 
     CL.init();
 
@@ -651,6 +663,10 @@
 
         // isError = isError ? true : false;
         output = ''; // used to clear the output each time
+
+        if (consoleAssert) {
+          output = 'Assertion failed: ';
+        }
 
         if (isExec) space = '<br>';
 
@@ -689,6 +705,7 @@
                   output += CL.syntax('html', CL.printHTML(param)) + space;
                 } else { // Most likely window, document etc...
                   entryClass += ' CL-err';
+                  isError = true;
                   output += '<span style="color: ' + CL.synColor.err + '">ERROR: Maximum call stack size exceeded.<br><em>Object is too deeply nested.</em></span>' + space;
                 }
               } else { // Most likely an array.
@@ -718,21 +735,26 @@
 
         if (isError) {
           entryClass = 'CL-entry CL-err';
+          sym = '<span class="CL-sym">x</span>';
         }
 
-        li = Helpers.create('li', {
-          'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
-        });
+        if (output !== '') {
+          li = Helpers.create('li', {
+            'class': entryClass,
+            'html': sym + '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
+          });
 
-        CL._entries.appendChild(li);
-        CL.newLog();
+          CL._entries.appendChild(li);
+          CL.newLog();
+        }        
       },
 
       clear: function() {
         var logs = CL._entries.getElementsByTagName('li');
         var logsCount = logs.length;
         var ID = '%CL%ML101417';
+
+        entryClass += ' CL-cleared';
 
         if (logsCount !== 1) {
           while (logsCount--) {
@@ -742,7 +764,7 @@
           }
         }
 
-        console.log('Console was cleared');
+        console.log('<em>Console was cleared</em>');
       },
 
       debug: function() {
@@ -783,12 +805,42 @@
         entryClass = 'CL-entry CL-warn';
         // isError = isError ? true : false;
 
-        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
-          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
-          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
-          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
-          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
-          args[10] === undefined ? '' : args[10]);
+        console.log(args[0] === undefined ? '' : args[0],
+          args[1] === undefined ? '' : args[1], args[2] === undefined ? '' : args[2],
+          args[3] === undefined ? '' : args[3], args[4] === undefined ? '' : args[4],
+          args[5] === undefined ? '' : args[5], args[6] === undefined ? '' : args[6],
+          args[7] === undefined ? '' : args[7], args[8] === undefined ? '' : args[8],
+          args[9] === undefined ? '' : args[9], args[10] === undefined ? '' : args[10]);
+      },
+
+      assert: function() {
+        var args = [];
+        var output = '';
+        var ID = '%CL%ML101417';
+
+        isError = consoleError = consoleAssert = true;
+
+        for (var i = 0, ii = arguments.length; i < ii; i++) {
+          args.push(arguments[i]);
+        }
+
+        args.shift();
+
+        if (typeof arguments[0] === 'boolean') {
+          if (!arguments[0]) {
+            console.error(args[0] === undefined ? 'console.assert' : args[0],
+              args[1] === undefined ? '' : args[1], args[2] === undefined ? '' : args[2],
+              args[3] === undefined ? '' : args[3], args[4] === undefined ? '' : args[4],
+              args[5] === undefined ? '' : args[5], args[6] === undefined ? '' : args[6],
+              args[7] === undefined ? '' : args[7], args[8] === undefined ? '' : args[8],
+              args[9] === undefined ? '' : args[9], args[10] === undefined ? '' : args[10]);
+          } else {
+            consoleAssert = consoleError = isError = false;
+          }
+        } else {
+          consoleAssert = consoleError = isError = false;
+          return;
+        }
       },
 
       time: function() {
