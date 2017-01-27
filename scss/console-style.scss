@@ -136,6 +136,16 @@
   &.CL-err {
     color: #FF0000;
     background: #fff0f0;
+
+    .CL-sym {
+      color: #FF0000;
+    }
+  }
+
+  &.CL-cleared {
+    .CL-sym {
+      display: none;
+    }
   }
   
   /* warn */
@@ -166,12 +176,16 @@
   border: 0;
   position: absolute;
   margin-left: 10px;
-  font-family: Century Gothic;
+  font-family: Arial;
   font-weight: 900;
   color: #939393;
   font-size: 12px;
   padding: 3px 0;
   left: 0;
+}
+
+.CL-sym2 {
+  color: #bababa;
 }
 
 .CL-entrytxt {

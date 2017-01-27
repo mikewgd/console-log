@@ -9,6 +9,7 @@ var runSequence = require('run-sequence');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var fs = require('fs');
+var jshint = require('gulp-jshint');
 
 var paths = {
   js: 'js',
@@ -48,6 +49,8 @@ gulp.task('watch', function() {
 
 gulp.task('js', function() {
   return gulp.src(paths.buildJs + '/console.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'))
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
