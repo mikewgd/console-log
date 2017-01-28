@@ -118,7 +118,10 @@
   /* execute */ }
   .CL-entry.CL-err {
     color: #FF0000;
-    background: #fff0f0; }
+    background: #fff0f0;
+    border-top: 1px solid #ffd6d6;
+    border-bottom: 1px solid #ffd6d6;
+    margin-top: -1px; }
     .CL-entry.CL-err .CL-sym {
       color: #FF0000; }
   .CL-entry.CL-cleared .CL-sym {

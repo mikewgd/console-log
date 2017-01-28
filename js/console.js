@@ -473,7 +473,7 @@
     setHeight: function(h, init) {
       var val = Number(h);
 
-      if (val >= 90 && val <= (Helpers.getWinH() - 64)) {
+      if (val >= 90 && val <= (Helpers.getWinH() - 150)) {
         this.height = val;
       } else {
         this.height = Helpers.getWinH() / 3;
