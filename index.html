@@ -45,20 +45,18 @@
 		
 		<div class="content">
 			<div class="section what-is-it">
-				<h2>How It Works/What is it?</h2>
-				<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object.</p>
+				<h2>What is this?</h2>
+				<p>A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and/or browsers that do not support the console object. The script uses device detection (user agent sniffing) and if the <code>console</code> object is <code>undefined</code>; It then overwrites the <code>console</code> object. This is a bare bones console, not a replacement for the browsers console. Certain limitations and functionality that the browser's console has will not be implemented in order to keep the script file size down.</p>
 			
 				<div class="list">
 					<h3>Features</h3>
 					<ul>
-						<li>Doesn't use JavaScript libraries</li>
+						<li>No JavaScript libraries</li>
 						<li>Toggle console</li>
-						<li>Adjust console height</li>
-						<li>Query params</li>
-						<li>Recognizable theme <strong class="new">NEW!</strong></li>
-						<li>Syntax highlighting <strong class="new">NEW!</strong></li>
-						<li>Clear console <strong class="new">NEW!</strong></li>
-						<li class="last">Supported functions: <code>log</code>, <code>time</code> & <code>timeEnd</code></li>
+						<li>Adjust console height / Clear console</li>
+						<li>Query params (height/toggle/override)</li>
+						<li>Recognizable theme / Syntax highlighting</li>
+						<li class="last">Supported functions: <code>log</code>, <code>time</code>, <code>timeEnd</code>, <code>assert</code>,<br><code>clear</code>, <code>debug</code>, <code>warn</code>, <code>error</code> (does not include trace functionality)</li>
 					</ul>
 				</div>
 
@@ -66,6 +64,12 @@
 					<h3>Limitations/Issues</h3>
 					<ul>
 						<li>Nested objects (window, document)</li>
+						<li>Autocomplete commands</li>
+						<li>String substitution and formatting, Format specifiers</li>
+						<li>Styling console output</li>
+						<li>Formatting DOM elements as JavaScript objects</li>
+						<li>Filtering, Settings, Command Line API</li>
+						<li>Monitoring events</li>
 						<li class="last">Have an issue? <a target="_blank" href="https://github.com/mikewgd/console-log/issues">Log it here!</a></li>
 					</ul>
 				</div>
@@ -76,10 +80,23 @@
 				<p>Just add the script on the page before the js file(s) that contain <code>console</code> and you're good to go! No rewriting code!</p>
 				
 				<h3>Parameters</h3>
-				<p>You may also use parameters to set default settings for the console (visibility and height). Simply add '?' to the end of the src attribute on the script tag.</p>
+				<p>You may also use parameters to set default settings for the console (visibility and height). Simply add '?' to the end of the src attribute on the script tag. You can also use the override setting, which overrides the device detection and if the <code>console</code> is undefined or not.</p>
 
-				<p><strong>EXAMPLE:</strong></p>
-	
+				<h4>Visibility</h4>
+				<p>By default it will be expanded/visible. You can hide the console by clicking on the top bar that says "Click to hide". You can override this default setting by adding a query parameter to the script tag: <code>console.min.js?hide</code>.</p>
+
+				<h4>Height Adjustment</h4>
+				<p>By default the console height (height of the log entries specifically) will be 1/3 of the window height. You can also adjust the height of the console by typing into the input field next to "CLEAR". As well as with visibility, you can also set the height of the console through query parameter: <code>console.min.js?200</code></p>
+
+				<p><em>NOTE: Height must be >= 90 and >= to the window height - 150 (magic number). Applies to using the input and query parameter. If the value does not meet the requirement it will be set to the default.</em></p>
+
+				<h4>Override</h4>
+				<p>Currently the custom console will only appear if <code>console</code> is not supported. However you can change that with a query parameter to ensure that it always appears: <code>console.min.js?override</code></p>
+
+				<br>
+
+				<h3>Full Example</h3>
+				<br>
 				<pre><code>&nbsp;&nbsp;&nbsp;&nbsp;...<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Add console log script above the other script. (with default settings) --&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type=&quot;text/javascript&quot; src=&quot;//console.min.js&quot;&gt;&lt;/script&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript" src="//console.min.js?400"&gt;&lt;/script&gt; &lt;!--console expanded, height 400px--&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript" src="//console.min.js?hide&amp;400"&gt;&lt;/script&gt; &lt;!-- console collapsed, height 400px--&gt;<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Some random js file with console.log --&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type=&quot;text/javascript&quot; src=&quot;//test.js&quot;&gt;&lt;/script&gt<br><br>&nbsp;&nbsp;&lt;/body&gt;<br>&lt;/html&gt;</code></pre>				
 			</div>
 			

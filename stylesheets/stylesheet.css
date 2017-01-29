@@ -30,6 +30,10 @@ pre {
     clear: both;
     width: 100%; }
 
+pre span {
+  display:  inline-block;
+}
+
 .fl {
   float: left; }
 
@@ -43,6 +47,10 @@ h1.logo {
 h2, h3 {
   margin: 0;
   padding: 0; }
+
+h4 {
+  margin-bottom:  0;
+}
 
 h3 {
   margin-top: 15px; }
