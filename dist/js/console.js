@@ -29,6 +29,48 @@
     },
 
     /**
+    * @function removeClass
+    * Removes a class name from an element.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element of class name you want removed.
+    * @param {String} classN - class name to be removed.
+    */
+    removeClass: function(elem, classN) {
+      var currClass = elem.className.replace(/(^\s+|\s+$)/g, '');
+      var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)", "g");
+
+      elem.className = (currClass.replace(regex, " ")).replace(/(^\s+|\s+$)/g, '');
+    },
+
+    /**
+    * @function hasClass
+    * Returns true or false if an element has a specifc class name.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element that may have the class name specified.
+    * @param {String} classN - class name to be checked for.
+    */
+    hasClass: function(elem, classN) {
+      var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)");
+      return regex.test(elem.className);
+    },
+
+    /**
+    * @function addClass
+    * Adds a class name to a given element.
+    *
+    * @param {HTMLElement} elem - element that you want a class name added to.
+    * @param {String} classN - new class name you want added to element.
+    */
+    addClass: function(elem, classN) {
+      var currClass = elem.className.replace(/(^\s+|\s+$)/g, '');
+      var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
+
+      if (!this.hasClass(elem, classN)) elem.className = addedClass;
+    },
+
+    /**
     * Returns true or false if we are viewing on a mobile or tablet device.
     * @return {Boolean}
     */
@@ -250,7 +292,7 @@
      */
     init: function() {
       this.setup();
-      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:2;font-size:12px}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL-header,.CL-title{font-family:Lucida Grande;font-size:12px}.CL-title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL-tog{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL-togtxt{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL-menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL-clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL-inp{width:23px;padding:2px;margin:4px;float:left;border:0}.CL-entries{background:#fff;overflow:auto;margin:0;padding:0;font-family:Lucida Grande;font-size:12px;width:100%}.CL-entries,.CL-entry{position:relative;list-style-type:none}.CL-entry{clear:both;min-height:16px;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;*zoom:1}.CL-entry.CL-err{color:red;background:#fff0f0;border-top:1px solid #ffd6d6;border-bottom:1px solid #ffd6d6;margin-top:-1px}.CL-entry.CL-err .CL-sym{color:red}.CL-entry.CL-cleared .CL-sym{display:none}.CL-entry.CL-warn{background:#fffbe6;color:#5c3b00}.CL-entry.CL-exec{overflow:hidden;border-bottom:0}.CL-entry.CL-exec .CL-sym{color:#2d7df9}.CL-entry.CL-exec .CL-entrytxt{overflow:auto;padding-right:0;*zoom:0}.CL-sym{border:0;position:absolute;margin-left:10px;font-family:Arial;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL-sym2{color:#bababa}.CL-entrytxt{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;*zoom:1}.CL-entrytxt,.CL-txtarea{font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL-txtarea{width:76%;float:left;padding:3px;height:30px;border:0}.CL-execbtn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
+      this.insertRules(document.styleSheets[document.styleSheets.length - 1], '.CL{position:fixed;bottom:0;width:100%;left:0;border-top:1px solid #a3a3a3;z-index:2;font-size:12px}* html{height:100%}* html body{margin:0;padding:0;height:100%;zoom:1}* html #customconsole{position:absolute;right:auto;bottom:auto;top:expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop:document.body.scrollTop)) + "px")}.CL-header{overflow:auto;background:#ececec;border-bottom:1px solid #a3a3a3;*height:32px}.CL-header,.CL-title{font-family:Lucida Grande;font-size:12px}.CL-title{margin:0 0 0 10px;line-height:15px;border:1px solid #a3a3a3;border-bottom:0;float:left;background:#fff;padding:5px 8px 6px;font-weight:400;*margin:0 0 0 5px}.CL-tog{color:#333;display:block;text-decoration:none;outline:none;padding:4px 0;text-align:right;font-family:Lucida Grande;font-size:12px}.CL-togtxt{background:#a3a3a3;color:#fff;font-size:11px;padding:4px;margin-right:4px;display:inline-block}.CL-menu{background:#fff;overflow:auto;border-bottom:1px solid #e6e6e6;*height:31px}.CL-label{float:left;font-size:11px;padding:4px 0 4px 8px;margin:4px 0;text-transform:uppercase;border-left:1px solid #a3a3a3}.CL-clear{color:#333;display:block;text-decoration:none;outline:none;padding:8px 10px;color:#666;float:left}.CL-inp{width:23px;padding:2px;margin:4px;float:left;border:0}.CL-rad{margin:8px;border:2px solid #a3a3a3}.CL-entries{background:#fff;overflow:auto;position:relative;margin:0;padding:0;list-style-type:none;font-family:Lucida Grande;font-size:12px;width:100%}.CL-entries.show-timestamps .CL-timest{display:block}.CL-entry{clear:both;position:relative;min-height:16px;list-style-type:none;font-size:11px;z-index:1;border-bottom:1px solid #f0f0f0;overflow:auto;*zoom:1}.CL-entry.CL-err{color:red;background:#fff0f0;border-top:1px solid #ffd6d6;border-bottom:1px solid #ffd6d6;margin-top:-1px}.CL-entry.CL-err .CL-sym{color:red}.CL-entry.CL-cleared .CL-sym{display:none}.CL-entry.CL-warn{background:#fffbe6;color:#5c3b00}.CL-entry.CL-exec{overflow:hidden;border-bottom:0}.CL-entry.CL-exec .CL-sym{color:#2d7df9;top:0!important}.CL-entry.CL-exec .CL-entrytxt{overflow:auto;padding-right:0;*zoom:0}.CL-sym{border:0;position:absolute;margin-left:10px;font-family:Arial;font-weight:900;color:#939393;font-size:12px;padding:3px 0;left:0}.CL-sym2{color:#bababa}.CL-entrytxt{margin-left:24px;display:block;padding:4px 22px 4px 0;word-wrap:break-word;position:relative;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px;*zoom:1}.CL-entrytxt.CL-timest{padding-right:6px;color:gray;font-size:10px;padding-bottom:0;display:none;float:right}.CL-txtarea{width:76%;float:left;padding:3px;height:30px;border:0;font-family:Menlo,monospace,Lucida Sans Unicode,Courier,Courier New;font-size:11px}.CL-execbtn{color:#333;text-decoration:none;outline:none;display:block;float:right;width:21%;text-align:center;text-transform:uppercase;line-height:38px}'); // Replaced by gulp
       this.scriptParams();
 
       // Added because IE 8 & 9 does support console.log, just needs to be enabled.
@@ -289,6 +331,8 @@
             '<a class="CL-clear" id="CLClear" href="#">CLEAR</a>' +
             '<span class="CL-label">Height:</span>' +
             '<input id="CLHeight" type="text" maxlength="3" class="CL-inp" />' +
+            '<label class="CL-label" for="CLTime" id="fffff">Timestamp:</label>' +
+            '<input id="CLTime" type="checkbox" value="show" class="CL-rad" />' +
           '</div>'
       });
 
@@ -325,7 +369,10 @@
 
           // Implement queries
           for (var j = 0, jj = queries.length; j < jj; j++) {
-            result = (queries[j] === 'override') ? true : false;
+            if (queries[j] === 'override') {
+              result = true;
+              break;
+            }
           }
         }
       }
@@ -357,8 +404,11 @@
 
             if (Number(query)) {
               self.height = query;
-            } else {
-              self.show = (query == 'hide') ? false : true;
+            } else if (query === 'hide') {
+              self.show = false;
+            } else if (query === 'timestamp') {
+              Helpers.$('CLTime').setAttribute('checked', true);
+              Helpers.addClass(self._entries, 'show-timestamps');
             }
           }
         }
@@ -371,6 +421,7 @@
     bindEvents: function() {
       var self = this;
       var textarea = Helpers.$('CLTextarea');
+
 
       Helpers.$('CLTog').onclick = function() {
         self.show = self.show ? false : true;
@@ -395,6 +446,10 @@
         }
 
         return false;
+      };
+
+      Helpers.$('CLTime').onchange = function() {
+        this.checked ? Helpers.addClass(self._entries, 'show-timestamps') : Helpers.removeClass(self._entries, 'show-timestamps');
       };
 
       Helpers.$('CLExeBtn').onclick = function() {
@@ -644,7 +699,8 @@
 
         var li = Helpers.create('li', {
           'class': entryClass,
-          html: sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+          html: sym + '<span class="CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+            '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
         });
 
         CL._entries.insertBefore(li, CL._liExec);
@@ -741,7 +797,8 @@
         if (output !== '') {
           li = Helpers.create('li', {
             'class': entryClass,
-            'html': sym + '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
+            'html': sym + '<span class="CL-entrytxt CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+              '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
           });
 
           CL._entries.appendChild(li);
@@ -858,7 +915,8 @@
 
         li = Helpers.create('li', {
           'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'html': sym + '<span class="CL-entrytxt CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+            '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
