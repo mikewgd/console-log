@@ -123,6 +123,8 @@
   /* error */
   /* warn */
   /* execute */ }
+  .CL-entry .CL-timest {
+    display: none; }
   .CL-entry.CL-err {
     color: #FF0000;
     background: #fff0f0;

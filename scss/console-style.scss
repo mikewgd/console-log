@@ -152,6 +152,10 @@
   overflow: auto;
   *zoom: 1;
 
+  .CL-timest {
+    display: none;
+  }
+
   /* error */
   &.CL-err {
     color: #FF0000;

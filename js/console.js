@@ -280,7 +280,8 @@
       clear: function() {'[native code]';},
       error: function() {'[native code]';},
       warn: function() {'[native code]';},
-      assert: function() {'[native code]';}
+      assert: function() {'[native code]';},
+      count: function() {'[native code]';}
     },
 
     _el: null,
@@ -688,6 +689,12 @@
     var isExec = false;             // Executing code.
     var consoleError = false;       // Flag if using console.error
     var consoleAssert = false;
+    var count = (function() {
+      var counter = {};
+      return function(v) {
+        return (counter[v] = (counter[v] || 0) + 1);
+      }
+    }());
 
     CL.init();
 
@@ -824,21 +831,6 @@
         console.log('<em>Console was cleared</em>');
       },
 
-      debug: function() {
-        var args = arguments;
-        var ID = '%CL%ML101417';
-
-        isError = isError ? true : false;
-        entryClass = 'CL-entry';
-
-        console.log(args[0] === undefined ? '' : args[0], args[1] === undefined ? '' : args[1],
-          args[2] === undefined ? '' : args[2], args[3] === undefined ? '' : args[3], 
-          args[4] === undefined ? '' : args[4], args[5] === undefined ? '' : args[5], 
-          args[6] === undefined ? '' : args[6], args[7] === undefined ? '' : args[7], 
-          args[8] === undefined ? '' : args[8], args[9] === undefined ? '' : args[9], 
-          args[10] === undefined ? '' : args[10]);
-      },
-
       error: function() {
         var args = arguments;
         var ID = '%CL%ML101417';
@@ -921,6 +913,12 @@
 
         CL._entries.appendChild(li);
         CL.newLog();
+      },
+
+      count: function() {
+        var ID = '%CL%ML101417';
+        var countItem = (arguments[0] === '' || arguments[0] === undefined) ? '' : arguments[0] + ': ';
+        console.log(countItem + count(arguments[0]).toString());
       }
     };
   }
