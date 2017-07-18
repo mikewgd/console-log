@@ -140,18 +140,41 @@ h3 {
   .content .indent {
     display: block;
     float: none; }
-  .content li {
+  .content ul li {
     background-image: url("../images/old.gif");
     background-repeat: no-repeat;
     background-position: left 6px;
     padding: 6px 15px;
     border-bottom: 1px solid #e6e6e6;
     margin: 0; }
-    .content li.last {
+    .content ul li.last {
       background-image: url("../images/last.gif");
       border-bottom: 0; float: left; }
   .content a {
     color: #3781fc; }
+
+    .bookmark:after {
+    content: "";
+    clear: both;
+    display: block; *zoom: 1;}
+
+    .bookmark {
+      display: block;
+      clear: both;
+      padding: 10px 0 0 0;
+    }
+
+    .bookmark h4 {
+      margin: 0 0 10px 0;
+    }
+
+    .bookmark a {
+    background: #dfdfdf;
+    color: #000;
+    border: 1px solid #505050;
+    padding: 8px;
+    display: inline-block;
+    text-decoration: none; }
 
 .section {
   padding: 10px;
@@ -167,7 +190,14 @@ h3 {
     padding: 2em; }
     .section.last .list {
       margin: 0; }
-
+.section .section {
+  overflow: auto;
+  clear: both;
+  display: block;
+  padding: 0;
+  border: 0;
+  padding: 15px 0;
+}
 .what-is-it {
   padding: 2px 10px 10px 10px; }
   .what-is-it h2 {

@@ -25,7 +25,7 @@
 			</div>
 
 			<div class="subheader">
-				<p>Get the LATEST version (v3.0): </p>
+				<p>Get the LATEST version (v4.0): </p>
 				<ul class="latest-version">
 					<li><a href="https://raw.githubusercontent.com/mikewgd/console-log/master/dist/js/console.min.js" download>Minified (12 KB)</a></li>
 					<li><a href="https://raw.githubusercontent.com/mikewgd/console-log/master/dist/js/console.js" download>Unminified (21 KB)</a></li>
@@ -40,6 +40,12 @@
 				<a target="_blank" href="https://github.com/mikewgd/console-log/releases/tag/push-to-cdn-v2.0">2.0</a> 
 				<a target="_blank" href="https://github.com/mikewgd/console-log/releases/tag/push-to-cdn-v2.1">2.1</a> 
 				<a target="_blank" href="https://github.com/mikewgd/console-log/releases/tag/push-to-cdn-v2.2">2.2</a>
+				<a target="_blank" href="https://github.com/mikewgd/console-log/releases/tag/push-to-cdn-v3.0">3.0</a>
+
+				<div class="bookmark">
+					<p>Bookmark: </p>
+					<a href="javascript:(function(){var script = document.createElement('script'); script.src = 'http://cdn.jsdelivr.net/console-log/latest/console.min.js'; document.body.appendChild(script); })();" rel="bookmark">Console.Log</a>
+				</div>
 			</div>
 		</div>
 		
@@ -56,7 +62,8 @@
 						<li>Adjust console height / Clear console</li>
 						<li>Query params (height/toggle/override)</li>
 						<li>Recognizable theme / Syntax highlighting</li>
-						<li class="last">Supported functions: <code>log</code>, <code>time</code>, <code>timeEnd</code>, <code>assert</code>,<br><code>clear</code>, <code>debug</code>, <code>warn</code>, <code>error</code> (does not include trace functionality)</li>
+						<li>Show timestamp toggle</li>
+						<li class="last">Supported functions: <code>log</code>, <code>time</code>, <code>timeEnd</code>, <code>assert</code>,<br><code>clear</code>, <code>count</code>, <code>warn</code>, <code>error</code> (does not include trace functionality)</li>
 					</ul>
 				</div>
 
@@ -73,7 +80,17 @@
 						<li class="last">Have an issue? <a target="_blank" href="https://github.com/mikewgd/console-log/issues">Log it here!</a></li>
 					</ul>
 				</div>
+
+				<div class="section">
+					<h3>References</h3>
+					<ol>
+						<li><a target="_blank" href="https://developers.google.com/web/tools/chrome-devtools/console/">https://developers.google.com/web/tools/chrome-devtools/console/</a></li>
+						<li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Console">https://developer.mozilla.org/en-US/docs/Web/API/Console</a></li>
+					</ol>
+				</div>
 			</div>
+
+
 		
 			<div class="section">
 				<h2>Implementation</h2>
