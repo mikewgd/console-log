@@ -29,6 +29,48 @@
     },
 
     /**
+    * @function removeClass
+    * Removes a class name from an element.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element of class name you want removed.
+    * @param {String} classN - class name to be removed.
+    */
+    removeClass: function(elem, classN) {
+      var currClass = elem.className.replace(/(^\s+|\s+$)/g, '');
+      var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)", "g");
+
+      elem.className = (currClass.replace(regex, " ")).replace(/(^\s+|\s+$)/g, '');
+    },
+
+    /**
+    * @function hasClass
+    * Returns true or false if an element has a specifc class name.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element that may have the class name specified.
+    * @param {String} classN - class name to be checked for.
+    */
+    hasClass: function(elem, classN) {
+      var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)");
+      return regex.test(elem.className);
+    },
+
+    /**
+    * @function addClass
+    * Adds a class name to a given element.
+    *
+    * @param {HTMLElement} elem - element that you want a class name added to.
+    * @param {String} classN - new class name you want added to element.
+    */
+    addClass: function(elem, classN) {
+      var currClass = elem.className.replace(/(^\s+|\s+$)/g, '');
+      var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
+
+      if (!this.hasClass(elem, classN)) elem.className = addedClass;
+    },
+
+    /**
     * Returns true or false if we are viewing on a mobile or tablet device.
     * @return {Boolean}
     */
@@ -289,6 +331,8 @@
             '<a class="CL-clear" id="CLClear" href="#">CLEAR</a>' +
             '<span class="CL-label">Height:</span>' +
             '<input id="CLHeight" type="text" maxlength="3" class="CL-inp" />' +
+            '<label class="CL-label" for="CLTime" id="fffff">Timestamp:</label>' +
+            '<input id="CLTime" type="checkbox" value="show" class="CL-rad" />' +
           '</div>'
       });
 
@@ -325,7 +369,10 @@
 
           // Implement queries
           for (var j = 0, jj = queries.length; j < jj; j++) {
-            result = (queries[j] === 'override') ? true : false;
+            if (queries[j] === 'override') {
+              result = true;
+              break;
+            }
           }
         }
       }
@@ -357,8 +404,11 @@
 
             if (Number(query)) {
               self.height = query;
-            } else {
-              self.show = (query == 'hide') ? false : true;
+            } else if (query === 'hide') {
+              self.show = false;
+            } else if (query === 'timestamp') {
+              Helpers.$('CLTime').setAttribute('checked', true);
+              Helpers.addClass(self._entries, 'show-timestamps');
             }
           }
         }
@@ -371,6 +421,7 @@
     bindEvents: function() {
       var self = this;
       var textarea = Helpers.$('CLTextarea');
+
 
       Helpers.$('CLTog').onclick = function() {
         self.show = self.show ? false : true;
@@ -395,6 +446,10 @@
         }
 
         return false;
+      };
+
+      Helpers.$('CLTime').onchange = function() {
+        this.checked ? Helpers.addClass(self._entries, 'show-timestamps') : Helpers.removeClass(self._entries, 'show-timestamps');
       };
 
       Helpers.$('CLExeBtn').onclick = function() {
@@ -644,7 +699,8 @@
 
         var li = Helpers.create('li', {
           'class': entryClass,
-          html: sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
+          html: sym + '<span class="CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+            '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.err + '">' + err + '\n' + url + '\n on line: ' + line + '</span></span>'
         });
 
         CL._entries.insertBefore(li, CL._liExec);
@@ -741,7 +797,8 @@
         if (output !== '') {
           li = Helpers.create('li', {
             'class': entryClass,
-            'html': sym + '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
+            'html': sym + '<span class="CL-entrytxt CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+              '<span class="CL-entrytxt">' + output.replace(/(<br\s*\/?>){3,}/gi, '<br>') + '</span>'
           });
 
           CL._entries.appendChild(li);
@@ -858,7 +915,8 @@
 
         li = Helpers.create('li', {
           'class': entryClass,
-          'html': sym + '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
+          'html': sym + '<span class="CL-entrytxt CL-timest">' + (new Date).toISOString().replace(/z|t/gi, ' ') + '</span> ' +
+            '<span class="CL-entrytxt"><span style="color: ' + CL.synColor.time + '">' + arguments[0] + ': ' + Math.abs(start - end) + 'ms</span></span>'
         });
 
         CL._entries.appendChild(li);
