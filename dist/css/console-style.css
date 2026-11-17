@@ -5,21 +5,8 @@
   left: 0;
   border-top: 1px solid #A3A3A3;
   z-index: 999999999;
-  font-size: 12px; }
-
-/* for ie */
-* html {
-  height: 100%; }
-  * html body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    zoom: 1; }
-  * html #customconsole {
-    position: absolute;
-    right: auto;
-    bottom: auto;
-    top: expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px'); }
+  font-size: 12px;
+}
 
 /** header **/
 .CL-header {
@@ -28,7 +15,7 @@
   border-bottom: 1px solid #A3A3A3;
   font-family: Lucida Grande;
   font-size: 12px;
-  *height: 32px; }
+}
 
 .CL-title {
   margin: 0 0 0 10px;
@@ -41,7 +28,7 @@
   font-weight: normal;
   font-family: Lucida Grande;
   font-size: 12px;
-  *margin: 0 0 0 5px; }
+}
 
 .CL-tog {
   color: #333;
@@ -51,7 +38,8 @@
   padding: 4px 0;
   text-align: right;
   font-family: Lucida Grande;
-  font-size: 12px; }
+  font-size: 12px;
+}
 
 .CL-togtxt {
   background: #A3A3A3;
@@ -59,14 +47,15 @@
   font-size: 11px;
   padding: 4px;
   margin-right: 4px;
-  display: inline-block; }
+  display: inline-block;
+}
 
 /** menu bar **/
 .CL-menu {
   background: #fff;
   overflow: auto;
   border-bottom: 1px solid #E6E6E6;
-  *height: 31px; }
+}
 
 .CL-label {
   float: left;
@@ -74,7 +63,8 @@
   padding: 4px 0 4px 8px;
   margin: 4px 0;
   text-transform: uppercase;
-  border-left: 1px solid #A3A3A3; }
+  border-left: 1px solid #A3A3A3;
+}
 
 .CL-clear {
   color: #333;
@@ -83,18 +73,21 @@
   outline: none;
   padding: 8px 10px;
   color: #666;
-  float: left; }
+  float: left;
+}
 
 .CL-inp {
   width: 23px;
   padding: 2px;
   margin: 4px;
   float: left;
-  border: 0; }
+  border: 0;
+}
 
 .CL-rad {
   margin: 8px;
-  border: 2px solid #A3A3A3; }
+  border: 2px solid #A3A3A3;
+}
 
 /** console entries **/
 .CL-entries {
@@ -106,10 +99,11 @@
   list-style-type: none;
   font-family: Lucida Grande;
   font-size: 12px;
-  width: 100%; }
-  .CL-entries.show-timestamps .CL-timest {
-    display: block; }
-
+  width: 100%;
+}
+.CL-entries.show-timestamps .CL-timest {
+  display: block;
+}
 .CL-entry {
   clear: both;
   position: relative;
@@ -119,35 +113,48 @@
   z-index: 1;
   border-bottom: 1px solid #F0F0F0;
   overflow: auto;
-  *zoom: 1;
+}
+.CL-entry .CL-timest {
+  display: none;
+}
+.CL-entry {
   /* error */
+}
+.CL-entry.CL-err {
+  color: #FF0000;
+  background: #fff0f0;
+  border-top: 1px solid #ffd6d6;
+  border-bottom: 1px solid #ffd6d6;
+  margin-top: -1px;
+}
+.CL-entry.CL-err .CL-sym {
+  color: #FF0000;
+}
+.CL-entry.CL-cleared .CL-sym {
+  display: none;
+}
+.CL-entry {
   /* warn */
-  /* execute */ }
-  .CL-entry .CL-timest {
-    display: none; }
-  .CL-entry.CL-err {
-    color: #FF0000;
-    background: #fff0f0;
-    border-top: 1px solid #ffd6d6;
-    border-bottom: 1px solid #ffd6d6;
-    margin-top: -1px; }
-    .CL-entry.CL-err .CL-sym {
-      color: #FF0000; }
-  .CL-entry.CL-cleared .CL-sym {
-    display: none; }
-  .CL-entry.CL-warn {
-    background: #fffbe6;
-    color: #5c3b00; }
-  .CL-entry.CL-exec {
-    overflow: hidden;
-    border-bottom: 0; }
-    .CL-entry.CL-exec .CL-sym {
-      color: #2d7df9;
-      top: 0 !important; }
-    .CL-entry.CL-exec .CL-entrytxt {
-      overflow: auto;
-      padding-right: 0;
-      *zoom: 0; }
+}
+.CL-entry.CL-warn {
+  background: #fffbe6;
+  color: #5c3b00;
+}
+.CL-entry {
+  /* execute */
+}
+.CL-entry.CL-exec {
+  overflow: hidden;
+  border-bottom: 0;
+}
+.CL-entry.CL-exec .CL-sym {
+  color: #2d7df9;
+  top: 0 !important;
+}
+.CL-entry.CL-exec .CL-entrytxt {
+  overflow: auto;
+  padding-right: 0;
+}
 
 /* the > in the log */
 .CL-sym {
@@ -159,10 +166,12 @@
   color: #939393;
   font-size: 12px;
   padding: 3px 0;
-  left: 0; }
+  left: 0;
+}
 
 .CL-sym2 {
-  color: #bababa; }
+  color: #bababa;
+}
 
 .CL-entrytxt {
   margin-left: 24px;
@@ -172,14 +181,15 @@
   position: relative;
   font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
   font-size: 11px;
-  *zoom: 1; }
-  .CL-entrytxt.CL-timest {
-    padding-right: 6px;
-    color: #808080;
-    font-size: 10px;
-    padding-bottom: 0;
-    display: none;
-    float: right; }
+}
+.CL-entrytxt.CL-timest {
+  padding-right: 6px;
+  color: #808080;
+  font-size: 10px;
+  padding-bottom: 0;
+  display: none;
+  float: right;
+}
 
 .CL-txtarea {
   width: 76%;
@@ -188,7 +198,8 @@
   height: 30px;
   border: 0;
   font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
-  font-size: 11px; }
+  font-size: 11px;
+}
 
 .CL-execbtn {
   color: #333;
@@ -200,4 +211,5 @@
   width: 21%;
   text-align: center;
   text-transform: uppercase;
-  line-height: 38px; }
+  line-height: 38px;
+}

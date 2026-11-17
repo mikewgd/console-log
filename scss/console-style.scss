@@ -15,27 +15,6 @@
   font-size: 12px;
 }
 
-/* for ie */
-* html {
-  height: 100%;
-
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    zoom: 1;
-  }
-
-  #customconsole {
-    position: absolute;
-
-    // http://www.howtocreate.co.uk/fixedPosition.html
-    right: auto;
-    bottom: auto;
-    top: expression((0 - customconsole.offsetHeight + (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) + (ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop)) + 'px');
-  }
-}
-
 /** header **/
 .CL-header {
   overflow: auto;
@@ -43,7 +22,6 @@
   border-bottom: 1px solid #A3A3A3;
   font-family: Lucida Grande;
   font-size: 12px;
-  *height: 32px;
 }
 
 .CL-title {
@@ -57,7 +35,6 @@
   font-weight: normal; 
   font-family: Lucida Grande;
   font-size: 12px;
-  *margin: 0 0 0 5px;
 }
 
 .CL-tog {
@@ -82,7 +59,6 @@
   background: #fff;
   overflow: auto;
   border-bottom: 1px solid #E6E6E6;
-  *height: 31px;
 }
 
 .CL-label {
@@ -150,7 +126,6 @@
   z-index: 1;
   border-bottom: 1px solid #F0F0F0;
   overflow: auto;
-  *zoom: 1;
 
   .CL-timest {
     display: none;
@@ -194,7 +169,6 @@
     .CL-entrytxt {
       overflow: auto;
       padding-right: 0;
-      *zoom: 0;
     }
   }
 }
@@ -224,7 +198,6 @@
   position: relative;
   font-family: Menlo, monospace, Lucida Sans Unicode, Courier, Courier New;
   font-size:11px;
-  *zoom: 1;
 
   &.CL-timest {
     padding-right: 6px;
