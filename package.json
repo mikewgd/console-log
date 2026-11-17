@@ -1,6 +1,6 @@
 {
   "name": "console-log",
-  "version": "0.0.0",
+  "version": "5.0.0",
   "description": "A simple script that mimics the console.log functionality in the browser. Used on mobile/tablet devices and in browsers without developer tools.",
   "main": "index.js",
   "scripts": {

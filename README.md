@@ -1,5 +1,7 @@
 # Console.Log
 
+> **This project is archived and no longer maintained.** If you need an on-page console for mobile browsers, take a look at [Eruda](https://github.com/liriliri/eruda) or [vConsole](https://github.com/Tencent/vConsole), which have far more features.
+
 A simple script that makes it easy to view the console log on mobile/tablet devices and in other browsers where you can't open the developer tools. The script overwrites the console object and the log function. Each calling of console.log gets inserted into an li element.
 
 ## What is this?
@@ -26,7 +28,7 @@ Add the script on the page before the js file(s) that contain `console` and you'
   ...
 
   <!-- Add the console script above your other scripts (default settings) -->
-  <script src="https://cdn.jsdelivr.net/gh/mikewgd/console-log@push-to-cdn-v4.0/dist/js/console.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mikewgd/console-log@v5.0.0/dist/js/console.min.js"></script>
 
   <!-- Some random js file with console.log -->
   <script src="test.js"></script>
@@ -59,8 +61,6 @@ _NOTE: Height must be >= 90 and <= the window height - 150 (magic number). This 
 * Monitoring events
 * Internet Explorer (the IE 8/9 workarounds have been removed)
 * Known issue: string arguments are inserted as HTML, not escaped, so `console.log('<b>x</b>')` shows **x** in bold instead of the literal text
-
-Have an issue? [Log it here!](https://github.com/mikewgd/console-log/issues)
 
 ## Try it out
 
