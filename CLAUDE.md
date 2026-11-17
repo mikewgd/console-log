@@ -17,6 +17,8 @@ npm run lint     # JSHint on js/*.js
 
 Building needs Node >= 20.19 (a Sass requirement). There is no dev server; open `demo.html` directly. The shipped JS is ES5 and nothing in the build transpiles it. IE support has been removed, so ES5 now only matters for old mobile/TV/webview browsers; decide that deliberately before using ES2015+ syntax.
 
+`package.json` has `overrides` that force patched `lodash` (>= 4.18.1) and `minimatch` (^3.1.5) under `jshint`, because its latest release (2.13.6) pins vulnerable ranges; drop them once jshint updates. `npm audit` still reports one `picomatch` ReDoS (via sass's optional `@parcel/watcher`, which only powers `sass --watch` and is never used here). No patched `picomatch` exists yet, so there is nothing to upgrade to.
+
 ## Build pipeline (the non-obvious part)
 
 Source and output are different files, and the output is committed:
