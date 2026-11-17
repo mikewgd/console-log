@@ -1,17 +1,13 @@
-Console.Log
-==========
+# Console.Log
 
 A simple script that makes it easy to view the console log on mobile/tablet devices and in other browsers where you can't open the developer tools. The script overwrites the console object and the log function. Each calling of console.log gets inserted into an li element.
 
-**Stable Build:** Please go here (http://console.mikewgd.com/)  
-**CDN:** `<script src="https://cdn.jsdelivr.net/gh/mikewgd/console-log@push-to-cdn-v4.0/dist/js/console.min.js"></script>`
+## What is this?
 
-## What is this?  
 A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and other browsers without developer tools. The script uses device detection (user agent sniffing) and also checks whether the console object is undefined; if either is true, it overwrites the console object. This is a bare bones console, not a replacement for the browsers console. Certain limitations and functionality that the browser's console has will not be implemented in order to keep the script file size down.
 
+## Features
 
-
-### Features
 * No JavaScript libraries
 * Toggle console
 * Adjust console height / Clear console
@@ -19,11 +15,41 @@ A tool for programmers to see a viewable console in the browser. Meant to be use
 * Recognizable theme / Syntax highlighting
 * Show timestamp toggle
 * Run JavaScript from the console input (`>` prompt + Execute button)
-* Supported functions: `log`, `time`, `timeEnd`, `assert`,
-`clear`, `count`, `warn`, `error` (does not include trace functionality)
+* Supported functions: `log`, `time`, `timeEnd`, `assert`, `clear`, `count`, `warn`, `error` (does not include trace functionality)
 
+## Usage
 
-### Limitations/Issues
+Add the script on the page before the js file(s) that contain `console` and you're good to go. No rewriting code!
+
+```html
+<body>
+  ...
+
+  <!-- Add the console script above your other scripts (default settings) -->
+  <script src="https://cdn.jsdelivr.net/gh/mikewgd/console-log@push-to-cdn-v4.0/dist/js/console.min.js"></script>
+
+  <!-- Some random js file with console.log -->
+  <script src="test.js"></script>
+</body>
+```
+
+## Options
+
+Options are set with query parameters on the script tag's `src`. Add `?` after the file name, and join several options with `&`.
+
+| Option | Example | What it does |
+| --- | --- | --- |
+| Hide | `console.min.js?hide` | Starts collapsed. By default the console is expanded. Click the top bar ("Click to hide" / "Click to show") to toggle it. |
+| Height | `console.min.js?200` | Height in pixels of the log entries. The default is 1/3 of the window height. You can also change it with the Height field next to "CLEAR". |
+| Timestamps | `console.min.js?timestamp` | Shows timestamps from the start. They are hidden by default and can be toggled with the "Timestamp" checkbox in the menu bar. |
+| Override | `console.min.js?override` | Always shows the custom console. By default it only appears on mobile/tablet devices (detected from the user agent) or when `console` is undefined. |
+
+For example, `console.min.js?hide&400` starts the console collapsed with 400px of log entries.
+
+_NOTE: Height must be >= 90 and <= the window height - 150 (magic number). This applies to both the Height field and the query parameter. If the value does not meet the requirement it will be set to the default._
+
+## Limitations / known issues
+
 * Nested objects (window, document)
 * Autocomplete commands
 * String substitution and formatting, Format specifiers
@@ -33,53 +59,22 @@ A tool for programmers to see a viewable console in the browser. Meant to be use
 * Monitoring events
 * Internet Explorer (the IE 8/9 workarounds have been removed)
 * Known issue: string arguments are inserted as HTML, not escaped, so `console.log('<b>x</b>')` shows **x** in bold instead of the literal text
-*   Have an issue? [Log it here!](https://github.com/mikewgd/console-log/issues)
 
-## Implementation
-Just add the script on the page before the js file(s) that contain `console` and you're good to go! No rewriting code!
+Have an issue? [Log it here!](https://github.com/mikewgd/console-log/issues)
 
-### Parameters
-You may also use parameters to set default settings for the console (visibility, height and timestamps). Simply add '?' to the end of the src attribute on the script tag. You can also use the override setting, which overrides the device detection and if the console is undefined or not.
+## Try it out
 
-#### Visibility
-By default it will be expanded/visible. You can hide the console by clicking on the top bar that says "Click to hide". You can override this default setting by adding a query parameter to the script tag: `console.min.js?hide`.
-
-#### Height Adjustment
-By default the console height (height of the log entries specifically) will be 1/3 of the window height. You can also adjust the height of the console by typing into the input field next to "CLEAR". As well as with visibility, you can also set the height of the console through query parameter: `console.min.js?200`
-
-_NOTE: Height must be >= 90 and <= the window height - 150 (magic number). Applies to using the input and query parameter. If the value does not meet the requirement it will be set to the default._
-
-#### Timestamps
-Timestamps are hidden by default and can be toggled with the "Timestamp" checkbox in the menu bar. To have them shown from the start, use the query parameter: `console.min.js?timestamp`
-
-#### Override
-By default the custom console only appears on mobile/tablet devices (detected from the user agent) or when `console` is undefined. You can force it to always appear with a query parameter: `console.min.js?override`
-
-**Full Example:**
-
-            ...
-        
-             <!-- Add console log script above the other script. (with default settings) -->
-             <script type="text/javascript" src="//console.min.js"></script>
-             <script type="text/javascript" src="//console.min.js?400"></script> <!--console expanded, height 400px-->
-             <script type="text/javascript" src="//console.min.js?hide&400"></script> <!-- console collapsed, height 400px-->
-             <script type="text/javascript" src="//console.min.js?timestamp"></script> <!-- console expanded, timestamps shown-->
-
-             <!-- Some random js file with console.log -->
-             <script type="text/javascript" src="//test.js"></script>
-
-        </body>
-    </html>
+A demo page is included in the repo: open `demo.html` in a browser. Remember you need to view it on a device, change your user agent, or add `?override` to the script URL in `demo.html`.
 
 ## Development
+
 Edit the source in `js/` (`helpers.js`, `cl.js` and `main.js`, which `scripts/build.js` concatenates into one `console.js`) and `scss/console-style.scss`. Everything in `dist/` is generated by `scripts/build.js` (and committed), so rebuild after changing source.
 
-    npm install
-    npm run build    # one-off build of dist/css and dist/js
-    npm run watch    # rebuild whenever js/ or scss/ changes
-    npm run lint     # JSHint on js/*.js
+```sh
+npm install
+npm run build    # one-off build of dist/css and dist/js
+npm run watch    # rebuild whenever js/ or scss/ changes
+npm run lint     # JSHint on js/*.js
+```
 
 Building needs Node 20.19 or newer. There is no dev server; open `demo.html` directly in a browser.
-
-## Try it out! [View the demo](http://console.mikewgd.com/demo)
-Remember you need to view it on a device, change your user agent, or add `?override` to the script URL.
