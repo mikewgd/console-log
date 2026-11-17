@@ -1,3 +1,4 @@
+/*! Console.Log - ISC License - Copyright (c) 2014-2026 Michael Levy and contributors */
 (function() {
 // Part of console.js, not a standalone module: scripts/build.js concatenates
 // helpers.js, cl.js and main.js (in that order) inside one IIFE, so they share scope.

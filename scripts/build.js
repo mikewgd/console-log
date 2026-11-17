@@ -26,6 +26,10 @@ const PARTS = ['helpers.js', 'cl.js', 'main.js'];
 
 const PLACEHOLDER = '{{consoleLogStyles}}';
 
+// License notice prepended to both dist/js files, so it travels with the file
+// people load from a CDN. Keep the copyright line in sync with LICENSE.
+const BANNER = '/*! Console.Log - ISC License - Copyright (c) 2014-2026 Michael Levy and contributors */';
+
 async function build() {
   fs.mkdirSync(p('dist/css'), { recursive: true });
   fs.mkdirSync(p('dist/js'), { recursive: true });
@@ -61,12 +65,12 @@ async function build() {
   // Fail the build if the inlined result isn't valid JS (parses only, doesn't run it).
   new vm.Script(built, { filename: 'dist/js/console.js' });
 
-  fs.writeFileSync(p('dist/js/console.js'), built);
+  fs.writeFileSync(p('dist/js/console.js'), BANNER + '\n' + built);
 
   // `directives: false` keeps the lone '[native code]' string statement in the
   // CL.funcs stubs. Without it terser strips them to `function(){}`, and logging
   // `console` (or a console method) no longer prints "[native code]".
-  const min = await minify(built, { compress: { directives: false } });
+  const min = await minify(built, { compress: { directives: false }, format: { preamble: BANNER } });
   fs.writeFileSync(p('dist/js/console.min.js'), min.code);
 
   console.log('Built dist/ (css.min: ' + minCss.length + ' B, js: ' + built.length + ' B, js.min: ' + min.code.length + ' B)');

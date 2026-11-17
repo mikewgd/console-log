@@ -26,6 +26,7 @@ Source and output are different files, and the output is committed:
 - **The `js/` files are fragments, not modules.** They share one scope because they are concatenated, so each file's top-level `var`s are visible to the others, and none of them is valid to load on its own at runtime. A new file must be added to `PARTS`, and order matters: `main.js` runs at load time using what the other two define.
 - The CSS is escaped into the JS string literal (a quote or backslash in the CSS would otherwise break the string literal), and the result is syntax-checked with `vm.Script`, so a bad inline fails the build instead of shipping broken JS.
 - Terser runs with `compress: { directives: false }`; don't remove it. The `CL.funcs` stubs are `function() {'[native code]';}`, and terser otherwise strips the lone string statement down to `function(){}`, so logging `console` or a console method would stop printing `[native code]`.
+- `BANNER` in `scripts/build.js` is the ISC license notice prepended to both `dist/js` files (terser keeps it via `format.preamble`). Keep its copyright line in sync with `LICENSE`.
 - `demo.html` loads `dist/js/console.js?200`, not the files in `js/`. Running the demo without a build, or with a stale `dist/`, shows old code.
 - The demo only shows the panel if the console is not natively supported, the UA is mobile, or `?override` is on the script URL. On desktop, add `?override` to the script `src` or emulate a mobile device.
 

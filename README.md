@@ -78,3 +78,9 @@ npm run lint     # JSHint on js/*.js
 ```
 
 Building needs Node 20.19 or newer. There is no dev server; open `demo.html` directly in a browser.
+
+## License
+
+[ISC](LICENSE) © Michael Levy and contributors.
+
+The object formatting in `js/helpers.js` (`ObjString`) is adapted from Douglas Crockford's [JSON-js](https://github.com/douglascrockford/JSON-js), which is in the public domain.
