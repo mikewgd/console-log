@@ -4,7 +4,7 @@ Console.Log
 A simple script that makes it easy to view the console log on mobile/tablet devices and in other browsers where you can't open the developer tools. The script overwrites the console object and the log function. Each calling of console.log gets inserted into an li element.
 
 **Stable Build:** Please go here (http://console.mikewgd.com/)  
-**CDN:** `<script src="http://cdn.jsdelivr.net/gh/mikewgd/console-log@push-to-cdn-v4.0/dist/js/console.min.js"></script>`
+**CDN:** `<script src="https://cdn.jsdelivr.net/gh/mikewgd/console-log@push-to-cdn-v4.0/dist/js/console.min.js"></script>`
 
 ## What is this?  
 A tool for programmers to see a viewable console in the browser. Meant to be used on mobile devices and other browsers without developer tools. The script uses device detection (user agent sniffing) and also checks whether the console object is undefined; if either is true, it overwrites the console object. This is a bare bones console, not a replacement for the browsers console. Certain limitations and functionality that the browser's console has will not be implemented in order to keep the script file size down.
@@ -53,7 +53,7 @@ _NOTE: Height must be >= 90 and <= the window height - 150 (magic number). Appli
 Timestamps are hidden by default and can be toggled with the "Timestamp" checkbox in the menu bar. To have them shown from the start, use the query parameter: `console.min.js?timestamp`
 
 #### Override
-Currently the custom console will only appear if console is not supported. However you can change that with a query parameter to ensure that it always appears: `console.min.js?override`
+By default the custom console only appears on mobile/tablet devices (detected from the user agent) or when `console` is undefined. You can force it to always appear with a query parameter: `console.min.js?override`
 
 **Full Example:**
 
@@ -82,4 +82,4 @@ Edit the source in `js/` (`helpers.js`, `cl.js` and `main.js`, which `scripts/bu
 Building needs Node 20.19 or newer. There is no dev server; open `demo.html` directly in a browser.
 
 ## Try it out! [View the demo](http://console.mikewgd.com/demo)
-Remember you need to view it on a device or change your user agent.
+Remember you need to view it on a device, change your user agent, or add `?override` to the script URL.
